@@ -1,6 +1,4 @@
-VAR total = "holamundo";
-and = 3;
+var total = "holamundo";
+var year = 2021;
 
-or = "o";
-
-and = a;
+var heelo = total;

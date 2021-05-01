@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Antlr4.Runtime;
 using Kys.Visitors;
@@ -7,6 +8,8 @@ namespace Kys
 {
 	class Program
 	{
+		public static Dictionary<string, dynamic> Variables = new();
+
 		static int Main(string[] args)
 		{
 			if (args.Length == 0)
@@ -26,7 +29,9 @@ namespace Kys
 
 			ProgramVisitor visitor = new();
 
-			return visitor.Visit(programContext);
+			var exit = visitor.Visit(programContext);
+
+			return exit;
 		}
 	}
 }

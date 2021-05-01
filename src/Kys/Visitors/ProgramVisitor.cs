@@ -8,6 +8,12 @@ namespace Kys.Visitors
 
 		public override int VisitProgram([NotNull] KysParser.ProgramContext context)
 		{
+			SentenceExecutor executor = new();
+
+			// ejecutamos cada sentencia del programa.
+			foreach (var item in context.sentence())
+				executor.Visit(item);
+
 			return 0;
 		}
 	}
