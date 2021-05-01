@@ -14,11 +14,9 @@ Kvar: 'var';
 
 // / lang primitive values / // 
 
-// las funciones pueden iniciar en minuscula o mayuscula
-NAME: LETTER+;
+VAR: LOWER+;
 
-//las variables siempre inician en minusculas
-VAR: LOWER LETTER*;
+CONST: UPPER+;
 
 STRING: '"' LETTER* '"';
 
