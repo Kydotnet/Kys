@@ -1,3 +1,3 @@
 #!/bin/bash
 
-antlr4 -Dlanguage=CSharp KysLexer.g4 -no-listener -visitor -package Kys -o Generated
+antlr4 -Dlanguage=CSharp KysParser.g4 KysLexer.g4 -no-listener -visitor -package Kys -o Generated
