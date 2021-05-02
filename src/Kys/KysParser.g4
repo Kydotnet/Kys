@@ -6,7 +6,9 @@ options {
 
 program: sentence+;
 
-sentence: funccall | declaration | asignation;
+sentence: exitprogram | funccall | declaration | asignation;
+
+exitprogram: Kexit NUMBER SC;
 
 declaration: Kvar asignation;
 

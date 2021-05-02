@@ -15,6 +15,8 @@ namespace Kys
 
 		public static Dictionary<string, Function> Functions = new();
 
+		public static int ExitCode = 0;
+
 		static int Main(string[] args)
 		{
 			if (args.Length == 0)
@@ -37,11 +39,11 @@ namespace Kys
 			ProgramVisitor visitor = new();
 
 			//execute the app
-			var exit = visitor.Visit(programContext);
+			ExitCode = visitor.Visit(programContext);
 
 			PrintBeforExit();
 
-			return exit;
+			return ExitCode;
 		}
 
 		private static void PrintBeforExit()

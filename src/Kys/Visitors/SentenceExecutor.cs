@@ -58,5 +58,13 @@ namespace Kys.Visitors
 			Program.Variables[varname] = resolver.Visit(context.expression());
 			return true;
 		}
+
+		public override bool VisitExitprogram([NotNull] KysParser.ExitprogramContext context)
+		{
+			double code = ValueResolver.GetNumber(context.NUMBER());
+			int exit = (int)Math.Round(code);
+			Program.ExitCode = exit;
+			return false;
+		}
 	}
 }

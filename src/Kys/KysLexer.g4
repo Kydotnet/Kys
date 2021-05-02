@@ -18,9 +18,13 @@ fragment ANY: ~[\r\n];
 
 fragment PATH: [\\/:.];
 
-Kvar: 'var'; // / lang keywords / //
+// / lang keywords / //
+
+Kvar: 'var';
 
 Kfunc: 'func';
+
+Kexit: 'exit';
 
 // / lang values / // 
 

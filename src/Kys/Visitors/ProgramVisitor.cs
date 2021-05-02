@@ -14,8 +14,8 @@ namespace Kys.Visitors
 			{
 				// ejecutamos cada sentencia del programa.
 				foreach (var item in context.sentence())
-					executor.Visit(item);
-				return 0;
+					if (!executor.Visit(item)) break;
+				return Program.ExitCode;
 			}
 			catch (KysException e)
 			{
