@@ -2,7 +2,9 @@ lexer grammar KysLexer;
 
 // / instructions / //
 
-COMMENT: (Scomment (SPACE | LETTER | DIGIT)+) -> channel(HIDDEN);
+BASH: Sinstruction ANY+ -> channel(HIDDEN);
+
+COMMENT: Scomment ANY* -> channel(HIDDEN);
 
 // / fragments / //
 
@@ -11,6 +13,8 @@ fragment UPPER: [A-Z];
 
 fragment LETTER: LOWER | UPPER;
 fragment DIGIT: [0-9];
+
+fragment ANY: ~[\r\n];
 
 // / lang keywords / //
 
@@ -41,6 +45,8 @@ Sdolar: '$';
 Sarr: '@';
 
 Scomment: '//';
+
+Sinstruction: '#!';
 
 //semicolon
 SC: ';';
