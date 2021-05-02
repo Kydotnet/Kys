@@ -6,6 +6,8 @@
 
 var total = "hola mundo";	// variable from string
 
+var bash = "/bin/bash";		// variables from path
+
 var year = 2021;			// variable from number
 
 var day = true;				// variable from bool

@@ -16,9 +16,9 @@ fragment DIGIT: [0-9];
 
 fragment ANY: ~[\r\n];
 
-// / lang keywords / //
+fragment PATH: [\\/:.];
 
-Kvar: 'var';
+Kvar: 'var'; // / lang keywords / //
 
 Kfunc: 'func';
 
@@ -34,13 +34,17 @@ RVAR: Sarr VAR;
 
 CONST: UPPER+;
 
-STRING: '"' (LETTER | DIGIT | SPACE)* '"';
+FUNC: LETTER+;
+
+STRING: '"' (LETTER | DIGIT | SPACE | PATH)* '"';
 
 NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 
 ANDOR: Sor | Sand;
 
 // / lang simbols / //
+
+Scomma: ',';
 
 Sor: '||';
 

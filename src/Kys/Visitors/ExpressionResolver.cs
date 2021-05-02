@@ -2,6 +2,7 @@ using System;
 using System.Dynamic;
 using Antlr4.Runtime.Misc;
 using Kys.Exceptions;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Kys.Visitors
 {
@@ -23,7 +24,7 @@ namespace Kys.Visitors
 					return a && b;
 				return a || b;
 			}
-			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException e)
+			catch (RuntimeBinderException e)
 			{
 				throw new TokenException(context.Start, e.Message);
 			}

@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using Antlr4.Runtime.Misc;
+using Kys.Core;
 using Kys.Exceptions;
 
 namespace Kys.Visitors
@@ -20,6 +23,29 @@ namespace Kys.Visitors
 				Program.Variables.Remove(varname);
 				throw;
 			}
+		}
+
+		public override bool VisitFunccall([NotNull] KysParser.FunccallContext context)
+		{
+			var funcname = context.funcresult().funcname().GetText();
+			if (!Program.Functions.ContainsKey(funcname))
+				return false;
+
+			var funcargs = context.funcresult().arguments();
+			var hasargs = funcargs != null;
+
+			dynamic[] args;
+			if (hasargs)
+			{
+				args = funcargs.value().Select(v => ValueResolver.Default.Visit(v)).ToArray();
+			}
+			else
+			{
+				args = Array.Empty<dynamic>();
+			}
+			Function func = Program.Functions[funcname];
+			_ = func.Call(args);
+			return true;
 		}
 
 		public override bool VisitAsignation([NotNull] KysParser.AsignationContext context)

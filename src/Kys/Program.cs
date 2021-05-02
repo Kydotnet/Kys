@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using Antlr4.Runtime;
+using Kys.Core;
 using Kys.Visitors;
 
 namespace Kys
@@ -10,6 +12,8 @@ namespace Kys
 	class Program
 	{
 		public static Dictionary<string, dynamic> Variables = new();
+
+		public static Dictionary<string, Function> Functions = new();
 
 		static int Main(string[] args)
 		{
@@ -27,6 +31,8 @@ namespace Kys
 
 			if (kysParser.NumberOfSyntaxErrors > 0)
 				return 1;
+
+			Config.ConfigFuncs();
 
 			ProgramVisitor visitor = new();
 
