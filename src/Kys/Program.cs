@@ -17,6 +17,8 @@ namespace Kys
 
 		public static int ExitCode = 0;
 
+		public static int LastLine = 0;
+
 		static int Main(string[] args)
 		{
 			if (args.Length == 0)

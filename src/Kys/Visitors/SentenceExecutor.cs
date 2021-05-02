@@ -8,6 +8,12 @@ namespace Kys.Visitors
 {
 	public class SentenceExecutor : KysParserBaseVisitor<bool>
 	{
+		public override bool VisitSentence([NotNull] KysParser.SentenceContext context)
+		{
+			Program.LastLine = context.Start.Line;
+			return base.VisitSentence(context);
+		}
+
 		public override bool VisitDeclaration([NotNull] KysParser.DeclarationContext context)
 		{
 			var varname = context.asignation().VAR().GetText();
@@ -18,7 +24,7 @@ namespace Kys.Visitors
 			{
 				return Visit(context.asignation());
 			}
-			catch (TokenException)
+			catch (Exception)
 			{
 				Program.Variables.Remove(varname);
 				throw;

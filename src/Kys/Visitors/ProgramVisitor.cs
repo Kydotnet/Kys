@@ -25,7 +25,7 @@ namespace Kys.Visitors
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
+				Console.WriteLine("line {0}: {1}", Program.LastLine, e.Message);
 				return 1;
 			}
 
