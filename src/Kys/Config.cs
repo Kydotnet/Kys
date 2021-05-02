@@ -22,7 +22,7 @@ namespace Kys
 		private static dynamic Trace(dynamic[] args)
 		{
 			if (args.Length == 0) Console.WriteLine();
-			if (args.Length == 1) Console.WriteLine(args[0] as object);
+			else if (args.Length == 1) Console.WriteLine(args[0] as object);
 			else
 			{
 				object[] par = args.Skip(1).ToArray();

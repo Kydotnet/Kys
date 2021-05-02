@@ -36,7 +36,7 @@ CONST: UPPER+;
 
 FUNC: LETTER+;
 
-STRING: '"' (LETTER | DIGIT | SPACE | PATH)* '"';
+STRING: '"' (LETTER | DIGIT | SPACE | PATH | SYMBOL)* '"';
 
 NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 
@@ -56,6 +56,10 @@ SRpar: ')';
 
 SLpar: '(';
 
+SLbrack: '{';
+
+SRbrack: '}';
+
 Sequal: '=';
 
 Sdolar: '$';
@@ -69,7 +73,22 @@ Sinstruction: '#!';
 //semicolon
 SC: ';';
 
+SYMBOL:
+	Scomma
+	| Sor
+	| Sand
+	| Snot
+	| SRpar
+	| SLpar
+	| SLbrack
+	| SRbrack
+	| Sequal
+	| Sdolar
+	| Sarr;
+
 //whitespace
 WS: [ \t\r\n]+ -> channel(HIDDEN);
 
 SPACE: [ \t]+;
+
+ALL: .;
