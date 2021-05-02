@@ -1,6 +1,4 @@
-var total = "holamundo";
-var year = 2021;
+var total = "holamundo";	// variable from string
+var year = 2021;			// variable from number
 
-var heelo = year;
-
-var current = "kyd";
+var heelo = year;			// variable from other var

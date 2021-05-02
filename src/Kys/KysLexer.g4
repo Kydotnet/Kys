@@ -1,5 +1,9 @@
 lexer grammar KysLexer;
 
+// / instructions / //
+
+COMMENT: (Scomment (SPACE | LETTER | DIGIT)+) -> channel(HIDDEN);
+
 // / fragments / //
 
 fragment LOWER: [a-z];
@@ -36,8 +40,12 @@ Sdolar: '$';
 
 Sarr: '@';
 
+Scomment: '//';
+
 //semicolon
 SC: ';';
 
 //whitespace
 WS: [ \t\r\n]+ -> channel(HIDDEN);
+
+SPACE: [ \t]+;
