@@ -8,14 +8,27 @@ namespace Kys
 	{
 		public static void ConfigFuncs()
 		{
-			Func trace = Trace;
 			Program.Functions.Add("trace", new()
 			{
-				Method = trace,
+				Method = Trace,
 				ArgCount = -1,
 				HasReturn = false
 			});
+			Program.Functions.Add("clear", new()
+			{
+				Method = Clear,
+				ArgCount = 0,
+				HasReturn = false,
+			});
 		}
+
+		private static dynamic Clear(dynamic[] args)
+		{
+			Console.Clear();
+			return null;
+		}
+
+		#region trace
 
 		private delegate void d_trace(string obj, params object[] objs);
 
@@ -31,5 +44,7 @@ namespace Kys
 			}
 			return null;
 		}
+
+		#endregion
 	}
 }

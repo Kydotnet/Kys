@@ -4,7 +4,7 @@
 // declaration examples
 
 
-var total = "hola mundo";	// variable from string
+var hola = "hola mundo";	// variable from string
 
 var bash = "/bin/bash";		// variables from path
 

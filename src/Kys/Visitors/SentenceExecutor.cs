@@ -28,8 +28,10 @@ namespace Kys.Visitors
 		public override bool VisitFunccall([NotNull] KysParser.FunccallContext context)
 		{
 			var funcname = context.funcresult().funcname().GetText();
+			var nametoken = context.funcresult().funcname().Start;
+
 			if (!Program.Functions.ContainsKey(funcname))
-				return false;
+				throw new UndefinedFunctionException(nametoken, funcname);
 
 			var funcargs = context.funcresult().arguments();
 			var hasargs = funcargs != null;
