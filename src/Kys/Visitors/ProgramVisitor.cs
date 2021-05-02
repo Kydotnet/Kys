@@ -23,9 +23,10 @@ namespace Kys.Visitors
 
 				return 1;
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
-				throw;
+				Console.WriteLine(e.Message);
+				return 1;
 			}
 
 		}

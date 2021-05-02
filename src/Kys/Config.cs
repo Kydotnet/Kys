@@ -10,12 +10,14 @@ namespace Kys
 		{
 			Program.Functions.Add("trace", new()
 			{
+				Name = "trace",
 				Method = Trace,
 				ArgCount = -1,
 				HasReturn = false
 			});
 			Program.Functions.Add("clear", new()
 			{
+				Name = "clear",
 				Method = Clear,
 				ArgCount = 0,
 				HasReturn = false,

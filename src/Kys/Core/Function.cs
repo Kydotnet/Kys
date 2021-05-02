@@ -6,6 +6,8 @@ namespace Kys.Core
 {
 	public class Function
 	{
+		public string Name { get; init; }
+
 		public int ArgCount { get; init; }
 
 		/// <summary>
@@ -24,8 +26,7 @@ namespace Kys.Core
 		{
 			if (ArgCount > -1 && args.Length != ArgCount)
 			{
-				//error
-				return null;
+				throw new ArgumentException($"La función {Name} requiere {ArgCount} parametros pero se pasaron {args.Length}");
 			}
 			if (Method != null)
 			{
