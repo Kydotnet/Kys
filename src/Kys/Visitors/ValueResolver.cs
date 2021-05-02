@@ -43,9 +43,7 @@ namespace Kys.Visitors
 			var raw = terminalNode.GetText();
 			if (int.TryParse(raw, out int retint))
 				return retint;
-			if (double.TryParse(raw, out double retdou))
-				return retdou;
-			return 0;
+			return double.Parse(raw, System.Globalization.CultureInfo.InvariantCulture);
 		}
 
 		public static string GetString(ITerminalNode terminalNode)

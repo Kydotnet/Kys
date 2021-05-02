@@ -15,13 +15,16 @@ declaration: Kvar asignation;
 asignation: VAR Sequal expression SC;
 
 expression:
-	SLpar expression SRpar			# parenthesisExp
-	| expression ANDOR expression	# booleanExp
-	| funcresult					# funcExp
-	| value							# valueExp;
-
-// un valor asignable puede ser otra variable o un numero o un string
-value: STRING | NUMBER | BOOL | VAR;
+	SLpar expression SRpar								# parenthesisExp
+	| <assoc = right> Snot expression					# uniNotExp
+	| <assoc = right> expression UNIARIT				# uniAritExp
+	| <assoc = right> expression POTENCIAL expression	# potencialExp
+	| expression MULTIPLICATIVE expression				# multiplicativeExp
+	| expression ADITIVE expression						# aditiveExp
+	| expression EQUALITY expression					# equalityExp
+	| expression ANDOR expression						# logicalExp
+	| value												# valueExp;
+//| funcresult # funcExp
 
 funccall: funcresult SC;
 
@@ -30,3 +33,5 @@ funcresult: funcname SLpar arguments? SRpar;
 funcname: VAR | FUNC;
 
 arguments: value (Scomma value)*;
+
+value: STRING | NUMBER | BOOL | VAR;

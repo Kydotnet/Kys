@@ -44,9 +44,31 @@ STRING: '"' (LETTER | DIGIT | SPACE | PATH | SYMBOL)* '"';
 
 NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 
-ANDOR: Sor | Sand;
+UNIARIT: Splus Splus | Sminus Sminus;
+
+POTENCIAL: Spot | Sroot;
+
+MULTIPLICATIVE: Smul | Sdiv;
+
+ADITIVE: Splus | Sminus;
+
+EQUALITY: Sequal Sequal | Snot Sequal;
+
+ANDOR: Sand | Sor;
 
 // / lang simbols / //
+
+Spot: '^';
+
+Sroot: '¬';
+
+Sdiv: '/';
+
+Smul: '*';
+
+Splus: '+';
+
+Sminus: '-';
 
 Scomma: ',';
 
