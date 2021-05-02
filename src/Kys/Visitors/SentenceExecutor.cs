@@ -9,7 +9,7 @@ namespace Kys.Visitors
 		{
 			var varname = context.asignation().VAR().GetText();
 			if (Program.Variables.ContainsKey(varname))
-				return false;
+				throw new DefinedException(context.asignation().VAR().Symbol, varname);
 			Program.Variables.Add(varname, null);
 			return Visit(context.asignation());
 		}
