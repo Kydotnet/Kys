@@ -29,6 +29,7 @@ namespace Kys
 
 			ProgramVisitor visitor = new();
 
+			//execute the app
 			var exit = visitor.Visit(programContext);
 
 			return exit;

@@ -1,4 +1,5 @@
 using Antlr4.Runtime.Misc;
+using Kys.Exceptions;
 
 namespace Kys.Visitors
 {
@@ -17,7 +18,7 @@ namespace Kys.Visitors
 		{
 			var varname = context.VAR().GetText();
 			if (!Program.Variables.ContainsKey(varname))
-				return false;
+				throw new UndefinedException(context.VAR().Symbol, varname);
 			ValueResolver resolver = new();
 
 			Program.Variables[varname] = resolver.Visit(context.value());

@@ -12,9 +12,15 @@ fragment DIGIT: [0-9];
 
 Kvar: 'var';
 
-// / lang primitive values / // 
+Kfunc: 'func';
+
+// / lang values / // 
 
 VAR: LOWER+;
+
+GVAR: Sdolar VAR;
+
+RVAR: Sarr VAR;
 
 CONST: UPPER+;
 
@@ -25,6 +31,10 @@ NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 // / lang simbols / //
 
 Sequal: '=';
+
+Sdolar: '$';
+
+Sarr: '@';
 
 //semicolon
 SC: ';';

@@ -1,4 +1,6 @@
 var total = "holamundo";
 var year = 2021;
 
-var heelo = total;
+var heelo = year;
+
+var current = "kyd";

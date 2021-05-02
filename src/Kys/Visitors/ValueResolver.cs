@@ -1,6 +1,7 @@
 using System;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using Kys.Exceptions;
 
 namespace Kys.Visitors
 {
@@ -21,8 +22,9 @@ namespace Kys.Visitors
 		private static dynamic GetVar(ITerminalNode terminalNode)
 		{
 			var raw = terminalNode.GetText();
+
 			if (!Program.Variables.ContainsKey(raw))
-				return null;// throw error
+				throw new UndefinedException(terminalNode.Symbol, raw);
 			return Program.Variables[raw];
 		}
 
