@@ -7,19 +7,29 @@ namespace Kys.Visitors
 {
 	internal class ValueResolver : KysParserBaseVisitor<dynamic>
 	{
+		public static ValueResolver Default = new();
+
 		public override dynamic VisitValue([NotNull] KysParser.ValueContext context)
 		{
 			if (context.STRING() != null)
 				return GetString(context.STRING());
 			else if (context.NUMBER() != null)
 				return GetNumber(context.NUMBER());
+			else if (context.BOOL() != null)
+				return GetBool(context.BOOL());
 			else if (context.VAR() != null)
 				return GetVar(context.VAR());
 
 			return null;
 		}
 
-		private static dynamic GetVar(ITerminalNode terminalNode)
+		public static bool GetBool(ITerminalNode terminalNode)
+		{
+			var raw = terminalNode.GetText();
+			return raw.Equals("true");
+		}
+
+		public static dynamic GetVar(ITerminalNode terminalNode)
 		{
 			var raw = terminalNode.GetText();
 
@@ -28,7 +38,7 @@ namespace Kys.Visitors
 			return Program.Variables[raw];
 		}
 
-		private static dynamic GetNumber(ITerminalNode terminalNode)
+		public static dynamic GetNumber(ITerminalNode terminalNode)
 		{
 			var raw = terminalNode.GetText();
 			if (int.TryParse(raw, out int retint))
@@ -38,7 +48,7 @@ namespace Kys.Visitors
 			return 0;
 		}
 
-		private static string GetString(ITerminalNode terminalNode)
+		public static string GetString(ITerminalNode terminalNode)
 		{
 			var raw = terminalNode.GetText();
 			return raw.Trim('"');

@@ -11,7 +11,15 @@ namespace Kys.Visitors
 			if (Program.Variables.ContainsKey(varname))
 				throw new DefinedException(context.asignation().VAR().Symbol, varname);
 			Program.Variables.Add(varname, null);
-			return Visit(context.asignation());
+			try
+			{
+				return Visit(context.asignation());
+			}
+			catch (TokenException)
+			{
+				Program.Variables.Remove(varname);
+				throw;
+			}
 		}
 
 		public override bool VisitAsignation([NotNull] KysParser.AsignationContext context)
@@ -19,9 +27,9 @@ namespace Kys.Visitors
 			var varname = context.VAR().GetText();
 			if (!Program.Variables.ContainsKey(varname))
 				throw new UndefinedException(context.VAR().Symbol, varname);
-			ValueResolver resolver = new();
+			ExpressionResolver resolver = new();
 
-			Program.Variables[varname] = resolver.Visit(context.value());
+			Program.Variables[varname] = resolver.Visit(context.expression());
 			return true;
 		}
 	}

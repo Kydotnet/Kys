@@ -1,13 +1,29 @@
 #!/home/koto/bin/kys
 
-var total = "holamundo";	// variable from string
+
+// declaration examples
+
+
+var total = "hola mundo";	// variable from string
 
 var year = 2021;			// variable from number
 
-var heelo = year;			// variable from other var
+var day = true;				// variable from bool
 
-//comment this
-var year = 2020;			// this cause an error because year is already defined
+var helo = year;			// variable from other var
 
-//comment this
-bash = "hola";				// this cause an error because bash is not defined
+var bool = (false);			// variable with parenthesis
+
+var or = bool || day;		// variable from a boolean operation
+
+var all = day || year;		// allowed because day is true and the operation is intercepted
+
+
+// not allowed
+
+
+var and = or && year;		// error because year is not a bool
+
+var year = 2020;			// error because year is already defined
+
+bash = "hola";				// error because bash is not defined

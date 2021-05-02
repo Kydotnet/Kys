@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Antlr4.Runtime;
 using Kys.Visitors;
@@ -32,7 +33,16 @@ namespace Kys
 			//execute the app
 			var exit = visitor.Visit(programContext);
 
+			PrintBeforExit();
+
 			return exit;
+		}
+
+		private static void PrintBeforExit()
+		{
+			Console.WriteLine("All defined variables:");
+			foreach (var item in Variables)
+				Console.WriteLine("{0}: {1}", item.Key, item.Value);
 		}
 	}
 }

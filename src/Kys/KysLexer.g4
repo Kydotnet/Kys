@@ -24,6 +24,8 @@ Kfunc: 'func';
 
 // / lang values / // 
 
+BOOL: 'true' | 'false';
+
 VAR: LOWER+;
 
 GVAR: Sdolar VAR;
@@ -32,11 +34,23 @@ RVAR: Sarr VAR;
 
 CONST: UPPER+;
 
-STRING: '"' LETTER* '"';
+STRING: '"' (LETTER | DIGIT | SPACE)* '"';
 
 NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 
+ANDOR: Sor | Sand;
+
 // / lang simbols / //
+
+Sor: '||';
+
+Sand: '&&';
+
+Snot: '~' | '!';
+
+SRpar: ')';
+
+SLpar: '(';
 
 Sequal: '=';
 

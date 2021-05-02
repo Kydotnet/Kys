@@ -10,7 +10,12 @@ sentence: declaration | asignation;
 
 declaration: Kvar asignation;
 
-asignation: VAR Sequal value SC;
+asignation: VAR Sequal expression SC;
+
+expression:
+	SLpar expression SRpar			# parenthesisExp
+	| expression ANDOR expression	# booleanExp
+	| value							# valueExp;
 
 // un valor asignable puede ser otra variable o un numero o un string
-value: STRING | NUMBER | VAR;
+value: STRING | NUMBER | BOOL | VAR;
