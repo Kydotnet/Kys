@@ -1,13 +1,15 @@
 #!/bin/kys
 
-if(true)
+var bool = true;
+var otherbool = true;
+
+if(bool)
 {
+	trace("condition is true");
 }
-else if(true)
+else if(otherbool)
 {
-}
-else
-{
+	trace("other condition is true");
 }
 
 while(true)

@@ -38,7 +38,7 @@ namespace Kys
 
 			Config.ConfigFuncs();
 
-			ProgramVisitor visitor = new();
+			KysRunner visitor = new();
 
 			//execute the app
 			ExitCode = visitor.Visit(programContext);

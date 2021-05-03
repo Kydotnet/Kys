@@ -8,6 +8,8 @@ namespace Kys.Visitors
 {
 	internal class ExpressionResolver : KysParserBaseVisitor<dynamic>
 	{
+		public static readonly ExpressionResolver Default = new();
+
 		public override dynamic VisitValueExp([NotNull] KysParser.ValueExpContext context) =>
 			ValueResolver.Default.Visit(context);
 

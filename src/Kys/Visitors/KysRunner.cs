@@ -4,17 +4,17 @@ using Kys.Exceptions;
 
 namespace Kys.Visitors
 {
-	public class ProgramVisitor : KysParserBaseVisitor<int>
+	public class KysRunner : KysParserBaseVisitor<int>
 	{
 
 		public override int VisitProgram([NotNull] KysParser.ProgramContext context)
 		{
-			SentenceExecutor executor = new();
+			InstructionAnalizer analizer = new();
 			try
 			{
-				// ejecutamos cada sentencia del programa.
-				foreach (var item in context.sentence())
-					if (!executor.Visit(item)) break;
+				// ejecutamos cada instrucción del programa.
+				foreach (var item in context.instruction())
+					if (!analizer.Analize(item)) break;
 				return Program.ExitCode;
 			}
 			catch (KysException e)

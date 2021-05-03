@@ -7,7 +7,7 @@ namespace Kys.Visitors
 {
 	internal class ValueResolver : KysParserBaseVisitor<dynamic>
 	{
-		public static ValueResolver Default = new();
+		public static readonly ValueResolver Default = new();
 
 		public override dynamic VisitValue([NotNull] KysParser.ValueContext context)
 		{

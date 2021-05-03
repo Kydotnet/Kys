@@ -8,11 +8,10 @@ namespace Kys.Visitors
 {
 	public class SentenceExecutor : KysParserBaseVisitor<bool>
 	{
-		public override bool VisitSentence([NotNull] KysParser.SentenceContext context)
-		{
-			Program.LastLine = context.Start.Line;
-			return base.VisitSentence(context);
-		}
+		public static readonly SentenceExecutor Default = new();
+
+		public override bool VisitControl([NotNull] KysParser.ControlContext context) =>
+			ControlStructure.Default.Visit(context);
 
 		public override bool VisitDeclaration([NotNull] KysParser.DeclarationContext context)
 		{
@@ -65,14 +64,6 @@ namespace Kys.Visitors
 
 			Program.Variables[varname] = resolver.Visit(context.expression());
 			return true;
-		}
-
-		public override bool VisitExitprogram([NotNull] KysParser.ExitprogramContext context)
-		{
-			double code = ValueResolver.GetNumber(context.NUMBER());
-			int exit = (int)Math.Round(code);
-			Program.ExitCode = exit;
-			return false;
 		}
 	}
 }
