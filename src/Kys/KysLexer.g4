@@ -26,6 +26,20 @@ Kfunc: 'func';
 
 Kexit: 'exit';
 
+Kif: 'if';
+
+Kelse: 'else';
+
+Kwhile: 'while';
+
+Ktimed: 'timed';
+
+Ktimeout: 'timeout';
+
+Kwait: 'wait';
+
+Kfor: 'for';
+
 // / lang values / // 
 
 BOOL: 'true' | 'false';

@@ -4,11 +4,48 @@ options {
 	tokenVocab = KysLexer;
 }
 
-program: sentence+;
+program: (instruction)+;
 
-sentence: exitprogram | funccall | declaration | asignation;
+instruction: exitprogram | sentence;
 
 exitprogram: Kexit NUMBER SC;
+
+sentence: control | funccall | declaration | asignation;
+
+control:
+	ifcontrol
+	| whilecontrol
+	| twhilecontrol
+	| waitcontrol
+	| forcontrol;
+
+ifcontrol: Kif SLpar expression SRpar block elsecontrol?;
+
+elsecontrol: Kelse (ifcontrol | block);
+
+whilecontrol: Kwhile SLpar expression SRpar block;
+
+twhilecontrol: Ktimed Kwhile twbucle;
+
+waitcontrol: Kwait twbucle;
+
+twbucle:
+	SLpar expression Scomma NUMBER SRpar block timeoutcontrol?;
+
+timeoutcontrol: Ktimeout SLpar NUMBER SRpar block;
+
+forcontrol:
+	Kfor SLpar varoperation expression SC NUMBER SRpar block;
+
+varoperation: declaration | asignation;
+
+block: SLbrack sentence* SRbrack;
+
+funccall: funcresult SC;
+
+funcresult: funcname SLpar arguments? SRpar;
+
+arguments: value (Scomma value)*;
 
 declaration: Kvar asignation;
 
@@ -26,12 +63,6 @@ expression:
 	| value												# valueExp;
 //| funcresult # funcExp
 
-funccall: funcresult SC;
-
-funcresult: funcname SLpar arguments? SRpar;
-
 funcname: VAR | FUNC;
-
-arguments: value (Scomma value)*;
 
 value: STRING | NUMBER | BOOL | VAR;
