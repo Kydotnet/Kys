@@ -3,17 +3,21 @@
 var bool = true;
 var otherbool = true;
 
+var i = 0;
+
 if(bool)
 {
 	trace("condition is true");
 }
-else if(otherbool)
+else 
 {
-	trace("other condition is true");
+	trace("condition is false");
 }
 
 while(true)
 {
+	trace("i is {0}",i);
+	i = i++;					// i++ not change the value of i
 }
 
 timed while(bool, 25)

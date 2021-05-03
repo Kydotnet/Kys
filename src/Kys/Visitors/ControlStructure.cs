@@ -26,6 +26,16 @@ namespace Kys.Visitors
 			return true;
 		}
 
+		public override bool VisitWhilecontrol([NotNull] KysParser.WhilecontrolContext context)
+		{
+			var block = context.block();
+
+			while (ExpressionResolver.Default.Visit(context.expression()))
+				Visit(block);
+
+			return true;
+		}
+
 		public override bool VisitBlock([NotNull] KysParser.BlockContext context)
 		{
 			foreach (var item in context.sentence())
