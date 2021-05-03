@@ -1,5 +1,4 @@
-#!/home/koto/bin/kys
-
+#!/bin/kys
 var year = 2021;
 
 trace("hello world");	// pass string as argument

@@ -1,4 +1,4 @@
-#!/home/koto/bin/kys
+#!/bin/kys
 
 var a = 7.0;	// floating 
 var b = 2; 
@@ -13,8 +13,8 @@ trace(c);		// -- operator: It works the same as the ++ operator but subtracting
 c = a^b;
 trace(c);		// ^ operator: Returns a raised to the power of b
 
-c = b¬a;
-trace(c);		// ¬ operator: Returns the root b of a
+c = b~a;
+trace(c);		// ~ operator: Returns the root b of a
 
 c = a*b;
 trace(c);		// * operator: Returns the multiplication of a x b

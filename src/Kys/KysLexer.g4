@@ -60,7 +60,7 @@ ANDOR: Sand | Sor;
 
 Spot: '^';
 
-Sroot: '¬';
+Sroot: '~';
 
 Sdiv: '/';
 
@@ -76,7 +76,7 @@ Sor: '||';
 
 Sand: '&&';
 
-Snot: '~' | '!';
+Snot: '!';
 
 SRpar: ')';
 

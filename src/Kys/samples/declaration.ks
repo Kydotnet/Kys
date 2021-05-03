@@ -1,5 +1,4 @@
-#!/home/koto/bin/kys
-
+#!/bin/kys
 
 // declaration examples
 

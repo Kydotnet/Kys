@@ -1,4 +1,4 @@
-#!/home/koto/bin/kys
+#!/bin/kys
 
 // the exit sentence is optional
 // an exit 0 sentence is implicit at the of the program
