@@ -15,9 +15,9 @@ namespace Kys.Visitors
 
 		public override bool VisitDeclaration([NotNull] KysParser.DeclarationContext context)
 		{
-			var varname = context.asignation().VAR().GetText();
+			var varname = context.asignation().ID().GetText();
 			if (Program.Variables.ContainsKey(varname))
-				throw new DefinedException(context.asignation().VAR().Symbol, varname);
+				throw new DefinedException(context.asignation().ID().Symbol, varname);
 			Program.Variables.Add(varname, null);
 			try
 			{
@@ -32,8 +32,8 @@ namespace Kys.Visitors
 
 		public override bool VisitFunccall([NotNull] KysParser.FunccallContext context)
 		{
-			var funcname = context.funcresult().funcname().GetText();
-			var nametoken = context.funcresult().funcname().Start;
+			var funcname = context.funcresult().ID().GetText();
+			var nametoken = context.funcresult().ID().Symbol;
 
 			if (!Program.Functions.ContainsKey(funcname))
 				throw new UndefinedFunctionException(nametoken, funcname);
@@ -57,9 +57,9 @@ namespace Kys.Visitors
 
 		public override bool VisitAsignation([NotNull] KysParser.AsignationContext context)
 		{
-			var varname = context.VAR().GetText();
+			var varname = context.ID().GetText();
 			if (!Program.Variables.ContainsKey(varname))
-				throw new UndefinedException(context.VAR().Symbol, varname);
+				throw new UndefinedException(context.ID().Symbol, varname);
 			ExpressionResolver resolver = new();
 
 			Program.Variables[varname] = resolver.Visit(context.expression());

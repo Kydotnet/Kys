@@ -9,14 +9,14 @@ COMMENT: Scomment ANY* -> channel(HIDDEN);
 // / fragments / //
 
 fragment LOWER: [a-z];
+
 fragment UPPER: [A-Z];
 
 fragment LETTER: LOWER | UPPER;
+
 fragment DIGIT: [0-9];
 
 fragment ANY: ~[\r\n];
-
-fragment PATH: [\\/:.];
 
 // / lang keywords / //
 
@@ -44,17 +44,13 @@ Kfor: 'for';
 
 BOOL: 'true' | 'false';
 
-VAR: LOWER+;
+ID: LETTER+;
 
-GVAR: Sdolar VAR;
+GID: Sdolar ID;
 
-RVAR: Sarr VAR;
+RID: Sarr ID;
 
-CONST: UPPER+;
-
-FUNC: LETTER+;
-
-STRING: '"' (LETTER | DIGIT | SPACE | PATH | SYMBOL)* '"';
+STRING: '"' ANY*? '"';
 
 NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 
@@ -112,19 +108,6 @@ Sinstruction: '#!';
 
 //semicolon
 SC: ';';
-
-SYMBOL:
-	Scomma
-	| Sor
-	| Sand
-	| Snot
-	| SRpar
-	| SLpar
-	| SLbrack
-	| SRbrack
-	| Sequal
-	| Sdolar
-	| Sarr;
 
 //whitespace
 WS: [ \t\r\n]+ -> channel(HIDDEN);

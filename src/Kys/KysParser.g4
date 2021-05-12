@@ -43,13 +43,13 @@ block: SLbrack sentence* SRbrack;
 
 funccall: funcresult SC;
 
-funcresult: funcname SLpar arguments? SRpar;
+funcresult: ID SLpar arguments? SRpar;
 
 arguments: value (Scomma value)*;
 
 declaration: Kvar asignation;
 
-asignation: VAR Sequal expression SC;
+asignation: ID Sequal expression SC;
 
 expression:
 	SLpar expression SRpar								# parenthesisExp
@@ -63,6 +63,4 @@ expression:
 	| value												# valueExp;
 //| funcresult # funcExp
 
-funcname: VAR | FUNC;
-
-value: STRING | NUMBER | BOOL | VAR;
+value: STRING | NUMBER | BOOL | ID;

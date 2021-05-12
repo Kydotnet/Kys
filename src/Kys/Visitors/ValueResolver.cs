@@ -17,8 +17,8 @@ namespace Kys.Visitors
 				return GetNumber(context.NUMBER());
 			else if (context.BOOL() != null)
 				return GetBool(context.BOOL());
-			else if (context.VAR() != null)
-				return GetVar(context.VAR());
+			else if (context.ID() != null)
+				return GetVar(context.ID());
 
 			return null;
 		}
