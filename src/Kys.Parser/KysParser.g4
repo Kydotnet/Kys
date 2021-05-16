@@ -45,7 +45,7 @@ funccall: funcresult SC;
 
 funcresult: ID SLpar arguments? SRpar;
 
-arguments: value (Scomma value)*;
+arguments: expression (Scomma expression)*;
 
 declaration: Kvar asignation;
 

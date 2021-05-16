@@ -3,7 +3,7 @@ var year = 2021;
 
 trace("hello world");	// pass string as argument
 
-trace(158);				// pass number as argument
+trace(158 + 2);			// pass a number as argument
 
 trace(year);			// pass a var as argument
 

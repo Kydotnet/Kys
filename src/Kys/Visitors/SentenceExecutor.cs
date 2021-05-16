@@ -45,7 +45,7 @@ namespace Kys.Visitors
 			dynamic[] args;
 			if (hasargs)
 			{
-				args = funcargs.value().Select(v => ValueResolver.Default.Visit(v)).ToArray();
+				args = funcargs.expression().Select(v => ExpressionResolver.Default.Visit(v)).ToArray();
 			}
 			else
 			{
