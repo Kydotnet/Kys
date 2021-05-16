@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using Antlr4.Runtime;
 using Kys.Core;
+using Kys.Parser;
 using Kys.Visitors;
 
 namespace Kys

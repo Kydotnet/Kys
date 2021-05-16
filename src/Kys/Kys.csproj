@@ -1,17 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kys.Parser\Kys.Parser.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-	<NoWarn>$(NoWarn);CS3021</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
-  </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="java -jar $(SolutionDir)build-tools/antlr4.jar -Dlanguage=CSharp KysParser.g4 KysLexer.g4 -no-listener -visitor -package Kys -o Generated" />
-  </Target>
 
 </Project>

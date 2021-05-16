@@ -1,3 +1,4 @@
 # ignore auto gen grammar
-Generated
+*.tokens
+*.interp
 .antlr
