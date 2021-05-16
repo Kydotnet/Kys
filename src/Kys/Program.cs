@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using Antlr4.Runtime;
-using Kys.Core;
+using Kys.Lang;
+using Kys.Library;
 using Kys.Parser;
 using Kys.Visitors;
 
@@ -37,7 +36,7 @@ namespace Kys
 			if (kysParser.NumberOfSyntaxErrors > 0)
 				return 1;
 
-			Config.ConfigFuncs();
+			FunctionRegister.Standard(Functions);
 
 			KysRunner visitor = new();
 

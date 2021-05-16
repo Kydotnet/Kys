@@ -40,7 +40,15 @@ Kwait: 'wait';
 
 Kfor: 'for';
 
+Kuse: 'use';
+
+Klib: 'lib';
+
+Kkys: 'kys';
+
 // / lang values / // 
+
+NULL: 'null';
 
 BOOL: 'true' | 'false';
 
@@ -53,6 +61,8 @@ RID: Sarr ID;
 STRING: '"' ANY*? '"';
 
 NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
+
+// / lang operators / //
 
 UNIARIT: Splus Splus | Sminus Sminus;
 
@@ -106,12 +116,8 @@ Scomment: '//';
 
 Sinstruction: '#!';
 
-//semicolon
 SC: ';';
 
-//whitespace
 WS: [ \t\r\n]+ -> channel(HIDDEN);
-
-SPACE: [ \t]+;
 
 ALL: .;

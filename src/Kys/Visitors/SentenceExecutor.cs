@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using Antlr4.Runtime.Misc;
-using Kys.Core;
 using Kys.Exceptions;
+using Kys.Lang;
 using Kys.Parser;
 
 namespace Kys.Visitors
@@ -51,8 +51,7 @@ namespace Kys.Visitors
 			{
 				args = Array.Empty<dynamic>();
 			}
-			Function func = Program.Functions[funcname];
-			_ = func.Call(args);
+			Program.Functions[funcname].Call(args);
 			return true;
 		}
 
