@@ -3,6 +3,7 @@ using Kys.Parser;
 using Antlr4.Runtime.Misc;
 using Kys.Exceptions;
 using Microsoft.CSharp.RuntimeBinder;
+using System.Linq;
 
 namespace Kys.Visitors
 {
@@ -123,6 +124,29 @@ namespace Kys.Visitors
 			{
 				throw new TokenException(context.Start, e.Message);
 			}
+		}
+
+		public override dynamic VisitFuncExp([NotNull] KysParser.FuncExpContext context)
+		{
+			var funcname = context.funcresult().ID().GetText();
+			var nametoken = context.funcresult().ID().Symbol;
+
+			if (!Program.Functions.ContainsKey(funcname))
+				throw new UndefinedFunctionException(nametoken, funcname);
+
+			var funcargs = context.funcresult().arguments();
+			var hasargs = funcargs != null;
+
+			dynamic[] args;
+			if (hasargs)
+			{
+				args = funcargs.expression().Select(v => ExpressionResolver.Default.Visit(v)).ToArray();
+			}
+			else
+			{
+				args = Array.Empty<dynamic>();
+			}
+			return Program.Functions[funcname].Call(args);
 		}
 	}
 }

@@ -60,7 +60,7 @@ expression:
 	| expression ADITIVE expression						# aditiveExp
 	| expression EQUALITY expression					# equalityExp
 	| expression ANDOR expression						# logicalExp
+	| funcresult										# funcExp
 	| value												# valueExp;
-//| funcresult # funcExp
 
 value: STRING | NUMBER | BOOL | ID;
