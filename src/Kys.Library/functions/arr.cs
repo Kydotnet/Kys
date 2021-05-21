@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 namespace Kys.Library
 {
 	partial class StandardFunctions
