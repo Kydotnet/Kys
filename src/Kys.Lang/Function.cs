@@ -12,8 +12,6 @@ namespace Kys.Lang
 		/// </summary>
 		public Func Method { get; init; }
 
-		public bool HasReturn { get; init; }
-
 		public virtual dynamic Call(params dynamic[] args)
 		{
 			if (ArgCount > -1 && args.Length != ArgCount)

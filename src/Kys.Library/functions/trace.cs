@@ -7,9 +7,9 @@ namespace Kys.Library
 	{
 		private delegate void d_trace(string obj, params object[] objs);
 
-		private static d_trace f_trace = Console.WriteLine;
+		private static readonly d_trace f_trace = Console.WriteLine;
 
-		[Function("trace", -1, false)]
+		[Function("trace", -1)]
 		private static dynamic trace(dynamic[] args)
 		{
 			if (args.Length == 0) Console.WriteLine();

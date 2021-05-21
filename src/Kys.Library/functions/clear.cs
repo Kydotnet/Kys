@@ -5,7 +5,7 @@ namespace Kys.Library
 	partial class StandardFunctions
 	{
 
-		[Function("clear", 0, false)]
+		[Function("clear", 0)]
 		private static dynamic Clear(dynamic[] args)
 		{
 			Console.Clear();

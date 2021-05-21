@@ -34,7 +34,6 @@ namespace Kys.Library
 			{
 				Name = att.Name,
 				ArgCount = att.Argcount,
-				HasReturn = att.HasReturn,
 				Method = func
 			});
 		}

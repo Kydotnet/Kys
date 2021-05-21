@@ -5,18 +5,14 @@ namespace Kys.Library
 	{
 		readonly string name;
 		readonly int argcount;
-		readonly bool hasreturn;
 
-		public FunctionAttribute(string name, int argcount, bool hasreturn)
+		public FunctionAttribute(string name, int argcount)
 		{
 			this.name = name;
 			this.argcount = argcount;
-			this.hasreturn = hasreturn;
 		}
 
 		public string Name => name;
-
-		public bool HasReturn => hasreturn;
 
 		public int Argcount => argcount;
 	}
