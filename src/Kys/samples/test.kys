@@ -1,3 +1,9 @@
 #!/bin/kys
+
 var int = type("System.Int32");
 
+var array = tarr(int,47);
+
+trace(array);
+
+trace(typeof("Hello world"));
