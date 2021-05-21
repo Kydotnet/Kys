@@ -1,0 +1,39 @@
+#!/bin/kys
+
+var bool = type("System.Boolean");
+
+var byte = type("System.Byte");
+
+var sbyte = type("System.SByte");
+
+var char = type("System.Char");
+
+var decimal = type("System.Decimal");
+
+var Double = type("System.Double");
+
+var float = type("System.Single");
+
+var int = type("System.Int32");
+
+var uint = type("System.UInt32");
+
+var nint = type("System.IntPtr");
+
+var nuint = type("System.UIntPtr");
+
+var long = type("System.Int64");
+
+var ulong = type("System.UInt64");
+
+var short = type("System.Int16");
+
+var ushort = type("System.UInt16");
+
+var object = type("System.Object");
+
+var string = type("System.String");
+
+var date = type("System.DateTime");
+
+var time = type("System.TimeSpan");

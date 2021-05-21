@@ -1,6 +1,3 @@
 #!/bin/kys
-var i = arr(10,23,12,16);
-var txt = format("you have {0:C2}",5000);
+var int = type("System.Int32");
 
-trace(txt);
-trace(i);
