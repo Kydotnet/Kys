@@ -13,7 +13,7 @@ namespace Kys.Library
 		private static dynamic trace(dynamic[] args)
 		{
 			if (args.Length == 0) Console.WriteLine();
-			else if (args.Length == 1) Console.WriteLine(args[0]);
+			else if (args.Length == 1) Console.WriteLine($"{args[0]}");
 			else
 			{
 				object[] par = args.Skip(1).ToArray();
