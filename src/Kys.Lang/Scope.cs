@@ -12,6 +12,9 @@ namespace Kys.Lang
 
 		public virtual void AsigVar(string ID, dynamic value)
 		{
+			if (Variables.ContainsKey(ID))
+				Variables[ID] = value;
+			throw new NullReferenceException($"Acceso a una variable {ID} no definida");
 		}
 
 		public virtual void SetVar(string ID, dynamic value) =>
@@ -20,10 +23,8 @@ namespace Kys.Lang
 		public virtual void DefVar(string ID, dynamic value) =>
 			CollectionExtensions.TryAdd(Variables, ID, value);
 
-		public virtual void DecVar(string ID, dynamic value)
-		{
-
-		}
+		public virtual void DecVar(string ID, dynamic value) =>
+			Variables.Add(ID, value);
 
 		public virtual dynamic GetVar(string ID, bool recursive)
 		{
