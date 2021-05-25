@@ -1,5 +1,10 @@
 #!/bin/kys
 
+for(var a = 0; a!=10; 2)
+{
+	trace(a);
+}
+
 var int = type("System.Int32");
 
 var array = tarr(int,47);
@@ -8,7 +13,7 @@ trace(array);
 
 trace(typeof("Hello world"));
 
-timed while(bool,500)
+timed while(true,500)
 {
 	trace("hello");
 }

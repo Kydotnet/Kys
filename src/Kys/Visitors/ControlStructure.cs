@@ -91,6 +91,34 @@ namespace Kys.Visitors
 			return true;
 		}
 
+		public override bool VisitWaitcontrol([NotNull] KysParser.WaitcontrolContext context)
+		{
+			Console.WriteLine("la estructura wait aun no ha sido implementada");
+			return true;
+		}
+
+		public override bool VisitForcontrol([NotNull] KysParser.ForcontrolContext context)
+		{
+			var step = ValueResolver.GetNumber(context.NUMBER());
+			string varname;
+			if (context.varoperation().declaration() != null)
+			{
+				varname = context.varoperation().declaration().asignation().ID().GetText();
+			}
+			else
+			{
+				varname = context.varoperation().asignation().ID().GetText();
+			}
+			SentenceExecutor.Default.VisitVaroperation(context.varoperation());
+
+			while (ExpressionResolver.Default.Visit(context.expression()))
+			{
+				Visit(context.block());
+				Program.Variables[varname] += step;
+			}
+			return true;
+		}
+
 		public override bool VisitBlock([NotNull] KysParser.BlockContext context)
 		{
 			foreach (var item in context.sentence())
