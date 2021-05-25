@@ -14,26 +14,31 @@ else
 	trace("condition is false");
 }
 
-while(true)
+while(i != 27)
 {
 	trace("i is {0}",i);
 	i = i++;					// i++ not change the value of i
 }
 
-timed while(bool, 25)
+timed while(bool,35)
 {
+	trace("hola");
 }
-timeout(5)
+timeout(2000) // esperamos 2 segundos
 {
+	trace("demasiados hola!");
 }
 
 wait(bool, 25)
 {
+	trace("bool ha cambiado");
 }
-timeout(5)
+timeout(1500)
 {
+	trace("mucho tiempo de espera");
 }
 
 for(var a = 0; a!=10; 1)
 {
+	trace(a);
 }

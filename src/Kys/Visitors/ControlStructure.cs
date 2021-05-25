@@ -1,5 +1,8 @@
-using Kys.Parser;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
+using Kys.Parser;
 
 namespace Kys.Visitors
 {
@@ -33,6 +36,58 @@ namespace Kys.Visitors
 			while (ExpressionResolver.Default.Visit(context.expression()))
 				Visit(block);
 
+			return true;
+		}
+
+		public override bool VisitTwhilecontrol([NotNull] KysParser.TwhilecontrolContext context)
+		{
+			var info = context.twbucle();
+			var block = info.block();
+			var timed = info.timeoutcontrol();
+			int wait = ValueResolver.GetNumber(info.NUMBER());
+
+			if (timed != null)
+			{
+				var twait = ValueResolver.GetNumber(timed.NUMBER());
+				var tblock = timed.block();
+				using var token = new CancellationTokenSource();
+
+				var task = Task.Run(() =>
+				{
+					while (ExpressionResolver.Default.Visit(info.expression()) && !token.IsCancellationRequested)
+					{
+						Visit(block);
+						Task.Delay(wait).Wait();
+					}
+					token.Cancel();
+				});
+				try
+				{
+					Task.Delay(twait, token.Token).Wait();
+				}
+				catch (Exception)
+				{
+
+				}
+				finally
+				{
+					if (!token.IsCancellationRequested)
+					{
+						token.Cancel();
+						// en caso de que el while se este ejecutando esperamos a que finalize, esto puede ocurrir cuando el bloque del while se pudo ejecutar y es algo muy pesado y aun no finaliza su ejecución
+						task.Wait();
+						Visit(tblock);
+					}
+				}
+			}
+			else
+			{
+				while (ExpressionResolver.Default.Visit(info.expression()))
+				{
+					Visit(block);
+					Task.Delay(wait).Wait();
+				}
+			}
 			return true;
 		}
 

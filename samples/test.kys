@@ -7,3 +7,14 @@ var array = tarr(int,47);
 trace(array);
 
 trace(typeof("Hello world"));
+
+timed while(bool,500)
+{
+	trace("hello");
+}
+timeout(2500)
+{
+	trace("demasiados hello!");
+}
+
+trace("ufas");
