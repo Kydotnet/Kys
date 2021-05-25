@@ -42,17 +42,19 @@ namespace Kys
 
 			//execute the app
 			ExitCode = visitor.Visit(programContext);
-
+#if DEBUG
 			PrintBeforExit();
+#endif
 
 			return ExitCode;
 		}
-
+#if DEBUG
 		private static void PrintBeforExit()
 		{
 			Console.WriteLine("All defined variables:");
 			foreach (var item in Variables)
 				Console.WriteLine("{0}: {1}", item.Key, item.Value);
 		}
+#endif
 	}
 }
