@@ -1,0 +1,17 @@
+<Project>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Juan Pablo Calle</Authors>
+		<Company>Juan Pablo Calle Grafe</Company>
+		<Copyright>Copyrigth © 2021 Juan Pablo Calle</Copyright>
+		<RepositoryUrl>https://github.com/JuanCalle1606/Kys</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>main</RepositoryBranch>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<NeutralLanguage>es</NeutralLanguage>
+	</PropertyGroup>
+</Project>
