@@ -10,7 +10,7 @@ instruction: exitprogram | sentence;
 
 exitprogram: Kexit NUMBER SC;
 
-sentence: control | funccall | declaration | asignation;
+sentence: control | funccall | varoperation;
 
 control:
 	ifcontrol
