@@ -4,12 +4,12 @@ namespace Kys.Lang
 	{
 		public string Name { get; init; }
 
-		public Scope Source { get; init; }
+		public IScope Source { get; init; }
 
 		public dynamic Value
 		{
-			get => Source[Name];
-			set => Source[Name] = value;
+			get => Source.GetVar(Name);
+			set => Source.SetVar(Name, value);
 		}
 	}
 }
