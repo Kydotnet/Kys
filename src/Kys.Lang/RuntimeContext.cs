@@ -19,7 +19,7 @@ namespace Kys.Lang
 
 		bool IContext.IsStarted { get; set; }
 
-		public bool AddFunction(IFunction Function) => Functions.TryAdd(Function.Name, Function);
+		public bool AddFunction(IFunction Function) => Functions.TryAdd(Function?.Name, Function);
 
 		public IFunction GetFunction(string Name)
 		{
@@ -27,7 +27,14 @@ namespace Kys.Lang
 				return function;
 			return null;
 		}
-		public void OverrideFunction(IFunction Function) => throw new System.NotImplementedException();
-		public bool RemoveFunction(string Name) => throw new System.NotImplementedException();
+
+		public void OverrideFunction(IFunction Function) => Functions[Function.Name] = Function;
+
+		public bool RemoveFunction(string Name)
+		{
+			if(((IContext)this).IsStarted || !Functions.ContainsKey(Name))
+				return false;
+			return Functions.Remove(Name);
+		}
 	}
 }

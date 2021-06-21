@@ -18,6 +18,21 @@ namespace Kys.Lang
 		public static IScope Current => ScopeStack.Peek();
 
 		/// <summary>
+		/// Busca entre una gerarquia de <see cref="IScope"/> al primero que contenga una definición para <paramref name="ID"/>.
+		/// </summary>
+		/// <param name="ID">Identificador de la variable a buscar.</param>
+		/// <param name="Start">Scope por el cual se empieza la busqueda, luego se vera su padre y luego el padre del padre y asi sucesivamente.</param>
+		/// <returns>Devuelve el primer scope que se encuentre con una definición para <paramref name="ID"/>, si no se encuentra ninguno se devuelve <c>null</c>.</returns>
+		public static IScope CheckRecursive(string ID, IScope Start)
+		{
+			if (Start.ConVar(ID))
+				return Start;
+			if (Start.ParentScope != null)
+				CheckRecursive(ID, Start.ParentScope);
+			return null;
+		}
+
+		/// <summary>
 		/// El <see cref="IScope"/> padre al cual esta instancia tiene acceso a variables. Esta propiedad no puede ser cambiado luego de inicializada la variable.
 		/// </summary>
 		IScope ParentScope { get; init; }
@@ -44,6 +59,16 @@ namespace Kys.Lang
 		/// Limipa este scope eliminando todas las variables que contiene.
 		/// </summary>
 		void Clear();
+
+		/// <summary>
+		/// Indica si este scope contiene una definición para la variable dada.
+		/// </summary>
+		/// <remarks>
+		/// Este metodo no es recursivo, para buscar recursivamente se usa <see cref="CheckRecursive(string, IScope)"/>.
+		/// </remarks>
+		/// <param name="ID">Identificador de la variable a buscar.</param>
+		/// <returns><c>true</c> si se tiene una variable <paramref name="ID"/>, <c>false</c> si no se tiene.</returns>
+		bool ConVar(string ID);
 
 		/// <summary>
 		/// Asigna un valor a una variable existente, si la variable existe en este o en otro <see cref="IScope"/> padre entonces cambia su valor, si no existe genera un error.
