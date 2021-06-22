@@ -1,48 +1,87 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Kys.Lang
 {
-	public class Scope
+	/// <summary>
+	/// Implementación por defecto de <see cref="IScope"/>.
+	/// </summary>
+	public class Scope : IScope
 	{
-		public Scope Parent { get; init; }
+		public IScope ParentScope { get; init; }
 
-		protected IDictionary<string, dynamic> Variables { get; set; } = new ConcurrentDictionary<string, dynamic>();
+		/// <summary>
+		/// Contenedor interno de las variables
+		/// </summary>>
+		internal IDictionary<string, dynamic> Variables { get; set; } = new ConcurrentDictionary<string, dynamic>();
 
-		public virtual void AsigVar(string ID, dynamic value)
+		public void Clear() => Variables.Clear();
+
+		public void AsigVar(string ID, dynamic value, bool recursive = true)
 		{
-			if (Variables.ContainsKey(ID))
-				Variables[ID] = value;
-			throw new NullReferenceException($"Acceso a una variable {ID} no definida");
-		}
-
-		public virtual void SetVar(string ID, dynamic value) =>
+			if (recursive)
+			{
+				var scope = IScope.CheckRecursive(ID, this);
+				if (scope != null)
+				{
+					scope.AsigVar(ID, value, false);
+					return;
+				}
+			}
+			if (!Variables.ContainsKey(ID))
+				_ = Variables[ID];
 			Variables[ID] = value;
+		}
 
-		public virtual void DefVar(string ID, dynamic value) =>
-			CollectionExtensions.TryAdd(Variables, ID, value);
+		public void SetVar(string ID, dynamic value, bool recursive = true)
+		{
+			if(recursive)
+			{
+				var scope = IScope.CheckRecursive(ID, this);
+				if(scope != null)
+				{
+					scope.SetVar(ID, value, false);
+					return;
+				}
+			}
+			Variables[ID] = value;
+		}
 
-		public virtual void DecVar(string ID, dynamic value) =>
+		public void DefVar(string ID, dynamic value, bool recursive = true)
+		{
+			if (recursive)
+			{
+				var scope = IScope.CheckRecursive(ID, this);
+				if (scope != null)
+					return;
+			}
+			else if (ConVar(ID)) return;
+			Variables[ID] = value;
+		}
+
+		public void DecVar(string ID, dynamic value, bool recursive = true)
+		{
+			if (recursive)
+			{
+				var scope = IScope.CheckRecursive(ID, this);
+				if (scope != null)
+				{
+					scope.DecVar(ID, value, false);
+					return;
+				}
+			}
 			Variables.Add(ID, value);
-
-		public virtual dynamic GetVar(string ID, bool recursive)
-		{
-			if (Variables.ContainsKey(ID))
-				return Variables[ID];
-			if (recursive && Parent != null)
-				return Parent.GetVar(ID, true);
-			else
-				throw new ArgumentException($"Acceso a una variable {ID} no definida en el contexto actual", nameof(ID));
 		}
 
-		public dynamic GetVar(string ID) => GetVar(ID, true);
-
-		public virtual dynamic this[string ID]
+		public dynamic GetVar(string ID, bool recursive = true)
 		{
-			get => GetVar(ID, true);
-			set => AsigVar(ID, value);
+			if (Variables.TryGetValue(ID, out dynamic ret))
+				return ret;	
+			if (recursive && ParentScope != null)
+				return ParentScope.GetVar(ID);
+			return Variables[ID];
 		}
 
+		public bool ConVar(string ID) => Variables.ContainsKey(ID);
 	}
 }
