@@ -7,12 +7,12 @@ namespace Kys.Library
 {
 	public static class FunctionRegister
 	{
-		public static void Standard(IDictionary functions)
+		public static void Standard(IContext functions)
 		{
 			AddFunctions(typeof(StandardFunctions), functions);
 		}
 
-		public static void AddFunctions(Type ContainerType, IDictionary functions)
+		public static void AddFunctions(Type ContainerType, IContext functions)
 		{
 			var methods = ContainerType.GetMethods(
 				BindingFlags.DeclaredOnly
@@ -26,16 +26,17 @@ namespace Kys.Library
 			}
 		}
 
-		private static void AddFunction(IDictionary functions, MethodInfo item, FunctionAttribute att)
+		private static void AddFunction(IContext functions, MethodInfo item, FunctionAttribute att)
 		{
-			Func func = item.CreateDelegate<Func>();
+			ParamArrayAttribute a;
+			/*Func func = item.CreateDelegate<Func>();
 
 			functions.Add(att.Name, new Function()
 			{
 				Name = att.Name,
 				ArgCount = att.Argcount,
 				Method = func
-			});
+			});*/
 		}
 	}
 }
