@@ -6,6 +6,8 @@
 
   <PropertyGroup>
     <Version>0.1</Version>
+    <DocumentationFile>Kys.Library.xml</DocumentationFile>
+    <RepositoryBranch>Kyl-dev</RepositoryBranch>
   </PropertyGroup>
 
 </Project>

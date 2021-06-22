@@ -6,6 +6,8 @@
 
   <PropertyGroup>
     <Version>0.1</Version>
+    <DocumentationFile>Kys.Interpreter.xml</DocumentationFile>
+    <RepositoryBranch>Interpreter-dev</RepositoryBranch>
   </PropertyGroup>
 
 </Project>
