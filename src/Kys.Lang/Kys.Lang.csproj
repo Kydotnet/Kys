@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-	<Version>1.0.0</Version>
+	<Version>1.0.1-dev</Version>
 	<DocumentationFile>Kys.Lang.xml</DocumentationFile>
 	<RepositoryBranch>Lang-dev</RepositoryBranch>
   </PropertyGroup>

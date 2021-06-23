@@ -1,4 +1,9 @@
 ﻿# Changelog
+
+## v1.0.1
+### Arreglado
+- Corregido un error en CsFunction al llamar funciones con parametros infinitos.
+
 ## v1.0.0
 ### Agregado
 - Agregadas las intefaces en lugar de clases base.
