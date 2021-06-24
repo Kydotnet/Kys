@@ -56,32 +56,38 @@ namespace Kys.Library
 		/// <param name="att"></param>
 		private static void PrivateAddFunction(IContext targetContext, MethodInfo method, FunctionAttribute att)
 		{
-			ParamArrayAttribute a;
-			if(att.Passinfo)
-			{
+			var args = method.GetParameters();
+			var argcount = args.Length;
+			bool infArg = false;
+			string name = att.Name ?? method.Name;
 
-			}
-			else
+			if (argcount > 0 && args[^1].GetCustomAttribute<ParamArrayAttribute>() != null)
 			{
-				var args = method.GetParameters();
-				var argcount = args.Length;
-				bool infArg = false;
-				if(argcount > 0 && args[^1].GetCustomAttribute<ParamArrayAttribute>() != null)
-				{
-					infArg = true;
-					argcount--;
-				}
-				var function = new CsFunction()
-				{
-					Method = method,
-					Name = att.Name??method.Name,
-					ParentContext = targetContext,
-					ArgCount = argcount,
-					InfArgs = infArg
-				};
-				if(!targetContext.AddFunction(function))
-					throw new ArgumentException($"A function with the name \"{function.Name}\" is already defined in the target context.");
+				infArg = true;
+				argcount--;
 			}
+
+			if (att.Passinfo)
+			{
+				if (argcount < 2)
+					throw new ArgumentException($"El metodo {name} debe tener como minimo 2 argumentos ya que se establecio Passinfo en true.");
+				if (!args[0].ParameterType.IsAssignableFrom(typeof(IContext)))
+					throw new ArgumentException($"El primer parametro del metodo {name} debe poder aceptar objetos de tipo IContext.");
+				if (!args[1].ParameterType.IsAssignableFrom(typeof(IScope)))
+					throw new ArgumentException($"El segundo parametro del metodo {name} debe poder aceptar objetos de tipo IScope.");
+				argcount -= 2;
+			}
+
+			var function = new CsFunction()
+			{
+				Method = method,
+				Name = name,
+				ParentContext = targetContext,
+				ArgCount = argcount,
+				InfArgs = infArg
+			};
+			if (!targetContext.AddFunction(function))
+				throw new ArgumentException($"A function with the name \"{function.Name}\" is already defined in the target context.");
 		}
 	}
 }
