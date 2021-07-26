@@ -1,3 +1,4 @@
+#pragma warning disable CS1591
 using System;
 
 namespace Kys.Library
@@ -5,6 +6,6 @@ namespace Kys.Library
 	partial class StandardFunctions
 	{
 		[Function]
-		static Array arr(params dynamic[] args) => args;
+		public static Array arr(params dynamic[] args) => args;
 	}
 }

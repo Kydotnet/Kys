@@ -1,9 +1,10 @@
+#pragma warning disable CS1591
 using System;
 
 namespace Kys.Library
 {
 	partial class StandardFunctions
 	{
-		[Function] static void clear() => Console.Clear();
+		[Function] public static void clear() => Console.Clear();
 	}
 }

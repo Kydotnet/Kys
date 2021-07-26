@@ -1,4 +1,4 @@
 ﻿namespace Kys.Library
 {
-	internal static partial class StandardFunctions { }
+	public static partial class StandardFunctions { }
 }
