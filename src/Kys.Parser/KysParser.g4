@@ -39,7 +39,7 @@ forcontrol:
 
 varoperation: declaration | creation | definition | asignation;
 
-block: SLbrack sentence* SRbrack;
+block: SLbrack sentence* SRbrack | sentence;
 
 funccall: funcresult SC;
 
