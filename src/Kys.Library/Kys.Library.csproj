@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\KYLib-CSharp\KYLib\KYLib.csproj" />
     <ProjectReference Include="..\Kys.Lang\Kys.Lang.csproj" />
   </ItemGroup>
 

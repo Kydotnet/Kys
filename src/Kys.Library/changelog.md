@@ -4,6 +4,7 @@
 
 ### Agregado
 - Agregados mas metodos a FunctionRegister. 
+- Creadas las clases ScopeFactory y ContextFactory.
 
 ### Cambiado
 - Se ha modificado la estructura de FunctionAttribute.
