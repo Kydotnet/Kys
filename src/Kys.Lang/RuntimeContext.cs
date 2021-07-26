@@ -11,7 +11,7 @@ namespace Kys.Lang
 		/// 
 		private IDictionary<string, IFunction> Functions = new ConcurrentDictionary<string, IFunction>();
 
-		public IScope RootScope { get; } = new Scope();
+		public IScope RootScope { get; init; }
 
 		public IEnumerable<IFunction> DefinedFunctions => Functions.Values;
 

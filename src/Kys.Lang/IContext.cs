@@ -48,7 +48,7 @@ namespace Kys.Lang
 		/// <summary>
 		/// <see cref="IScope"/> raiz de este contexto.
 		/// </summary>
-		IScope RootScope { get; }
+		IScope RootScope { get; init; }
 
 		/// <summary>
 		/// Lista de funciones que han sido definidas en este contexto.
