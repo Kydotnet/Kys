@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Reflection;
+using KYLib.System;
 using Kys.Lang;
 
 namespace Kys.Library
@@ -10,31 +10,28 @@ namespace Kys.Library
 	/// </summary>
 	public static class FunctionRegister
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		public static void AddStandardFunctions() => AddStandardFunctionsTo(IContext.Me);
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="targetContext"></param>
-		public static void AddStandardFunctionsTo(IContext targetContext) => AddFunctionsFromType(typeof(StandardFunctions), targetContext);
+		public static void AddStandardFunctions(this IContext targetContext) =>
+			AddFunctions(targetContext, typeof(StandardFunctions));
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <typeparam name="ContainerType"></typeparam>
 		/// <param name="targetContext"></param>
-		public static void AddFunctionsFromType<ContainerType>(IContext targetContext) =>
-			AddFunctionsFromType(typeof(ContainerType), targetContext);
+		public static void AddFunctions<ContainerType>(this IContext targetContext) =>
+			AddFunctions(targetContext, typeof(ContainerType));
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="ContainerType"></param>
 		/// <param name="targetContext"></param>
-		public static void AddFunctionsFromType(Type ContainerType, IContext targetContext)
+		public static void AddFunctions(this IContext targetContext, Type ContainerType)
 		{
 			var methods = ContainerType.GetMethods(
 				BindingFlags.DeclaredOnly
@@ -44,9 +41,29 @@ namespace Kys.Library
 			foreach (var item in methods)
 			{
 				var att = item.GetCustomAttribute<FunctionAttribute>();
-				if (att != null) PrivateAddFunction(targetContext, item, att);
+				if (att != null)
+					PrivateAddFunction(targetContext, item, att);
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="targetContext"></param>
+		/// <param name="method"></param>
+		public static void AddCsFunction(this IContext targetContext, MethodInfo method) =>
+			PrivateAddFunction(targetContext, method, FunctionAttribute.None);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="targetContext"></param>
+		/// <param name="method"></param>
+		public static void AddCsFunction<T>(this IContext targetContext, T method)
+			where T : Delegate =>
+			PrivateAddFunction(targetContext, method.Method, FunctionAttribute.None);
+
 
 		/// <summary>
 		/// 
