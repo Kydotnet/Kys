@@ -22,6 +22,10 @@ fragment ANY: ~[\r\n];
 
 Kvar: 'var';
 
+Kset: 'set';
+
+Kdef: 'def';
+
 Kfunc: 'func';
 
 Kexit: 'exit';

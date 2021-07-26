@@ -37,7 +37,7 @@ timeoutcontrol: Ktimeout SLpar NUMBER SRpar block;
 forcontrol:
 	Kfor SLpar varoperation expression SC NUMBER SRpar block;
 
-varoperation: declaration | asignation;
+varoperation: declaration | creation | definition | asignation;
 
 block: SLbrack sentence* SRbrack;
 
@@ -48,6 +48,10 @@ funcresult: ID SLpar arguments? SRpar;
 arguments: expression (Scomma expression)*;
 
 declaration: Kvar asignation;
+
+creation: Kset asignation;
+
+definition: Kdef asignation;
 
 asignation: ID Sequal expression SC;
 
