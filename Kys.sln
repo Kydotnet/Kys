@@ -5,15 +5,17 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3ED2FCB7-4DC1-4B9F-BAF4-AC62378AD953}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kys.Parser", "src\Kys.Parser\Kys.Parser.csproj", "{10B50627-D69D-423B-AEB9-128F8A0F3A25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kys.Parser", "src\Kys.Parser\Kys.Parser.csproj", "{10B50627-D69D-423B-AEB9-128F8A0F3A25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kys", "src\Kys\Kys.csproj", "{A4BD57B4-7F22-44EC-9E79-2376F068AA53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kys", "src\Kys\Kys.csproj", "{A4BD57B4-7F22-44EC-9E79-2376F068AA53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kys.Library", "src\Kys.Library\Kys.Library.csproj", "{D6E996D0-32C7-4367-9585-ED6401C19E65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kys.Library", "src\Kys.Library\Kys.Library.csproj", "{D6E996D0-32C7-4367-9585-ED6401C19E65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kys.Lang", "src\Kys.Lang\Kys.Lang.csproj", "{8297C7FE-912C-4880-B815-1923FA527A35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kys.Lang", "src\Kys.Lang\Kys.Lang.csproj", "{8297C7FE-912C-4880-B815-1923FA527A35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kys.Interpreter", "src\Kys.Interpreter\Kys.Interpreter.csproj", "{0576C79E-0505-4AFC-8DB7-F3521CBB7C40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kys.Interpreter", "src\Kys.Interpreter\Kys.Interpreter.csproj", "{0576C79E-0505-4AFC-8DB7-F3521CBB7C40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYLib", "..\KYLib-CSharp\KYLib\KYLib.csproj", "{7876C49C-5293-456D-B21F-4A8D1F8808BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,9 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{10B50627-D69D-423B-AEB9-128F8A0F3A25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -88,6 +87,21 @@ Global
 		{0576C79E-0505-4AFC-8DB7-F3521CBB7C40}.Release|x64.Build.0 = Release|Any CPU
 		{0576C79E-0505-4AFC-8DB7-F3521CBB7C40}.Release|x86.ActiveCfg = Release|Any CPU
 		{0576C79E-0505-4AFC-8DB7-F3521CBB7C40}.Release|x86.Build.0 = Release|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Debug|x64.Build.0 = Debug|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Debug|x86.Build.0 = Debug|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Release|x64.ActiveCfg = Release|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Release|x64.Build.0 = Release|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Release|x86.ActiveCfg = Release|Any CPU
+		{7876C49C-5293-456D-B21F-4A8D1F8808BC}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{10B50627-D69D-423B-AEB9-128F8A0F3A25} = {3ED2FCB7-4DC1-4B9F-BAF4-AC62378AD953}
@@ -95,5 +109,8 @@ Global
 		{D6E996D0-32C7-4367-9585-ED6401C19E65} = {3ED2FCB7-4DC1-4B9F-BAF4-AC62378AD953}
 		{8297C7FE-912C-4880-B815-1923FA527A35} = {3ED2FCB7-4DC1-4B9F-BAF4-AC62378AD953}
 		{0576C79E-0505-4AFC-8DB7-F3521CBB7C40} = {3ED2FCB7-4DC1-4B9F-BAF4-AC62378AD953}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {116D5C32-0F27-46BC-96F6-E68BA6E303C3}
 	EndGlobalSection
 EndGlobal
