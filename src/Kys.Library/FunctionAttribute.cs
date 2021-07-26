@@ -6,6 +6,10 @@ namespace Kys.Library
 	[System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
 	public sealed class FunctionAttribute : System.Attribute
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly FunctionAttribute None = new();
 
 		/// <summary>
 		/// Indica si el metodo va a recibir información del llamado, si es establecido en true entonces el primer parametro del metodo debe recibir un <see cref="Lang.IContext"/> y el segundo parametro debe recibir un <see cref="Lang.IScope"/>.
