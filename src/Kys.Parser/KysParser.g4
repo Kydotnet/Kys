@@ -8,7 +8,7 @@ program: (toplevel)* (instruction)+;
 
 toplevel: kyl | kys;
 
-kyl: Kkyl ID STRING;
+kyl: Kkyl ID STRING+;
 
 kys: Kkys ID value*;
 
@@ -22,7 +22,7 @@ params: ID (Scomma ID)*;
 
 exitprogram: Kexit NUMBER SC;
 
-sentence: control | funccall | varoperation;
+sentence: control | funccall | varoperation SC;
 
 control:
 	ifcontrol
@@ -47,7 +47,7 @@ twbucle:
 timeoutcontrol: Ktimeout SLpar NUMBER SRpar block;
 
 forcontrol:
-	Kfor SLpar varoperation expression SC NUMBER SRpar block;
+	Kfor SLpar varoperation? SC expression? SC expression? SRpar block;
 
 varoperation: declaration | creation | definition | asignation;
 
@@ -65,7 +65,7 @@ creation: Kset asignation;
 
 definition: Kdef asignation;
 
-asignation: ID Sequal expression SC;
+asignation: ID Sequal expression;
 
 expression:
 	SLpar expression SRpar								# parenthesisExp
