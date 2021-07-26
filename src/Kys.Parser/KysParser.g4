@@ -4,9 +4,21 @@ options {
 	tokenVocab = KysLexer;
 }
 
-program: (instruction)+;
+program: (toplevel)* (instruction)+;
 
-instruction: exitprogram | sentence;
+toplevel: kyl | kys;
+
+kyl: Kkyl ID STRING;
+
+kys: Kkys ID value*;
+
+instruction: exitprogram | funcdefinition | sentence;
+
+funcdefinition: Kfunc ID SLpar parameters SRpar block;
+
+parameters: params? PARAMS?;
+
+params: ID (Scomma ID)*;
 
 exitprogram: Kexit NUMBER SC;
 

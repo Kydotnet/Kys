@@ -44,9 +44,7 @@ Kwait: 'wait';
 
 Kfor: 'for';
 
-Kuse: 'use';
-
-Klib: 'lib';
+Kkyl: 'kyl';
 
 Kkys: 'kys';
 
@@ -80,6 +78,8 @@ EQUALITY: Sequal Sequal | Snot Sequal;
 
 ANDOR: Sand | Sor;
 
+PARAMS: Sdot Sdot Sdot;
+
 // / lang simbols / //
 
 Spot: '^';
@@ -95,6 +95,8 @@ Splus: '+';
 Sminus: '-';
 
 Scomma: ',';
+
+Sdot: '.';
 
 Sor: '||';
 
