@@ -4,3 +4,4 @@
 
 ### Agregado
 - Se han agregado las operaciones creation(set) y definition(def) con variables.
+- Agregado NULL como una valor base.

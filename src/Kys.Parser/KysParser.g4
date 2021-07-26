@@ -67,4 +67,4 @@ expression:
 	| funcresult										# funcExp
 	| value												# valueExp;
 
-value: STRING | NUMBER | BOOL | ID;
+value: NULL | STRING | NUMBER | BOOL | ID;
