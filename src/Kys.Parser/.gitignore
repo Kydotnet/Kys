@@ -1,4 +1,0 @@
-# ignore auto gen grammar
-*.tokens
-*.interp
-.antlr

@@ -22,6 +22,10 @@ fragment ANY: ~[\r\n];
 
 Kvar: 'var';
 
+Kset: 'set';
+
+Kdef: 'def';
+
 Kfunc: 'func';
 
 Kexit: 'exit';
@@ -40,9 +44,7 @@ Kwait: 'wait';
 
 Kfor: 'for';
 
-Kuse: 'use';
-
-Klib: 'lib';
+Kkyl: 'kyl';
 
 Kkys: 'kys';
 
@@ -54,7 +56,7 @@ BOOL: 'true' | 'false';
 
 ID: LETTER+;
 
-GID: Sdolar ID;
+GID: Sdolar (DIGIT+ | Smul);
 
 RID: Sarr ID;
 
@@ -66,17 +68,37 @@ NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 
 UNIARIT: Splus Splus | Sminus Sminus;
 
+POTENCIALASSIGN: POTENCIAL Sequal;
+
 POTENCIAL: Spot | Sroot;
+
+MULTIPLICATIVEASSIGN: MULTIPLICATIVE Sequal;
 
 MULTIPLICATIVE: Smul | Sdiv;
 
+MODULEASSIGN: Smod Sequal;
+
+ADITIVEASSIGN: ADITIVE Sequal;
+
 ADITIVE: Splus | Sminus;
+
+EQRELATIONAL: RELATIONAL Sequal;
+
+RELATIONAL: Sless | Sgreat;
 
 EQUALITY: Sequal Sequal | Snot Sequal;
 
 ANDOR: Sand | Sor;
 
+PARAMS: Sdot Sdot Sdot;
+
 // / lang simbols / //
+
+Sless: '<';
+
+Sgreat: '>';
+
+Smod: '%';
 
 Spot: '^';
 
@@ -91,6 +113,8 @@ Splus: '+';
 Sminus: '-';
 
 Scomma: ',';
+
+Sdot: '.';
 
 Sor: '||';
 

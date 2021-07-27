@@ -4,13 +4,25 @@ options {
 	tokenVocab = KysLexer;
 }
 
-program: (instruction)+;
+program: (toplevel)* (instruction)+;
 
-instruction: exitprogram | sentence;
+toplevel: kyl | kys;
+
+kyl: Kkyl ID STRING+;
+
+kys: Kkys ID value*;
+
+instruction: exitprogram | funcdefinition | sentence;
+
+funcdefinition: Kfunc ID SLpar parameters SRpar block;
+
+parameters: params? PARAMS?;
+
+params: ID (Scomma ID)*;
 
 exitprogram: Kexit NUMBER SC;
 
-sentence: control | funccall | varoperation;
+sentence: control | funccall | varoperation SC;
 
 control:
 	ifcontrol
@@ -35,11 +47,11 @@ twbucle:
 timeoutcontrol: Ktimeout SLpar NUMBER SRpar block;
 
 forcontrol:
-	Kfor SLpar varoperation expression SC NUMBER SRpar block;
+	Kfor SLpar varoperation? SC expression? SC expression? SRpar block;
 
-varoperation: declaration | asignation;
+varoperation: declaration | creation | definition | asignation;
 
-block: SLbrack sentence* SRbrack;
+block: SLbrack sentence* SRbrack | sentence;
 
 funccall: funcresult SC;
 
@@ -49,18 +61,30 @@ arguments: expression (Scomma expression)*;
 
 declaration: Kvar asignation;
 
-asignation: ID Sequal expression SC;
+creation: Kset asignation;
+
+definition: Kdef asignation;
+
+asignation:
+	ID Sequal expression					# simpleAssign
+	| ID POTENCIALASSIGN expression			# potencialAssign
+	| ID MULTIPLICATIVEASSIGN expression	# multiplicativeAssign
+	| ID MODULEASSIGN expression			# moduleAssign
+	| ID ADITIVEASSIGN expression			# aditiveAssign;
 
 expression:
 	SLpar expression SRpar								# parenthesisExp
-	| <assoc = right> Snot expression					# uniNotExp
 	| <assoc = right> expression UNIARIT				# uniAritExp
+	| <assoc = right> Snot expression					# uniNotExp
 	| <assoc = right> expression POTENCIAL expression	# potencialExp
 	| expression MULTIPLICATIVE expression				# multiplicativeExp
+	| expression Smod expression						# moduleExp
 	| expression ADITIVE expression						# aditiveExp
+	| expression RELATIONAL expression					# relationalExp
+	| expression EQRELATIONAL expression				# eqrelationalExp
 	| expression EQUALITY expression					# equalityExp
 	| expression ANDOR expression						# logicalExp
 	| funcresult										# funcExp
 	| value												# valueExp;
 
-value: STRING | NUMBER | BOOL | ID;
+value: NULL | STRING | NUMBER | BOOL | GID | RID | ID;
