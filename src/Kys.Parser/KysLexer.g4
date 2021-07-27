@@ -56,7 +56,7 @@ BOOL: 'true' | 'false';
 
 ID: LETTER+;
 
-GID: Sdolar ID;
+GID: Sdolar (DIGIT+ | Smul);
 
 RID: Sarr ID;
 
