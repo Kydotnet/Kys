@@ -11,3 +11,5 @@
 - Se han agregado las operaciones creation(set) y definition(def) con variables.
 - Agregado NULL como una valor base.
 - Se ha agregado la definición de función.
+- Agregado el operador modulo.
+- Agregadas mas operadores de comparación.

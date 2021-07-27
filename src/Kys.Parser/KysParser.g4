@@ -69,11 +69,14 @@ asignation: ID Sequal expression;
 
 expression:
 	SLpar expression SRpar								# parenthesisExp
-	| <assoc = right> Snot expression					# uniNotExp
 	| <assoc = right> expression UNIARIT				# uniAritExp
+	| <assoc = right> Snot expression					# uniNotExp
 	| <assoc = right> expression POTENCIAL expression	# potencialExp
 	| expression MULTIPLICATIVE expression				# multiplicativeExp
+	| expression Smod expression						# moduleExp
 	| expression ADITIVE expression						# aditiveExp
+	| expression RELATIONAL expression					# relationalExp
+	| expression EQRELATIONAL expression				# eqrelationalExp
 	| expression EQUALITY expression					# equalityExp
 	| expression ANDOR expression						# logicalExp
 	| funcresult										# funcExp

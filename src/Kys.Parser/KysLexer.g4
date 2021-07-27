@@ -74,6 +74,10 @@ MULTIPLICATIVE: Smul | Sdiv;
 
 ADITIVE: Splus | Sminus;
 
+EQRELATIONAL: RELATIONAL Sequal;
+
+RELATIONAL: Sless | Sgreat;
+
 EQUALITY: Sequal Sequal | Snot Sequal;
 
 ANDOR: Sand | Sor;
@@ -81,6 +85,12 @@ ANDOR: Sand | Sor;
 PARAMS: Sdot Sdot Sdot;
 
 // / lang simbols / //
+
+Sless: '<';
+
+Sgreat: '>';
+
+Smod: '%';
 
 Spot: '^';
 
