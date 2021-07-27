@@ -65,7 +65,12 @@ creation: Kset asignation;
 
 definition: Kdef asignation;
 
-asignation: ID Sequal expression;
+asignation:
+	ID Sequal expression					# simpleAssign
+	| ID POTENCIALASSIGN expression			# potencialAssign
+	| ID MULTIPLICATIVEASSIGN expression	# multiplicativeAssign
+	| ID MODULEASSIGN expression			# moduleAssign
+	| ID ADITIVEASSIGN expression			# aditiveAssign;
 
 expression:
 	SLpar expression SRpar								# parenthesisExp

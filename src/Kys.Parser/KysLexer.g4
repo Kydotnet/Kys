@@ -68,9 +68,17 @@ NUMBER: '-'? DIGIT+ ('.' DIGIT+)?;
 
 UNIARIT: Splus Splus | Sminus Sminus;
 
+POTENCIALASSIGN: POTENCIAL Sequal;
+
 POTENCIAL: Spot | Sroot;
 
+MULTIPLICATIVEASSIGN: MULTIPLICATIVE Sequal;
+
 MULTIPLICATIVE: Smul | Sdiv;
+
+MODULEASSIGN: Smod Sequal;
+
+ADITIVEASSIGN: ADITIVE Sequal;
 
 ADITIVE: Splus | Sminus;
 

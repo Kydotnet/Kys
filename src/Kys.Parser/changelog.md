@@ -12,4 +12,5 @@
 - Agregado NULL como una valor base.
 - Se ha agregado la definición de función.
 - Agregado el operador modulo.
-- Agregadas mas operadores de comparación.
+- Agregados mas operadores de comparación.
+- Agregadas mas formas de asignación.
