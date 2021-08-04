@@ -64,8 +64,35 @@ namespace Kys.Library
 		/// <param name="method"></param>
 		public static void AddCsFunction<T>(this IContext targetContext, T method)
 			where T : Delegate =>
-			PrivateAddFunction(targetContext, method.Method, FunctionAttribute.None);
+			AddCsFunction(targetContext, method.Method, method.Method.GetCustomAttribute<FunctionAttribute>() ?? FunctionAttribute.None);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="targetContext"></param>
+		/// <param name="funcdefinition"></param>
+		public static bool AddKysFunction(this IContext targetContext, FuncdefinitionContext funcdefinition)
+		{
+			var parameters = funcdefinition.parameters();
+			var infargs = parameters.PARAMS()!=null;
+			var @params = parameters.@params()?.ID().Select(id=>id.GetText()).ToArray();
+			var haveparams = @params != null;
+			var argcount = haveparams ?  @params.Length - (infargs?1:0) : 0;
+			var ID = funcdefinition.ID().GetText();
+			var sentences = funcdefinition.block().sentence();
+
+			var function = new KysFunction()
+			{
+				Name = ID,
+				ArgCount = argcount,
+				InfArgs = infargs,
+				ParentContext = targetContext,
+				Sentences = sentences,
+				ParamsNames = @params
+			};
+
+			return targetContext.AddFunction(function);
+		}
 
 		/// <summary>
 		/// 
@@ -73,8 +100,10 @@ namespace Kys.Library
 		/// <param name="targetContext"></param>
 		/// <param name="method"></param>
 		/// <param name="att"></param>
-		private static void PrivateAddFunction(IContext targetContext, MethodInfo method, FunctionAttribute att)
+		private static void AddCsFunction(IContext targetContext, MethodInfo method, FunctionAttribute att)
 		{
+			var realmethod = IsAsync(method);
+
 			var args = method.GetParameters();
 			var argcount = args.Length;
 			bool infArg = false;
