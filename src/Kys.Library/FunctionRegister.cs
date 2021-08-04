@@ -1,14 +1,16 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using KYLib.System;
 using Kys.Lang;
+using static Kys.Parser.KysParser;
 
 namespace Kys.Library
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public static class FunctionRegister
+	public static partial class FunctionRegister
 	{
 
 		/// <summary>
@@ -42,7 +44,7 @@ namespace Kys.Library
 			{
 				var att = item.GetCustomAttribute<FunctionAttribute>();
 				if (att != null)
-					PrivateAddFunction(targetContext, item, att);
+					AddCsFunction(targetContext, item, att);
 			}
 		}
 
@@ -52,7 +54,7 @@ namespace Kys.Library
 		/// <param name="targetContext"></param>
 		/// <param name="method"></param>
 		public static void AddCsFunction(this IContext targetContext, MethodInfo method) =>
-			PrivateAddFunction(targetContext, method, FunctionAttribute.None);
+			AddCsFunction(targetContext, method, method.GetCustomAttribute<FunctionAttribute>() ?? FunctionAttribute.None);
 
 		/// <summary>
 		/// 
@@ -97,7 +99,7 @@ namespace Kys.Library
 
 			var function = new CsFunction()
 			{
-				Method = method,
+				Method = realmethod,
 				Name = name,
 				ParentContext = targetContext,
 				ArgCount = argcount,
