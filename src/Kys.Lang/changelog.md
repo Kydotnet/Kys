@@ -4,6 +4,7 @@
 ### Arreglado
 - Corregido un error en CsFunction al llamar funciones con parametros infinitos.
 - Permitido cualquier tipo de arreglo en parametros infinitos y no solo dynamic.
+- Se han hecho virtuales algunos metodos de CsFunction.
 
 ### Cambiado
 - IContext.RootScope ahora tiene un accesor init.

@@ -21,20 +21,14 @@ namespace Kys.Lang
 
 		public bool AddFunction(IFunction Function) => Functions.TryAdd(Function?.Name, Function);
 
-		public IFunction GetFunction(string Name)
-		{
-			if(Functions.TryGetValue(Name, out IFunction function))
-				return function;
-			return null;
-		}
+		public IFunction GetFunction(string Name) => 
+			Functions.TryGetValue(Name, out IFunction function) ? function : null;
 
-		public void OverrideFunction(IFunction Function) => Functions[Function.Name] = Function;
+		public void OverrideFunction(IFunction Function) => Functions[Function?.Name] = Function;
 
 		public bool RemoveFunction(string Name)
 		{
-			if(((IContext)this).IsStarted || !Functions.ContainsKey(Name))
-				return false;
-			return Functions.Remove(Name);
+			return ((IContext)this).IsStarted || !Functions.ContainsKey(Name) ? false : Functions.Remove(Name);
 		}
 	}
 }

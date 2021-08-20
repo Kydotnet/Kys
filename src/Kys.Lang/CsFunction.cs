@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
 namespace Kys.Lang
 {
+	[DebuggerDisplay("{Method}")]
 	public class CsFunction : IFunction
 	{
 		/// <summary>
@@ -24,8 +26,8 @@ namespace Kys.Lang
 
 		public IContext ParentContext { get; init; }
 
-		public dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
-		{
+		public virtual dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
+		{ 
 			var realargs = GetRealArgs(args);
 			if (! PassInfo) return Method.Invoke(null, realargs);
 			FunctionScope.Start();
@@ -38,7 +40,7 @@ namespace Kys.Lang
 			return ret;
 		}
 
-		private dynamic[] GetRealArgs(dynamic[] args)
+		protected virtual dynamic[] GetRealArgs(dynamic[] args)
 		{
 			if (!InfArgs || args.Length < ArgCount) return args;
 			var ret = new object[ArgCount + 1];
