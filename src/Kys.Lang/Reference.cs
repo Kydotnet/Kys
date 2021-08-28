@@ -8,7 +8,7 @@ namespace Kys.Lang
 		public string Name { get; init; }
 
 		/// <summary>
-		/// Scope en el cuals e encuentra la variable.
+		/// Scope en el cual se encuentra la variable.
 		/// </summary>
 		public IScope Source { get; init; }
 
@@ -17,8 +17,8 @@ namespace Kys.Lang
 		/// </summary>
 		public dynamic Value
 		{
-			get => Source.GetVar(Name);
-			set => Source.SetVar(Name, value);
+			get => Source.GetVar(Name, false);
+			set => Source.SetVar(Name, value, false);
 		}
 	}
 }

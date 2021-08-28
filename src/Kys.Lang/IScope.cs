@@ -18,7 +18,7 @@ namespace Kys.Lang
 		public static IScope Current => ScopeStack.Peek();
 
 		/// <summary>
-		/// Busca entre una gerarquia de <see cref="IScope"/> al primero que contenga una definición para <paramref name="ID"/>.
+		/// Busca entre una jerarquia de <see cref="IScope"/> al primero que contenga una definición para <paramref name="ID"/>.
 		/// </summary>
 		/// <param name="ID">Identificador de la variable a buscar.</param>
 		/// <param name="Start">Scope por el cual se empieza la busqueda, luego se vera su padre y luego el padre del padre y asi sucesivamente.</param>
@@ -28,7 +28,7 @@ namespace Kys.Lang
 			if (Start.ConVar(ID))
 				return Start;
 			if (Start.ParentScope != null)
-				CheckRecursive(ID, Start.ParentScope);
+				return CheckRecursive(ID, Start.ParentScope);
 			return null;
 		}
 
