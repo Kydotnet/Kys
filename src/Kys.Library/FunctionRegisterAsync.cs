@@ -18,7 +18,7 @@ namespace Kys.Library
 			if(method.GetCustomAttribute<AsyncStateMachineAttribute>() != null || method.ReturnType.IsAssignableTo(typeof(Task)))
 			{
 				if (method.ReturnType == typeof(void))
-					throw new NotSupportedException("async void ");
+					throw new NotSupportedException("async void is not supported");
 				return GenerateMethod(method);
 			}
 			return method;
