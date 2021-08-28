@@ -3,6 +3,10 @@
 ## v1.0.1
 ### Arreglado
 - Corregido un error en CsFunction al llamar funciones con parametros infinitos.
+- Permitido cualquier tipo de arreglo en parametros infinitos y no solo dynamic.
+- Se han hecho virtuales algunos metodos de CsFunction.
+- Correción en Reference que no debe buscar recursivamente.
+- Arreglado CheckRecursive no devolvia el valor en algunos casos.
 
 ### Cambiado
 - IContext.RootScope ahora tiene un accesor init.
