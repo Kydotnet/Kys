@@ -1,10 +1,7 @@
 #pragma warning disable CS1591
-using System;
+namespace Kys.Library;
 
-namespace Kys.Library
+partial class StandardFunctions
 {
-	partial class StandardFunctions
-	{
-		[Function] public static Type type(string typeName) => Type.GetType(typeName, false, true);
-	}
+	[Function] public static Type type(string typeName) => Type.GetType(typeName, false, true);
 }

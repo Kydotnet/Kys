@@ -1,11 +1,8 @@
 ﻿#pragma warning disable CS1591
-using System;
+namespace Kys.Library;
 
-namespace Kys.Library
+partial class StandardFunctions
 {
-	partial class StandardFunctions
-	{
-		[Function]
-		public static ConsoleKeyInfo key() => Console.ReadKey();
-	}
+	[Function]
+	public static ConsoleKeyInfo key() => Console.ReadKey();
 }

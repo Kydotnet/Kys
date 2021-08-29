@@ -1,35 +1,34 @@
-namespace Kys.Lang
+namespace Kys.Lang;
+
+public interface IFunction
 {
-	public interface IFunction
-	{
-		/// <summary>
-		/// Nombre que toma la función a la hora de llamarla.
-		/// </summary>
-		string Name { get; }
+	/// <summary>
+	/// Nombre que toma la función a la hora de llamarla.
+	/// </summary>
+	string Name { get; }
 
-		/// <summary>
-		/// Cantidad de parametros que recibe esta función.
-		/// En caso de que <see cref="InfArgs"/> sea <c>true</c> entonces este valor es el numero minimo de parametros que recibe la función.
-		/// </summary>
-		int ArgCount { get; }
+	/// <summary>
+	/// Cantidad de parametros que recibe esta función.
+	/// En caso de que <see cref="InfArgs"/> sea <c>true</c> entonces este valor es el numero minimo de parametros que recibe la función.
+	/// </summary>
+	int ArgCount { get; }
 
-		/// <summary>
-		/// Indica si la función puede recibir una cantidad infinita de parametros.
-		/// </summary>
-		bool InfArgs { get; }
+	/// <summary>
+	/// Indica si la función puede recibir una cantidad infinita de parametros.
+	/// </summary>
+	bool InfArgs { get; }
 
-		/// <summary>
-		/// Contexto en el cual se encuentra registrada esta función.
-		/// </summary>
-		IContext ParentContext { get; init; }
+	/// <summary>
+	/// Contexto en el cual se encuentra registrada esta función.
+	/// </summary>
+	IContext ParentContext { get; init; }
 
-		/// <summary>
-		/// Ejecuta la función por causa de un llamado.
-		/// </summary>
-		/// <param name="CallerContext">Contexto desde el cual se invoco a la función.</param>
-		/// <param name="FunctionScope">Scope que sera usado para almacenar variabes locales de la función.</param>
-		/// <param name="args">Argumentos pasados a la función.</param>
-		/// <returns>Valor devuelto por la función.</returns>
-		dynamic Call(IContext CallerContext, IScope FunctionScope, dynamic[] args);
-	}
+	/// <summary>
+	/// Ejecuta la función por causa de un llamado.
+	/// </summary>
+	/// <param name="CallerContext">Contexto desde el cual se invoco a la función.</param>
+	/// <param name="FunctionScope">Scope que sera usado para almacenar variabes locales de la función.</param>
+	/// <param name="args">Argumentos pasados a la función.</param>
+	/// <returns>Valor devuelto por la función.</returns>
+	dynamic Call(IContext CallerContext, IScope FunctionScope, dynamic[] args);
 }
