@@ -3,7 +3,7 @@
 [AutoLoad]
 public static class ScopeFactory
 {
-	private static Dictionary<ScopeFactoryType, Func<IScope>> Factory = new();
+	private static Dictionary<ScopeFactoryType, Func<IScope, IScope>> Factory = new();
 
 	private static IEnumerable<ScopeFactoryType> types =
 #if NET5_0_OR_GREATER
@@ -13,22 +13,22 @@ public static class ScopeFactory
 #endif
 
 	public static void ChangeScope<T>(ScopeFactoryType type) where T : IScope, new() =>
-		Factory[type] = () => new T();
+		Factory[type] = (p) => new T() { ParentScope = p };
 
-	public static IScope Create(ScopeFactoryType type)
+	public static IScope Create(ScopeFactoryType type, IScope parent = null)
 	{
 		if (Factory.ContainsKey(type))
-			return Factory[type]();
+			return Factory[type](parent);
 		foreach (var item in types)
 		{
 			if ((type & item) == item && Factory.ContainsKey(item))
-				return Factory[item]();
+				return Factory[item](parent);
 		}
-		return Factory[ScopeFactoryType.ALL]();
+		return Factory[ScopeFactoryType.ALL](parent);
 	}
 
 	[AutoLoad]
-	static ScopeFactory() => Factory.Add(ScopeFactoryType.ALL, () => new Scope());
+	static ScopeFactory() => Factory.Add(ScopeFactoryType.ALL, (p) => new Scope() { ParentScope = p });
 }
 
 public enum ScopeFactoryType
