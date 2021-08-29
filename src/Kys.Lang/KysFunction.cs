@@ -46,7 +46,12 @@ namespace Kys.Lang
 				FunctionScope.SetVar(ParamsNames[^1], param);
 			}
 
-			IEnumerable<(string First, dynamic Second)> Zip = temp.Zip(args);
+#if NET5_0_OR_GREATER
+			var Zip = temp.Zip(args);
+#elif NETSTANDARD2_1_OR_GREATER
+			var Zip = temp.Zip(args, (First, Second) => (First, Second));
+#endif
+
 			foreach (var item in Zip)
 				FunctionScope.SetVar(item.First, item.Second, false);
 

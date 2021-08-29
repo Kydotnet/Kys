@@ -4,8 +4,8 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
-		<LangVersion>9.0</LangVersion>
+		<LangVersion>10.0</LangVersion>
+        <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>Juan Pablo Calle</Authors>
 		<Company>Juan Pablo Calle Grafe</Company>
@@ -16,5 +16,13 @@
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<NeutralLanguage>es</NeutralLanguage>
+		<RootNamespace>$(MSBuildProjectName)</RootNamespace>
+    	<NoWin32Manifest>true</NoWin32Manifest>
+    	<Nullable>annotations</Nullable>
+    	<BaseIntermediateOutputPath>$(SolutionDir).build\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+   		<BaseOutputPath>$(SolutionDir).build\bin\$(MSBuildProjectName)</BaseOutputPath>
 	</PropertyGroup>
+	<ItemGroup Condition="$(TargetFramework) != 'net5.0'">
+    	<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  	</ItemGroup>
 </Project>
