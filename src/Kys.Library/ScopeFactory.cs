@@ -17,7 +17,12 @@ namespace Kys.Library
 	{
 		private static Dictionary<ScopeFactoryType, Func<IScope>>  Factory = new();
 
-		private static IEnumerable<ScopeFactoryType> types = Enum.GetValues<ScopeFactoryType>().Reverse();
+		private static IEnumerable<ScopeFactoryType> types =
+#if NET5_0_OR_GREATER
+			Enum.GetValues<ScopeFactoryType>().Reverse();
+#else
+			Enum.GetValues(typeof(ScopeFactoryType)).Cast<ScopeFactoryType>().Reverse();
+#endif
 
 		/// <summary>
 		/// 

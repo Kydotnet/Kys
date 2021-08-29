@@ -9,21 +9,18 @@ using Kys.Lang;
 
 namespace Kys.Library
 {
-	/// <summary>
-	/// 
-	/// </summary>
 	[AutoLoad]
 	public static class ContextFactory
 	{
 		private static Dictionary<ContextFactoryType, Func<IContext>>  Factory = new();
 
-		private static IEnumerable<ContextFactoryType> types = Enum.GetValues<ContextFactoryType>().Reverse();
+		private static IEnumerable<ContextFactoryType> types =
+#if NET5_0_OR_GREATER
+			Enum.GetValues<ContextFactoryType>().Reverse();
+#else
+			Enum.GetValues(typeof(ContextFactoryType)).Cast<ContextFactoryType>().Reverse();
+#endif
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="type"></param>
 		public static void ChangeContext<T>(ContextFactoryType type) where T : IContext, new()
 		{
 			Factory[type] = () => new T()
@@ -32,10 +29,6 @@ namespace Kys.Library
 			};
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
 		public static IContext Create(ContextFactoryType type)
 		{
 			if(Factory.ContainsKey(type))
@@ -61,9 +54,7 @@ namespace Kys.Library
 			};
 		}
 	}
-	/// <summary>
-	/// 
-	/// </summary>
+
 	public enum ContextFactoryType
 	{
 		ALL		= 0b0,

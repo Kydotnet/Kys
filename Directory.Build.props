@@ -22,6 +22,9 @@
     	<BaseIntermediateOutputPath>$(SolutionDir).build\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
    		<BaseOutputPath>$(SolutionDir).build\bin\$(MSBuildProjectName)</BaseOutputPath>
 	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration) == 'Release'">
+		<DebugType>none</DebugType>
+	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework) != 'net5.0'">
     	<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   	</ItemGroup>

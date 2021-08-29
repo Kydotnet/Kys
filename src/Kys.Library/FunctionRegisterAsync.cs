@@ -15,6 +15,7 @@ namespace Kys.Library
 
 		private static MethodInfo IsAsync(MethodInfo method)
 		{
+			
 			if(method.GetCustomAttribute<AsyncStateMachineAttribute>() != null || method.ReturnType.IsAssignableTo(typeof(Task)))
 			{
 				if (method.ReturnType == typeof(void))
