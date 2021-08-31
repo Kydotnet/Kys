@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Antlr4.Runtime;
+using KYLib.Modding;
+using KYLib.System;
+using KYLib.Utils;
 using Kys.Lang;
 using Kys.Library;
 using Kys.Parser;
@@ -13,7 +19,7 @@ namespace Kys
 	{
 		public static Dictionary<string, dynamic> Variables = new();
 
-		public static Dictionary<string, Function> Functions = new();
+		public static Dictionary<string, IFunction> Functions = new();
 
 		public static int ExitCode = 0;
 
@@ -21,40 +27,63 @@ namespace Kys
 
 		static int Main(string[] args)
 		{
-			if (args.Length == 0)
-				return 1;
-			var path = args[0];
+			Mod.EnableAutoLoads();
+			IContext.ChangeContext(ContextFactory.Create(ContextFactoryType.ME));
 
-			using var input = File.OpenRead(path);
-			ICharStream inputStream = CharStreams.fromStream(input);
-			KysLexer kysLexer = new(inputStream);
-			CommonTokenStream commonTokenStream = new(kysLexer);
-			KysParser kysParser = new(commonTokenStream);
-			// syntax check
-			KysParser.ProgramContext programContext = kysParser.program();
+			var Int = typeof(int);
+			var Double = typeof(double);
+			var a = Int.IsAssignableFrom(Double);
+			var b = Double.IsAssignableFrom(Int);
+			var c = Int.IsAssignableTo(Double);
+			var d = Double.IsAssignableTo(Int);
 
-			if (kysParser.NumberOfSyntaxErrors > 0)
-				return 1;
+			IContext.Me.AddFunctions(typeof(Program));
+			//IContext.Me.AddStandardFunctions();
+			var func =
+@"kyl gen ""Kys.Program, Kys""";
+			var chars = CharStreams.fromString(func);
+			var lexer = new KysLexer(chars);
+			var tokens = new CommonTokenStream(lexer);
+			var parser = new KysParser(tokens);
+			parser.AddErrorListener(new Errores());
+			var funcdef = parser.kyl();
 
-			FunctionRegister.Standard(Functions);
+			KylLoader.Load(funcdef);
 
-			KysRunner visitor = new();
+			IFunction f = IContext.Me.GetFunction("Print");
+			
+			f.Call(null,null,(byte) 34 , 23, 46 , 45, 5);
 
-			//execute the app
-			ExitCode = visitor.Visit(programContext);
-#if DEBUG
-			PrintBeforExit();
-#endif
-
-			return ExitCode;
+			IContext.Start();
+			IContext.Stop();
+			return 0;
 		}
-#if DEBUG
-		private static void PrintBeforExit()
+
+		public static void Print(double obj) => Console.WriteLine(obj);
+
+		public static void Print(double obj , string a) => Console.WriteLine(obj);
+
+		public static void Print(double obj, string a, int b, int c) => Console.WriteLine(obj);
+
+
+		private static async Task<string> waitfor(params int[] time)
 		{
-			Console.WriteLine("All defined variables:");
-			foreach (var item in Variables)
-				Console.WriteLine("{0}: {1}", item.Key, item.Value);
+			foreach (var item in time)
+			{
+				await Task.Delay(item);
+			}
+			Console.WriteLine("waited");
+			return time.ToString();
 		}
-#endif
+
+		public delegate Task<string> asinc(int[] time);
+	}
+
+	class Errores : BaseErrorListener
+	{
+		public override void SyntaxError(TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
+		{
+			Environment.Exit(-1);
+		}
 	}
 }

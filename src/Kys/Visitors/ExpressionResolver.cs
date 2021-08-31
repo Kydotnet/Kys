@@ -146,7 +146,7 @@ namespace Kys.Visitors
 			{
 				args = Array.Empty<dynamic>();
 			}
-			return Program.Functions[funcname].Call(args);
+			return null;// Program.Functions[funcname].Call(args);
 		}
 	}
 }

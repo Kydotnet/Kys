@@ -10,8 +10,6 @@ public sealed class OverloadFunction : IFunction
 
 	public int ArgCount { get; private set; }
 
-	public int MaxArgCount { get; private set; }
-
 	public bool InfArgs { get; private set; }
 
 	public IContext ParentContext { get; init; }
@@ -27,11 +25,9 @@ public sealed class OverloadFunction : IFunction
 		).
 		ToList();
 		list.Sort(Sort);
-
 		Functions = list.ToArray();
 		InfArgs = list.Any(f => f.InfArgs);
 		ArgCount = list.Min(f => f.ArgCount);
-		MaxArgCount = list.Max(f => f.ArgCount);
 	}
 
 	private static int Sort(CsFunction f1, CsFunction f2)

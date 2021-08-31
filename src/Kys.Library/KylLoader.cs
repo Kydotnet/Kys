@@ -2,8 +2,6 @@
 
 public static class KylLoader
 {
-	static Type Type = typeof(KylLoader);
-
 	public static void Load(KylContext context)
 	{
 		var cmd = context.ID().GetText().ToLower();
@@ -16,7 +14,7 @@ public static class KylLoader
 					break;
 				}
 			default:
-				throw new NotImplementedException();
+				throw new NotImplementedException("Unknow kyl instruction");
 		}
 	}
 }

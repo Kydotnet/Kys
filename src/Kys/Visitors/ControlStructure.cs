@@ -99,7 +99,7 @@ namespace Kys.Visitors
 
 		public override bool VisitForcontrol([NotNull] KysParser.ForcontrolContext context)
 		{
-			var step = ValueResolver.GetNumber(context.NUMBER());
+			/*var step = ValueResolver.GetNumber(context.NUMBER());
 			string varname;
 			if (context.varoperation().declaration() != null)
 			{
@@ -115,7 +115,7 @@ namespace Kys.Visitors
 			{
 				Visit(context.block());
 				Program.Variables[varname] += step;
-			}
+			}*/
 			return true;
 		}
 

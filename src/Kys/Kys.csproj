@@ -9,8 +9,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-	<TargetFrameworks>net5.0</TargetFrameworks>
-	<Version>0.1</Version>
+	  <TargetFrameworks>net5.0</TargetFrameworks>
+	  <Version>0.1</Version>
   </PropertyGroup>
 
 </Project>

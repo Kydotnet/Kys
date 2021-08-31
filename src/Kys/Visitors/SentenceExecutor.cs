@@ -16,7 +16,7 @@ namespace Kys.Visitors
 
 		public override bool VisitDeclaration([NotNull] KysParser.DeclarationContext context)
 		{
-			var varname = context.asignation().ID().GetText();
+			/*var varname = context.asignation().ID().GetText();
 			if (Program.Variables.ContainsKey(varname))
 				throw new DefinedException(context.asignation().ID().Symbol, varname);
 			Program.Variables.Add(varname, null);
@@ -28,7 +28,8 @@ namespace Kys.Visitors
 			{
 				Program.Variables.Remove(varname);
 				throw;
-			}
+			}*/
+			return true;
 		}
 
 		public override bool VisitFunccall([NotNull] KysParser.FunccallContext context)
@@ -51,11 +52,11 @@ namespace Kys.Visitors
 			{
 				args = Array.Empty<dynamic>();
 			}
-			Program.Functions[funcname].Call(args);
+			//Program.Functions[funcname].Call(args);
 			return true;
 		}
 
-		public override bool VisitAsignation([NotNull] KysParser.AsignationContext context)
+		/*public override bool VisitAsignation([NotNull] KysParser.AsignationContext context)
 		{
 			var varname = context.ID().GetText();
 			if (!Program.Variables.ContainsKey(varname))
@@ -64,6 +65,6 @@ namespace Kys.Visitors
 
 			Program.Variables[varname] = resolver.Visit(context.expression());
 			return true;
-		}
+		}*/
 	}
 }

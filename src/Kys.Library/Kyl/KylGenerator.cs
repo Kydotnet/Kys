@@ -19,23 +19,23 @@ public static class KylGenerator
 					group methods by methods.Name into methodGroup
 					select methodGroup.ToArray();
 
-		var count = 0;
 		foreach (var method in smetv)
 		{
 			if (method.Length == 1) // metodo unico
 				IContext.Me.AddCsFunction(method[0]);
 			else // metodo con sobrecargas
 				IContext.Me.AddOverloadFunction(method);
-			count++;
 		}
 	}
 
 	public static void AddOverloadFunction(this IContext targetContext, MethodInfo[] methodOverloads)
 	{
-		var methods = methodOverloads.ToList();
-
 		var name = methodOverloads[0].Name;
 
+		var sameName = methodOverloads.TrueForAll(m => m.Name == name);
+
+		if (!sameName)
+			throw new ArgumentException("All methods must be overloads of the same base method", nameof(methodOverloads));
 
 		var function = new OverloadFunction(methodOverloads)
 		{
@@ -44,7 +44,6 @@ public static class KylGenerator
 		};
 
 		targetContext.AddFunction(function);
-		//function.Call(null,null, "34", 35);
 	}
 
 	private static Type GetType(string[] args)

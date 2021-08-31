@@ -30,5 +30,5 @@ public interface IFunction
 	/// <param name="FunctionScope">Scope que sera usado para almacenar variabes locales de la función.</param>
 	/// <param name="args">Argumentos pasados a la función.</param>
 	/// <returns>Valor devuelto por la función.</returns>
-	dynamic Call(IContext CallerContext, IScope FunctionScope, dynamic[] args);
+	dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args);
 }
