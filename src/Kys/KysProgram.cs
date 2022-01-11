@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,14 +24,14 @@ internal class KysProgram : BackgroundService
 		this.applicationLifetime = applicationLifetime;
 	}
 
-	public KysProgram(IHostApplicationLifetime applicationLifetime, KysParser programParser, IIterpreterBuilder interpreter, ILogger<KysProgram> logger) : 
+	public KysProgram(IHostApplicationLifetime applicationLifetime, KysParser programParser, IInterpreterBuilder interpreter, ILogger<KysProgram> logger) : 
 		this(applicationLifetime, programParser, interpreter.Build(), logger)
 	{
 
 	}
 
 	public KysProgram(IHostApplicationLifetime applicationLifetime, KysParser programParser, IServiceProvider contextFactory) : 
-		this(applicationLifetime, programParser, KysInterpreter.CreateDefaultBuilder(contextFactory), null)
+		this(applicationLifetime, programParser, KysInterpreter.CreateDefaultBuilder(contextFactory).ConfigureDefaulContext(), null)
 	{
 	
 	}
@@ -42,7 +43,14 @@ internal class KysProgram : BackgroundService
 
 	private void Start()
 	{
-		interpreter.Start(ProgramParser.program());
+		var sw1 = Stopwatch.StartNew();
+		var parsed = ProgramParser.program();
+		Console.WriteLine("Parsed in {0}ms", sw1.ElapsedMilliseconds);
+		sw1.Stop();
+		sw1.Start();
+		interpreter.Start(parsed);
+		Console.WriteLine("Kys executed in {0}ms", sw1.ElapsedMilliseconds);
+		sw1.Stop();
 		applicationLifetime.StopApplication();
 	}
 }

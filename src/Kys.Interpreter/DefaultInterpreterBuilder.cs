@@ -1,6 +1,6 @@
 ﻿namespace Kys.Interpreter
 {
-	internal class DefaultInterpreterBuilder : IIterpreterBuilder
+	internal class DefaultInterpreterBuilder : IInterpreterBuilder
 	{
 		private IContext context;
 		IInterpreterSesion sesion;
@@ -23,7 +23,7 @@
 			};
 		}
 
-		public IIterpreterBuilder ConfigureContext(Action<IContext> configureDelegate)
+		public IInterpreterBuilder ConfigureContext(Action<IContext> configureDelegate)
 		{
 			configureDelegate(context);
 			return this;

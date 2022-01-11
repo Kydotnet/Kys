@@ -1,13 +1,17 @@
-using Kys.Parser;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using Kys.Exceptions;
 
-namespace Kys.Visitors
+
+namespace Kys.Interpreter.Visitors
 {
-	internal class ValueResolver : KysParserBaseVisitor<dynamic>
+	public class ValueVisitor : KysParserBaseVisitor<dynamic>
 	{
-		public static readonly ValueResolver Default = new();
+		IInterpreterSesion Sesion;
+
+		public ValueVisitor(IInterpreterSesion sesion)
+		{
+			Sesion = sesion;
+		}
 
 		public override dynamic VisitValue([NotNull] KysParser.ValueContext context)
 		{
@@ -18,7 +22,7 @@ namespace Kys.Visitors
 			else if (context.BOOL() != null)
 				return GetBool(context.BOOL());
 			else if (context.ID() != null)
-				return GetVar(context.ID());
+				return GetVar(Sesion, context.ID());
 
 			return null;
 		}
@@ -29,13 +33,11 @@ namespace Kys.Visitors
 			return raw.Equals("true");
 		}
 
-		public static dynamic GetVar(ITerminalNode terminalNode)
+		public static dynamic GetVar(IInterpreterSesion sesion, ITerminalNode terminalNode)
 		{
 			var raw = terminalNode.GetText();
 
-			if (!Program.Variables.ContainsKey(raw))
-				throw new UndefinedException(terminalNode.Symbol, raw);
-			return Program.Variables[raw];
+			return sesion.CurrentScope.GetVar(raw);
 		}
 
 		public static dynamic GetNumber(ITerminalNode terminalNode)

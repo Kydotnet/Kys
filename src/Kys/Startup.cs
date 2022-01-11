@@ -13,6 +13,9 @@ using Kys.Parser;
 using Kys.Library;
 using Kys.Lang;
 using Kys.Interpreter;
+using static Kys.Parser.KysParser;
+using Kys.Interpreter.Visitors;
+using System.Diagnostics;
 
 namespace Kys;
 
@@ -20,17 +23,26 @@ internal class Startup
 {
 	public static int Main(string[] args)
 	{
+		var sw = Stopwatch.StartNew();
 		if (args.Length > 0 && File.Exists(args[0]))
 		{
 			Environment.SetEnvironmentVariable("KYS_PROGRAM_FILE", args[0]);
 
-			Host.CreateDefaultBuilder(args)
+			var sw1 = Stopwatch.StartNew();
+			var host = Host.CreateDefaultBuilder(args)
 				.ConfigureLogging(ConfigureLogging)
 				.ConfigureAppConfiguration(ConfigureAppConfiguration)
 				.ConfigureServices(ConfigureServices)
-				.Build()
-				.Run();
+				.Build();
+			Console.WriteLine("Host creation in {0}ms", sw1.ElapsedMilliseconds);
+			sw1.Restart();
+			host.Run();
+			Console.WriteLine("Host run in {0}ms", sw1.ElapsedMilliseconds);
+			sw1.Stop();
 
+
+			Console.WriteLine("Program run in {0}ms", sw.ElapsedMilliseconds);
+			sw.Stop();
 			return Environment.ExitCode;
 		}
 		return -1;
@@ -53,12 +65,23 @@ internal class Startup
 		services.AddSingleton<IScopeFactory, DefaultScopeFactory>();
 		services.AddSingleton<IContextFactory, DefaultContextFactory>();
 
-		services.AddSingleton<IVisitorProvider, KysVisitorProvider>();
+		services.AddSingleton<IVisitorProvider>(ConfigureVisitors);
+		services.AddSingleton<IInterpreterSesion, KysInterpreterSesion>();
 
 		services.AddTransient<IContext>(S => S.GetRequiredService<IContextFactory>().Create(ContextFactoryType.ALL));
 		services.AddTransient<IScope>(S => S.GetRequiredService<IScopeFactory>().Create(ScopeFactoryType.ALL));
 
 		services.AddHostedService<KysProgram>();
+	}
+
+	private static KysVisitorProvider ConfigureVisitors(IServiceProvider arg)
+	{
+		var dev = new KysVisitorProvider(arg);
+
+		dev.AddVisitor<ProgramContext, ProgramVisitor>();
+		dev.AddVisitor<InstructionContext, InstructionVisitor>();
+		dev.AddVisitor<ValueContext, ValueVisitor>();
+		return dev;
 	}
 
 	private static void ConfigureLogging(HostBuilderContext arg1, ILoggingBuilder arg2)
