@@ -9,7 +9,7 @@ public static class KylGenerator
 	const BindingFlags publicmet = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
 
-	internal static void Generate(string[] args)
+	internal static void Generate(string[] args, IContext targetContext)
 	{
 		var type = GetType(args);
 		Ensure.NotNull(type, "Type");
@@ -22,9 +22,9 @@ public static class KylGenerator
 		foreach (var method in smetv)
 		{
 			if (method.Length == 1) // metodo unico
-				IContext.Me.AddCsFunction(method[0]);
+				targetContext.AddCsFunction(method[0]);
 			else // metodo con sobrecargas
-				IContext.Me.AddOverloadFunction(method);
+				targetContext.AddOverloadFunction(method);
 		}
 	}
 
@@ -37,7 +37,7 @@ public static class KylGenerator
 		if (!sameName)
 			throw new ArgumentException("All methods must be overloads of the same base method", nameof(methodOverloads));
 
-		var function = new OverloadFunction(methodOverloads)
+		var function = new OverloadFunction(methodOverloads, targetContext)
 		{
 			Name = name,
 			ParentContext = targetContext

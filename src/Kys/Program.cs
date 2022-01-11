@@ -28,7 +28,7 @@ namespace Kys
 		static int Main(string[] args)
 		{
 			Mod.EnableAutoLoads();
-			IContext.ChangeContext(ContextFactory.Create(ContextFactoryType.ME));
+			//IContext.ChangeContext(ContextFactory.Create(ContextFactoryType.ME));
 
 			var Int = typeof(int);
 			var Double = typeof(double);
@@ -37,7 +37,7 @@ namespace Kys
 			var c = Int.IsAssignableTo(Double);
 			var d = Double.IsAssignableTo(Int);
 
-			IContext.Me.AddFunctions(typeof(Program));
+			//IContext.Me.AddFunctions(typeof(Program));
 			//IContext.Me.AddStandardFunctions();
 			var func =
 @"kyl gen ""Kys.Program, Kys""";
@@ -48,14 +48,14 @@ namespace Kys
 			parser.AddErrorListener(new Errores());
 			var funcdef = parser.kyl();
 
-			KylLoader.Load(funcdef);
+			//KylLoader.Load(funcdef);
 
-			IFunction f = IContext.Me.GetFunction("Print");
+//			IFunction f = IContext.Me.GetFunction("Print");
 			
-			f.Call(null,null,(byte) 34 , 23, 46 , 45, 5);
+		//	f.Call(null,null,(byte) 34 , 23, 46 , 45, 5);
 
-			IContext.Start();
-			IContext.Stop();
+	//		IContext.Start();
+		//	IContext.Stop();
 			return 0;
 		}
 

@@ -11,6 +11,7 @@ namespace Kys.Visitors
 		public override int VisitProgram([NotNull] KysParser.ProgramContext context)
 		{
 			InstructionAnalizer analizer = new();
+
 			try
 			{
 				// ejecutamos cada instrucción del programa.

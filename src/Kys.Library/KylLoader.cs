@@ -2,7 +2,7 @@
 
 public static class KylLoader
 {
-	public static void Load(KylContext context)
+	public static void Load(KylContext context, IContext targetContext)
 	{
 		var cmd = context.ID().GetText().ToLower();
 		var args = context.STRING().Select(s => s.GetText().Trim('"')).ToArray();
@@ -10,7 +10,7 @@ public static class KylLoader
 		{
 			case "gen":
 				{
-					KylGenerator.Generate(args);
+					KylGenerator.Generate(args, targetContext);
 					break;
 				}
 			default:

@@ -28,13 +28,13 @@ public class CsFunction : IFunction
 	{
 		var realargs = GetRealArgs(args);
 		if (!PassInfo) return Method.Invoke(null, realargs);
-		FunctionScope.Start();
+		//FunctionScope.Start();
 		var temp = new dynamic[realargs.Length + 2];
 		temp[0] = CallerContext;
 		temp[1] = FunctionScope;
 		realargs.CopyTo(temp, 2);
 		var ret = Method.Invoke(null, temp);
-		FunctionScope.Stop();
+		//FunctionScope.Stop();
 		return ret;
 	}
 

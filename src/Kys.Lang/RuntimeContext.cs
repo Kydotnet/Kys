@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 
 namespace Kys.Lang;
 
-internal sealed class RuntimeContext : IContext
+public sealed class RuntimeContext : IContext
 {
 	/// <summary>
 	/// Guarda la lista de funciones definidas en este contexto.
@@ -10,13 +10,16 @@ internal sealed class RuntimeContext : IContext
 	/// 
 	private IDictionary<string, IFunction> Functions = new ConcurrentDictionary<string, IFunction>();
 
-	public IScope RootScope { get; init; }
+	public RuntimeContext(IScope rootScope)
+	{
+		RootScope = rootScope;
+	}
+
+	public IScope RootScope { get; private set; }
 
 	public IEnumerable<IFunction> DefinedFunctions => Functions.Values;
 
 	public bool CanExecute => true;
-
-	bool IContext.IsStarted { get; set; }
 
 	public bool AddFunction(IFunction Function) => Functions.TryAdd(Function?.Name, Function);
 
@@ -27,6 +30,6 @@ internal sealed class RuntimeContext : IContext
 
 	public bool RemoveFunction(string Name)
 	{
-		return ((IContext)this).IsStarted || !Functions.ContainsKey(Name) ? false : Functions.Remove(Name);
+		return Functions.ContainsKey(Name) && Functions.Remove(Name);
 	}
 }

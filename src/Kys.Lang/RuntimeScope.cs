@@ -5,9 +5,9 @@ namespace Kys.Lang;
 /// <summary>
 /// Implementación por defecto de <see cref="IScope"/>.
 /// </summary>
-public class Scope : IScope
+public class RuntimeScope : IScope
 {
-	public IScope ParentScope { get; init; }
+	public IScope ParentScope { get; set; }
 
 	/// <summary>
 	/// Contenedor interno de las variables
@@ -20,7 +20,7 @@ public class Scope : IScope
 	{
 		if (recursive)
 		{
-			var scope = IScope.CheckRecursive(ID, this);
+			var scope = this.CheckRecursive(ID);
 			if (scope != null)
 			{
 				scope.AsigVar(ID, value, false);
@@ -36,7 +36,7 @@ public class Scope : IScope
 	{
 		if (recursive)
 		{
-			var scope = IScope.CheckRecursive(ID, this);
+			var scope = this.CheckRecursive(ID);
 			if (scope != null)
 			{
 				scope.SetVar(ID, value, false);
@@ -50,7 +50,7 @@ public class Scope : IScope
 	{
 		if (recursive)
 		{
-			var scope = IScope.CheckRecursive(ID, this);
+			var scope = this.CheckRecursive(ID);
 			if (scope != null)
 				return;
 		}
@@ -62,7 +62,7 @@ public class Scope : IScope
 	{
 		if (recursive)
 		{
-			var scope = IScope.CheckRecursive(ID, this);
+			var scope = this.CheckRecursive(ID);
 			if (scope != null)
 			{
 				scope.DecVar(ID, value, false);
@@ -81,5 +81,8 @@ public class Scope : IScope
 		return Variables[ID];
 	}
 
-	public bool ConVar(string ID) => Variables.ContainsKey(ID);
+	public bool ConVar(string ID, bool recursive = false)
+	{
+		return recursive ? this.CheckRecursive(ID) != null : Variables.ContainsKey(ID);
+	}
 }

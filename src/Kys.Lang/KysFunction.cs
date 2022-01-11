@@ -31,8 +31,8 @@ public sealed class KysFunction : IFunction
 	public dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
 	{
 		ValidateParams(args.Length);
-
-		FunctionScope.Start();
+		
+		//FunctionScope.Start();
 		var temp = ParamsNames;
 
 		if (InfArgs)
@@ -57,7 +57,7 @@ public sealed class KysFunction : IFunction
 		FunctionScope.DefVar("return", null, false);
 		var ret = FunctionScope.GetVar("return", false);
 
-		FunctionScope.Stop();
+		//FunctionScope.Stop();
 
 		return ret;
 	}

@@ -14,12 +14,12 @@ public sealed class OverloadFunction : IFunction
 
 	public IContext ParentContext { get; init; }
 
-	internal OverloadFunction(MethodInfo[] methods)
+	internal OverloadFunction(MethodInfo[] methods, IContext targetContext)
 	{
 		var list = methods.
 		Select(
 			m => FunctionRegister.CreateCsFuntion(
-				IContext.Me,
+				targetContext,
 				m,
 				m.GetCustomAttribute<FunctionAttribute>() ?? FunctionAttribute.None)
 		).
