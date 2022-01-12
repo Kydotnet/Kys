@@ -26,7 +26,7 @@ public sealed class KysFunction : IFunction
 	/// <summary>
 	/// Este es el Visitor que se usa para ejecutar las sentencias dentro de la función
 	/// </summary>
-	public static KysParserBaseVisitor<bool> Executor { get; set; } = new();
+	public IKysParserVisitor<object> senteceVisitor { get; init; }
 
 	public dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
 	{
@@ -52,7 +52,7 @@ public sealed class KysFunction : IFunction
 			FunctionScope.SetVar(item.First, item.Second, false);
 
 		foreach (var sentence in Sentences)
-			Executor.VisitSentence(sentence);
+			senteceVisitor.VisitSentence(sentence);
 
 		FunctionScope.DefVar("return", null, false);
 		var ret = FunctionScope.GetVar("return", false);

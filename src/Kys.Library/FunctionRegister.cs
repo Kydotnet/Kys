@@ -1,3 +1,4 @@
+using Kys.Parser;
 using System.Reflection;
 
 namespace Kys.Library;
@@ -26,7 +27,7 @@ public static partial class FunctionRegister
 		}
 	}
 
-	public static void AddKysFunction(this IContext targetContext, FuncdefinitionContext funcdefinition)
+	public static void AddKysFunction(this IContext targetContext, FuncdefinitionContext funcdefinition, IKysParserVisitor<object> sentenceVisitor)
 	{
 		var parameters = funcdefinition.parameters();
 		var infargs = parameters.PARAMS() != null;
@@ -36,6 +37,11 @@ public static partial class FunctionRegister
 		var ID = funcdefinition.ID().GetText();
 		var sentences = funcdefinition.block().sentence();
 
+		if(!haveparams && infargs)
+		{
+			@params = new string[]{ "params" };
+		}
+
 		var function = new KysFunction()
 		{
 			Name = ID,
@@ -43,7 +49,8 @@ public static partial class FunctionRegister
 			InfArgs = infargs,
 			ParentContext = targetContext,
 			Sentences = sentences,
-			ParamsNames = @params
+			ParamsNames = @params,
+			senteceVisitor = sentenceVisitor,
 		};
 
 		if (!targetContext.AddFunction(function))
