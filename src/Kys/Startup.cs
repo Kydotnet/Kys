@@ -23,26 +23,26 @@ internal class Startup
 {
 	public static int Main(string[] args)
 	{
-		var sw = Stopwatch.StartNew();
+		SWM.Enabled = args.Contains("-t");
+		SWM.Step("Program Run");
 		if (args.Length > 0 && File.Exists(args[0]))
 		{
 			Environment.SetEnvironmentVariable("KYS_PROGRAM_FILE", args[0]);
 
-			var sw1 = Stopwatch.StartNew();
-			var host = Host.CreateDefaultBuilder(args)
-				.ConfigureLogging(ConfigureLogging)
+			SWM.Step("Host Configuration");
+			var hostb = new KysHostBuilder() // Host.CreateDefaultBuilder(args)
+				//.ConfigureLogging(ConfigureLogging)
 				.ConfigureAppConfiguration(ConfigureAppConfiguration)
-				.ConfigureServices(ConfigureServices)
-				.Build();
-			Console.WriteLine("Host creation in {0}ms", sw1.ElapsedMilliseconds);
-			sw1.Restart();
-			host.Run();
-			Console.WriteLine("Host run in {0}ms", sw1.ElapsedMilliseconds);
-			sw1.Stop();
+				.ConfigureServices(ConfigureServices);
+			SWM.Step("Host Configuration");
+			SWM.Step("Host Creation");
+			var host = hostb	.Build();
+			SWM.Step("Host Creation");
+			SWM.Step("Host Run");
+			host.Start();
+			SWM.Step("Host Run");
 
-
-			Console.WriteLine("Program run in {0}ms", sw.ElapsedMilliseconds);
-			sw.Stop();
+			SWM.Step("Program Run");
 			return Environment.ExitCode;
 		}
 		return -1;
@@ -56,12 +56,12 @@ internal class Startup
 	private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
 	{
 		services.AddSingleton(S => S);
-
-		services.AddSingleton(S=>CharStreams.fromPath(S.GetRequiredService<IConfiguration>().GetRequiredSection("PROGRAM_FILE").Value));
+		
+		services.AddSingleton(S=>CharStreams.fromPath(Environment.GetEnvironmentVariable("KYS_PROGRAM_FILE")));
 		services.AddSingleton<ITokenSource, KysLexer>();
 		services.AddSingleton<ITokenStream, CommonTokenStream>();
 		services.AddSingleton<KysParser>();
-
+		
 		services.AddSingleton<IScopeFactory, DefaultScopeFactory>();
 		services.AddSingleton<IContextFactory, DefaultContextFactory>();
 
@@ -70,8 +70,6 @@ internal class Startup
 
 		services.AddTransient<IContext>(S => S.GetRequiredService<IContextFactory>().Create(ContextFactoryType.ALL));
 		services.AddTransient<IScope>(S => S.GetRequiredService<IScopeFactory>().Create(ScopeFactoryType.ALL));
-
-		services.AddHostedService<KysProgram>();
 	}
 
 	private static KysVisitorProvider ConfigureVisitors(IServiceProvider arg)

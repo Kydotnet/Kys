@@ -4,18 +4,13 @@ public class KysInterpreter : IInterpreter
 {
 	public IContext ProgramContext { get; init; }
 
-	public IInterpreterSesion Sesion { get; internal set; }
+	public IInterpreterSesion Sesion { get; set; }
 
-	public IKysParserVisitor<dynamic> KysParserVisitor { get; internal set; }
+	public IKysParserVisitor<dynamic> KysParserVisitor { get; set; }
 
-	public static IInterpreterBuilder CreateDefaultBuilder(IServiceProvider services)
+	public void ConfigureContext()
 	{
-		var dev = new DefaultInterpreterBuilder(
-			(IContextFactory)services.GetService(typeof(IContextFactory)),
-			(IInterpreterSesion)services.GetService(typeof(IInterpreterSesion)),
-			(IVisitorProvider)services.GetService(typeof(IVisitorProvider))
-		);
-		return dev;
+		this.ConfigureDefaultContext();
 	}
 
 	public void Start(ProgramContext programContext)

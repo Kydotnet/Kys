@@ -8,5 +8,7 @@ public interface IInterpreter
 	void Start(ProgramContext programContext);
 
 	void Stop();
+
+	void ConfigureContext();
 }
  

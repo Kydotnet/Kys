@@ -5,13 +5,13 @@ namespace Kys.Interpreter.Visitors
 	public class InstructionVisitor : KysParserBaseVisitor<object>
 	{
 		IInterpreterSesion Sesion;
-		IKysParserVisitor<object> SentenceVisitor;
+		IKysParserVisitor<object> sentenceVisitor;
 		IKysParserVisitor<dynamic> valueVisitor;
 
 		public InstructionVisitor(IInterpreterSesion sesion, IVisitorProvider visitorProvider)
 		{
 			Sesion = sesion;
-			SentenceVisitor = visitorProvider.GetVisitor<SentenceContext>();
+			sentenceVisitor = visitorProvider.GetVisitor<SentenceContext>();
 			valueVisitor = visitorProvider.GetVisitor<ValueContext>();
 		}
 
@@ -22,7 +22,7 @@ namespace Kys.Interpreter.Visitors
 		}
 
 		public override object VisitSentence([NotNull] SentenceContext context) =>
-			SentenceVisitor.VisitSentence(context);
+			sentenceVisitor.VisitSentence(context);
 
 		public override object VisitExitprogram([NotNull] ExitprogramContext context)
 		{

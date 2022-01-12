@@ -7,10 +7,10 @@ namespace Kys.Interpreter
 	public static class InterpreterBuilderExtensions
 	{
 
-		public static IInterpreterBuilder ConfigureDefaulContext(this IInterpreterBuilder builder)
+		public static IInterpreter ConfigureDefaultContext(this IInterpreter builder)
 		{
 
-			builder.ConfigureContext(ConfigureContext);
+			ConfigureContext(builder.ProgramContext);
 
 			return builder;
 		}
