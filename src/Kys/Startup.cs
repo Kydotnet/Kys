@@ -77,8 +77,25 @@ internal class Startup
 		var dev = new KysVisitorProvider(arg);
 
 		dev.AddVisitor<ProgramContext, ProgramVisitor>();
+
 		dev.AddVisitor<InstructionContext, InstructionVisitor>();
+		dev.AddVisitor<ExitprogramContext, InstructionVisitor>();
+		dev.AddVisitor<FuncdefinitionContext, InstructionVisitor>();
+
 		dev.AddVisitor<ValueContext, ValueVisitor>();
+		dev.AddVisitor<FuncresultContext, ValueVisitor>();
+
+		dev.AddVisitor<ExpressionContext, ExpressionVisitor>();
+
+		dev.AddVisitor<SentenceContext, SentenceVisitor>();
+		dev.AddVisitor<FunccallContext, SentenceVisitor>();
+
+		dev.AddVisitor<VaroperationContext, VaroperationVisitor>();
+		dev.AddVisitor<DeclarationContext, VaroperationVisitor>();
+		dev.AddVisitor<CreationContext, VaroperationVisitor>();
+		dev.AddVisitor<DefinitionContext, VaroperationVisitor>();
+		dev.AddVisitor<SelfasignationContext, VaroperationVisitor>();
+
 		return dev;
 	}
 

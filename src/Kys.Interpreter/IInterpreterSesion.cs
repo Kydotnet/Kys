@@ -17,11 +17,12 @@ public interface IInterpreterSesion
 	IContext CallerContext { get; set; }
 
 	/// <summary>
-	/// Almacena el indice de la ultima linea que se ejecuto en el programa, solo si el interprete lo soporta.
+	/// Almacena o obtiene una variable de sesion.
 	/// </summary>
-	int LastLine { get; set; }
+	/// <param name="name"></param>
+	/// <returns></returns>
+	object this[string name] { get; set; }
 
-	
 	IScope StartScope(ScopeFactoryType type);
 
 	IScope EndScope();

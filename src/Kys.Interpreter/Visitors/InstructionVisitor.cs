@@ -2,27 +2,32 @@ using Antlr4.Runtime.Misc;
 
 namespace Kys.Interpreter.Visitors
 {
-	public class InstructionVisitor : KysParserBaseVisitor<object>
+	public class InstructionVisitor : BaseVisitor<object>
 	{
-		IInterpreterSesion Sesion;
 		IKysParserVisitor<object> sentenceVisitor;
-		IKysParserVisitor<dynamic> valueVisitor;
 
-		public InstructionVisitor(IInterpreterSesion sesion, IVisitorProvider visitorProvider)
+		public override void Configure(IServiceProvider serviceProvider)
 		{
-			Sesion = sesion;
-			sentenceVisitor = visitorProvider.GetVisitor<SentenceContext>();
-			valueVisitor = visitorProvider.GetVisitor<ValueContext>();
+			base.Configure(serviceProvider);
+			sentenceVisitor = VisitorProvider.GetVisitor<SentenceContext>();
 		}
+
 
 		public override object VisitInstruction([NotNull] InstructionContext context)
 		{
-			Sesion.LastLine = context.Start.Line;
+			Sesion["LastLine"] = context.Start.Line;
+			Sesion["LastInstruction"] = context;
 			return base.VisitInstruction(context);
 		}
 
 		public override object VisitSentence([NotNull] SentenceContext context) =>
 			sentenceVisitor.VisitSentence(context);
+
+		public override object VisitFuncdefinition([NotNull] FuncdefinitionContext context)
+		{
+			Sesion.CurrentContext.AddKysFunction(context, sentenceVisitor);
+			return null;
+		}
 
 		public override object VisitExitprogram([NotNull] ExitprogramContext context)
 		{

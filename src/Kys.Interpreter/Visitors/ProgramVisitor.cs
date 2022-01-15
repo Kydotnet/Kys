@@ -2,15 +2,16 @@
 
 namespace Kys.Interpreter.Visitors
 {
-	public class ProgramVisitor : KysParserBaseVisitor<dynamic>
+	public class ProgramVisitor : BaseVisitor<dynamic>
 	{
 		IKysParserVisitor<object> IntructionVisitor;
 		IKysParserVisitor<object> TopLevelVisitor;
 
-		public ProgramVisitor(IVisitorProvider visitorProvider)
+		public override void Configure(IServiceProvider serviceProvider)
 		{
-			IntructionVisitor = visitorProvider.GetVisitor<InstructionContext>();
-			TopLevelVisitor = visitorProvider.GetVisitor<ToplevelContext>();
+			base.Configure(serviceProvider);
+			IntructionVisitor = VisitorProvider.GetVisitor<InstructionContext>();
+			TopLevelVisitor = VisitorProvider.GetVisitor<ToplevelContext>();
 		}
 
 		public override dynamic VisitProgram([NotNull] ProgramContext context)

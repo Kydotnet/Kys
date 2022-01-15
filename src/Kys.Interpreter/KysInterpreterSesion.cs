@@ -8,16 +8,12 @@
 
 		public IContext CallerContext { get; set; }
 
-		public int LastLine
+		IDictionary<string, object> SesionVariables = new Dictionary<string, object>();
+
+		public object this[string name]
 		{
-			get
-			{
-				return 0;
-			}
-			set
-			{
-				Console.WriteLine("Executing line {0}", value);
-			}
+			get => SesionVariables.TryGetValue(name, out object Variable) ? Variable : null;
+			set => SesionVariables[name] = value;
 		}
 
 		IScopeFactory ScopeFactory;

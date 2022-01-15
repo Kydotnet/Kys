@@ -18,14 +18,14 @@ public class KysInterpreter : IInterpreter
 		Sesion.CallerContext = null;
 		Sesion.CurrentScope = ProgramContext.RootScope;
 		Sesion.CurrentContext = ProgramContext;
-		Sesion.LastLine = 0;
+
 		try
 		{
 			KysParserVisitor.VisitProgram(programContext);
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine("line {0}: {1}", Sesion.LastLine, ex.Message);
+			Console.WriteLine("line {0}:{1} {2}", Sesion["LastLine"],Sesion["LastColumn"], ex.Message);
 		}
 	}
 

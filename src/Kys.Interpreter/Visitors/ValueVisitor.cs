@@ -4,16 +4,46 @@ using Antlr4.Runtime.Tree;
 
 namespace Kys.Interpreter.Visitors
 {
-	public class ValueVisitor : KysParserBaseVisitor<dynamic>
+	public class ValueVisitor : BaseVisitor<dynamic>
 	{
-		IInterpreterSesion Sesion;
+		IKysParserVisitor<dynamic> expressionVisitor;
 
-		public ValueVisitor(IInterpreterSesion sesion)
+		public override void Configure(IServiceProvider serviceProvider)
 		{
-			Sesion = sesion;
+			base.Configure(serviceProvider);
+			expressionVisitor = VisitorProvider.GetVisitor<ExpressionContext>();
 		}
 
-		public override dynamic VisitValue([NotNull] KysParser.ValueContext context)
+		public override dynamic VisitFuncresult([NotNull] FuncresultContext context)
+		{
+			var funcname = context.ID().GetText();
+			var nametoken = context.ID().Symbol;
+
+			var func = Sesion.CurrentContext.GetFunction(funcname);
+
+			var funcargs = context.arguments();
+			var hasargs = funcargs != null;
+
+			dynamic[] args;
+			if (hasargs)
+			{
+				args = funcargs.expression().Select(v => expressionVisitor.Visit(v)).ToArray();
+			}
+			else
+			{
+				args = Array.Empty<dynamic>();
+			}
+			var scope = Sesion.StartScope(ScopeFactoryType.FUNCTION);
+
+			//TODO: producir error cuando no existe la función;
+			var dev = func.Call(Sesion.CurrentContext, scope, args);
+
+			Sesion.EndScope();
+			// si se devuelve algo que no sea nulo el InstructionVisitor terminara
+			return dev;
+		}
+
+		public override dynamic VisitValue([NotNull] ValueContext context)
 		{
 			if (context.STRING() != null)
 				return GetString(context.STRING());
