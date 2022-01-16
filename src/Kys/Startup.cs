@@ -1,7 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -30,9 +29,7 @@ internal class Startup
 			Environment.SetEnvironmentVariable("KYS_PROGRAM_FILE", args[0]);
 
 			SWM.Step("Host Configuration");
-			var hostb = new KysHostBuilder() // Host.CreateDefaultBuilder(args)
-				//.ConfigureLogging(ConfigureLogging)
-				.ConfigureAppConfiguration(ConfigureAppConfiguration)
+			var hostb = new KysHostBuilder()
 				.ConfigureServices(ConfigureServices);
 			SWM.Step("Host Configuration");
 			SWM.Step("Host Creation");
@@ -46,11 +43,6 @@ internal class Startup
 			return Environment.ExitCode;
 		}
 		return -1;
-	}
-
-	private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder configuration)
-	{
-		configuration.AddEnvironmentVariables("KYS_");		
 	}
 
 	private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
@@ -97,14 +89,5 @@ internal class Startup
 		dev.AddVisitor<SelfasignationContext, VaroperationVisitor>();
 
 		return dev;
-	}
-
-	private static void ConfigureLogging(HostBuilderContext arg1, ILoggingBuilder arg2)
-	{
-		// no se usan loggers por ahora
-		arg2.ClearProviders();
-#if DEBUG
-		arg2.AddDebug();
-#endif
 	}
 }

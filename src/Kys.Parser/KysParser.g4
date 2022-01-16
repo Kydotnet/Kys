@@ -49,7 +49,11 @@ timeoutcontrol: Ktimeout SLpar NUMBER SRpar block;
 forcontrol:
 	Kfor SLpar varoperation? SC expression? SC expression? SRpar block;
 
-varoperation: declaration | creation | definition | asignation;
+varoperation:
+	declaration
+	| creation
+	| definition
+	| selfasignation;
 
 block: SLbrack sentence* SRbrack | sentence;
 
@@ -65,7 +69,9 @@ creation: Kset asignation;
 
 definition: Kdef asignation;
 
-asignation:
+asignation: ID Sequal expression;
+
+selfasignation:
 	ID Sequal expression					# simpleAssign
 	| ID POTENCIALASSIGN expression			# potencialAssign
 	| ID MULTIPLICATIVEASSIGN expression	# multiplicativeAssign

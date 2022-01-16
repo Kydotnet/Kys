@@ -46,7 +46,7 @@ public class KysVisitorProvider : IVisitorProvider
 
 	public IVisitor<object> GetVisitor<VisitorContext>() where VisitorContext : ParserRuleContext
 	{
-		if(!instanced)
+		if (!instanced)
 		{
 			InstanceAll();
 		}
@@ -60,13 +60,8 @@ public class KysVisitorProvider : IVisitorProvider
 		instanced = true;
 		var registeredType = _types.Values.Distinct();
 		var instances = registeredType.Select(
-
-			(t, i) =>
-			{
-				return (IVisitor<object>)ActivatorUtilities.CreateInstance(serviceProvider, t);
-			}
-
-		);
+			t => (IVisitor<object>)ActivatorUtilities.CreateInstance(serviceProvider, t)
+		).ToArray();
 
 		var group = _types.GroupBy(T => T.Value).Zip(instances);
 
@@ -78,7 +73,7 @@ public class KysVisitorProvider : IVisitorProvider
 			}
 		}
 
-		foreach(var visitor in _visitors)
-			visitor.Value.Configure(serviceProvider);
+		foreach (var visitor in instances)
+			visitor.Configure(serviceProvider);
 	}
 }

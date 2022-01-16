@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
+using Kys.Interpreter.Visitors;
 using Kys.Parser;
 
 namespace Kys.Visitors
@@ -12,7 +13,7 @@ namespace Kys.Visitors
 
 		public override bool VisitIfcontrol([NotNull] KysParser.IfcontrolContext context)
 		{
-			dynamic exp = ExpressionResolver.Default.Visit(context.expression());
+			dynamic exp = null;// ExpressionResolver.Default.Visit(context.expression());
 			if (exp)
 				Visit(context.block());
 			else if (context.elsecontrol() != null)
@@ -33,7 +34,7 @@ namespace Kys.Visitors
 		{
 			var block = context.block();
 
-			while (ExpressionResolver.Default.Visit(context.expression()))
+			while (false)//ExpressionResolver.Default.Visit(context.expression()))
 				Visit(block);
 
 			return true;
@@ -44,17 +45,17 @@ namespace Kys.Visitors
 			var info = context.twbucle();
 			var block = info.block();
 			var timed = info.timeoutcontrol();
-			int wait = ValueResolver.GetNumber(info.NUMBER());
+			int wait = ValueVisitor.GetNumber(info.NUMBER());
 
 			if (timed != null)
 			{
-				var twait = ValueResolver.GetNumber(timed.NUMBER());
+				var twait = ValueVisitor.GetNumber(timed.NUMBER());
 				var tblock = timed.block();
 				using var token = new CancellationTokenSource();
 
 				var task = Task.Run(() =>
 				{
-					while (ExpressionResolver.Default.Visit(info.expression()) && !token.IsCancellationRequested)
+					while (false)//ExpressionResolver.Default.Visit(info.expression()) && !token.IsCancellationRequested)
 					{
 						Visit(block);
 						Task.Delay(wait).Wait();
@@ -82,7 +83,7 @@ namespace Kys.Visitors
 			}
 			else
 			{
-				while (ExpressionResolver.Default.Visit(info.expression()))
+				while (false)//ExpressionResolver.Default.Visit(info.expression()))
 				{
 					Visit(block);
 					Task.Delay(wait).Wait();
@@ -121,8 +122,8 @@ namespace Kys.Visitors
 
 		public override bool VisitBlock([NotNull] KysParser.BlockContext context)
 		{
-			foreach (var item in context.sentence())
-				SentenceExecutor.Default.Visit(item);
+			/*foreach (var item in context.sentence())
+				SentenceVisitor.Default.Visit(item);*/
 			return true;
 		}
 	}
