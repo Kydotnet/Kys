@@ -1,14 +1,9 @@
-using System;
-using Kys.Parser;
 using Antlr4.Runtime.Misc;
 using Microsoft.CSharp.RuntimeBinder;
-using System.Linq;
-using Kys.Interpreter.Visitors;
-using Kys.Interpreter;
 
 namespace Kys.Interpreter.Visitors
 {
-	public class ExpressionVisitor :BaseVisitor<dynamic>
+	public class ExpressionVisitor : BaseVisitor<dynamic>
 	{
 		IKysParserVisitor<dynamic> valueVisitor;
 		IKysParserVisitor<dynamic> funcresultVisitor;
@@ -19,7 +14,6 @@ namespace Kys.Interpreter.Visitors
 			valueVisitor = VisitorProvider.GetVisitor<ValueContext>();
 			funcresultVisitor = VisitorProvider.GetVisitor<FuncresultContext>();
 		}
-
 
 		public override dynamic VisitValueExp([NotNull] ValueExpContext context) =>
 			valueVisitor.VisitValue(context.value());
@@ -92,6 +86,21 @@ namespace Kys.Interpreter.Visitors
 			}
 		}
 
+		public override dynamic VisitModuleExp([NotNull] ModuleExpContext context)
+		{
+			dynamic a = Visit(context.expression(0));
+			dynamic b = Visit(context.expression(1));
+			try
+			{
+				return a % b;
+			}
+			catch (RuntimeBinderException e)
+			{
+				//throw new TokenException(context.Start, e.Message);
+				throw e;
+			}
+		}
+
 		public override dynamic VisitAditiveExp([NotNull] AditiveExpContext context)
 		{
 			dynamic a = Visit(context.expression(0));
@@ -135,6 +144,40 @@ namespace Kys.Interpreter.Visitors
 				if (context.ANDOR().GetText() == "&&")
 					return a && b;
 				return a || b;
+			}
+			catch (RuntimeBinderException e)
+			{
+				//throw new TokenException(context.Start, e.Message);
+				throw e;
+			}
+		}
+
+		public override dynamic VisitEqrelationalExp([NotNull] EqrelationalExpContext context)
+		{
+			dynamic a = Visit(context.expression(0));
+			dynamic b = Visit(context.expression(1));
+			try
+			{
+				if (context.EQRELATIONAL().GetText() == "<=")
+					return a <= b;
+				return a >= b;
+			}
+			catch (RuntimeBinderException e)
+			{
+				//throw new TokenException(context.Start, e.Message);
+				throw e;
+			}
+		}
+
+		public override dynamic VisitRelationalExp([NotNull] RelationalExpContext context)
+		{
+			dynamic a = Visit(context.expression(0));
+			dynamic b = Visit(context.expression(1));
+			try
+			{
+				if (context.RELATIONAL().GetText() == "<")
+					return a < b;
+				return a > b;
 			}
 			catch (RuntimeBinderException e)
 			{
