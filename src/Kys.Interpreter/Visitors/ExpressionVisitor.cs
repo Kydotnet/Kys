@@ -38,7 +38,12 @@ namespace Kys.Interpreter.Visitors
 
 		public override dynamic VisitUniAritExp([NotNull] UniAritExpContext context)
 		{
+			var valueexp = context.expression() as ValueExpContext;
+			if (valueexp != null && valueexp.value().ID() != null)
+				return VisitUniAritValueExp(valueexp);
+
 			dynamic val = Visit(context.expression());
+
 			try
 			{
 				if (context.UNIARIT().GetText() == "++")
@@ -50,6 +55,14 @@ namespace Kys.Interpreter.Visitors
 				//throw new TokenException(context.Start, e.Message);
 				throw e;
 			}
+		}
+
+		private dynamic VisitUniAritValueExp(ValueExpContext valueExpContext)
+		{
+			var name = valueExpContext.value().ID().GetText();
+			var val = Sesion.CurrentScope.GetVar(name);
+			Sesion.CurrentScope.AsigVar(name, ++val);
+			return val;
 		}
 
 		public override dynamic VisitPotencialExp([NotNull] PotencialExpContext context)
