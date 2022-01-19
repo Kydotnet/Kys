@@ -90,6 +90,9 @@ internal class Startup
 		dev.AddVisitor<DefinitionContext, VaroperationVisitor>();
 		dev.AddVisitor<SelfasignationContext, VaroperationVisitor>();
 
+		dev.AddVisitor<ControlContext, ControlVisitor>();
+		dev.AddVisitor<BlockContext, ControlVisitor>();
+
 		return dev;
 	}
 }
