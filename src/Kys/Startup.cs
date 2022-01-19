@@ -1,20 +1,16 @@
 ﻿using Antlr4.Runtime;
+using Kys.Interpreter;
+using Kys.Interpreter.Visitors;
+using Kys.Lang;
+using Kys.Lang.Runtime;
+using Kys.Library;
+using Kys.Parser;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using Kys.Parser;
-using Kys.Library;
-using Kys.Lang;
-using Kys.Interpreter;
+using System.Linq;
 using static Kys.Parser.KysParser;
-using Kys.Interpreter.Visitors;
-using System.Diagnostics;
 
 namespace Kys;
 
@@ -33,7 +29,7 @@ internal class Startup
 				.ConfigureServices(ConfigureServices);
 			SWM.Step("Host Configuration");
 			SWM.Step("Host Creation");
-			var host = hostb	.Build();
+			var host = hostb.Build();
 			SWM.Step("Host Creation");
 			SWM.Step("Host Run");
 			host.Start();
@@ -48,11 +44,17 @@ internal class Startup
 	private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
 	{
 		services.AddSingleton(S => S);
-		
-		services.AddSingleton(S=>CharStreams.fromPath(Environment.GetEnvironmentVariable("KYS_PROGRAM_FILE")));
+
+		services.AddSingleton(S => CharStreams.fromPath(Environment.GetEnvironmentVariable("KYS_PROGRAM_FILE")));
 		services.AddSingleton<ITokenSource, KysLexer>();
 		services.AddSingleton<ITokenStream, CommonTokenStream>();
-		services.AddSingleton<KysParser>();
+		services.AddSingleton<IAntlrErrorListener<IToken>, KysErrorListener>();
+		services.AddSingleton<KysParser>(S => {
+			var ret = new KysParser(S.GetRequiredService<ITokenStream>());
+			ret.RemoveErrorListeners();
+			ret.AddErrorListener(S.GetRequiredService<IAntlrErrorListener<IToken>>());
+			return ret;
+		});
 		
 		services.AddSingleton<IScopeFactory, DefaultScopeFactory>();
 		services.AddSingleton<IContextFactory, DefaultContextFactory>();

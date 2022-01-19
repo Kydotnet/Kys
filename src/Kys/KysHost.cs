@@ -1,4 +1,5 @@
 ﻿using Kys.Interpreter;
+using Kys.Lang.Runtime;
 using Kys.Library;
 using Kys.Parser;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,12 +40,19 @@ namespace Kys
 			SWM.Step("Interpreter Configuration");
 			interpreter.ConfigureContext();
 			SWM.Step("Interpreter Configuration");
-			SWM.Step("Parsed");
-			var parsed = ProgramParser.program();
-			SWM.Step("Parsed");
-			SWM.Step("Kys Run");
-			interpreter.Start(parsed);
-			SWM.Step("Kys Run");
+			try
+			{
+				SWM.Step("Parsed");
+				var parsed = ProgramParser.program();
+				SWM.Step("Parsed");
+				SWM.Step("Kys Run");
+				interpreter.Start(parsed);
+				SWM.Step("Kys Run");
+			}
+			catch (KysException e)
+			{
+				Console.WriteLine("{0} {1}", e.Line, e.Message);
+			}
 			return Task.CompletedTask;
 		}
 
