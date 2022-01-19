@@ -1,8 +1,9 @@
 using Antlr4.Runtime;
+using System;
 
 namespace Kys.Exceptions
 {
-	[System.Serializable]
+	[Serializable]
 	public class TokenException : KysException
 	{
 

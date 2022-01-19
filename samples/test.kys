@@ -1,25 +1,29 @@
 #!/bin/kys
 
-for(var a = 0; a!=10; 2)
+kyl load "std"
+kys cmdargs args
+
+var i = 0;
+
+
+for(; i < 1000; i++) trace(i);
+
+for(var j = 0; j < 5; j += 2)
 {
-	trace(a);
+	trace(j);
 }
 
-var int = type("System.Int32");
+var j = 0;
 
-var array = tarr(int,47);
+var uno = 5++;
 
-trace(array);
+uno ^= 2;
 
-trace(typeof("Hello world"));
+trace(uno);
 
-timed while(true,500)
-{
-	trace("hello");
-}
-timeout(2500)
-{
-	trace("demasiados hello!");
-}
+var dos = uno++;
 
-trace("ufas");
+trace(dos);
+
+trace(uno);
+trace(dos);

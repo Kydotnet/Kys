@@ -47,7 +47,9 @@ twbucle:
 timeoutcontrol: Ktimeout SLpar NUMBER SRpar block;
 
 forcontrol:
-	Kfor SLpar varoperation? SC expression? SC expression? SRpar block;
+	Kfor SLpar varoperation? SC expression? SC forexpression? SRpar block;
+
+forexpression: expression | varoperation;
 
 varoperation:
 	declaration
@@ -93,4 +95,4 @@ expression:
 	| funcresult										# funcExp
 	| value												# valueExp;
 
-value: NULL | STRING | NUMBER | BOOL | GID | RID | ID;
+value: NULL | STRING | NUMBER | BOOL | ID;
