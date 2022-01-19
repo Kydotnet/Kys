@@ -2,11 +2,15 @@
 
 namespace Kys.Interpreter.Visitors
 {
+	/// <summary>
+	/// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ProgramContext"/>.
+	/// </summary>
 	public class ProgramVisitor : BaseVisitor<dynamic>
 	{
 		IKysParserVisitor<object> IntructionVisitor;
 		IKysParserVisitor<object> TopLevelVisitor;
 
+		/// <inheritdoc/>
 		public override void Configure(IServiceProvider serviceProvider)
 		{
 			base.Configure(serviceProvider);
@@ -14,6 +18,10 @@ namespace Kys.Interpreter.Visitors
 			TopLevelVisitor = VisitorProvider.GetVisitor<ToplevelContext>();
 		}
 
+		/// <summary>
+		/// Primero ejecuta todas los toplevel de <see cref="ProgramContext.toplevel()"/> y luego ejecuta las instrucciones de <see cref="ProgramContext.instruction()"/>.
+		/// </summary>
+		/// <inheritdoc/>
 		public override dynamic VisitProgram([NotNull] ProgramContext context)
 		{
 			var toplevel = context.toplevel();

@@ -7,6 +7,7 @@ namespace Kys.Lang;
 /// </summary>
 public class RuntimeScope : IScope
 {
+	/// <inheritdoc/>
 	public IScope ParentScope { get; set; }
 
 	/// <summary>
@@ -14,8 +15,10 @@ public class RuntimeScope : IScope
 	/// </summary>>
 	internal IDictionary<string, dynamic> Variables { get; set; } = new ConcurrentDictionary<string, dynamic>();
 
+	/// <inheritdoc/>
 	public void Clear() => Variables.Clear();
 
+	/// <inheritdoc/>
 	public void AsigVar(string ID, dynamic value, bool recursive = true)
 	{
 		if (recursive)
@@ -32,6 +35,7 @@ public class RuntimeScope : IScope
 		Variables[ID] = value;
 	}
 
+	/// <inheritdoc/>
 	public void SetVar(string ID, dynamic value, bool recursive = true)
 	{
 		if (recursive)
@@ -46,6 +50,7 @@ public class RuntimeScope : IScope
 		Variables[ID] = value;
 	}
 
+	/// <inheritdoc/>
 	public void DefVar(string ID, dynamic value, bool recursive = true)
 	{
 		if (recursive)
@@ -58,6 +63,7 @@ public class RuntimeScope : IScope
 		Variables[ID] = value;
 	}
 
+	/// <inheritdoc/>
 	public void DecVar(string ID, dynamic value, bool recursive = true)
 	{
 		if (recursive)
@@ -72,15 +78,15 @@ public class RuntimeScope : IScope
 		Variables.Add(ID, value);
 	}
 
+	/// <inheritdoc/>
 	public dynamic GetVar(string ID, bool recursive = true)
 	{
 		if (Variables.TryGetValue(ID, out dynamic ret))
 			return ret;
-		if (recursive && ParentScope != null)
-			return ParentScope.GetVar(ID);
-		return Variables[ID];
+		return recursive && ParentScope != null ? ParentScope.GetVar(ID) : Variables[ID];
 	}
 
+	/// <inheritdoc/>
 	public bool ConVar(string ID, bool recursive = false)
 	{
 		return recursive ? this.CheckRecursive(ID) != null : Variables.ContainsKey(ID);

@@ -2,8 +2,8 @@
 {
 	public interface IScopeFactory
 	{
-		void ChangeScope<T>(ScopeFactoryType type) where T : IScope;
+		void ChangeScope<T>(ScopeType type) where T : IScope;
 
-		IScope Create(ScopeFactoryType type, IScope parent = null);
+		IScope Create(ScopeType type, IScope parent = null);
 	}
 }

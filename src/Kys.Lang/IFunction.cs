@@ -1,5 +1,8 @@
 namespace Kys.Lang;
 
+/// <summary>
+/// Una función que puede ser agregada a un contexto de ejecución (<see cref="IContext"/>) para ser llamada desde Kys.
+/// </summary>
 public interface IFunction
 {
 	/// <summary>

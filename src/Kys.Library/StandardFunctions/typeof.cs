@@ -4,5 +4,5 @@ namespace Kys.Library;
 partial class StandardFunctions
 {
 	[Function(Name = "typeof")]
-	public static Type Typeof(dynamic obj) => obj?.GetType();
+	public static Type Typeof(object obj) => obj?.GetType();
 }

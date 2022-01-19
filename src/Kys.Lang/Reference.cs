@@ -1,5 +1,8 @@
 namespace Kys.Lang;
 
+/// <summary>
+/// La clase Reference aun no esta en uso.
+/// </summary>
 public sealed class Reference
 {
 	/// <summary>

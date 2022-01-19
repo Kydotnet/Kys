@@ -20,6 +20,7 @@ public interface IScope
 	/// Indica si este scope contiene una definición para la variable dada.
 	/// </summary>
 	/// <param name="ID">Identificador de la variable a buscar.</param>
+	/// <param name="recursive">Indica si se debe ver si los <see cref="IScope"/> padres tambien contienen la variable.</param>
 	/// <returns><c>true</c> si se tiene una variable <paramref name="ID"/>, <c>false</c> si no se tiene.</returns>
 	bool ConVar(string ID, bool recursive = false);
 
@@ -33,6 +34,7 @@ public interface IScope
 	/// </remarks>
 	/// <param name="ID">Identificador de la variable.</param>
 	/// <param name="value">Valor a asignar a la variable.</param>
+	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
 	void AsigVar(string ID, dynamic value, bool recursive = true);
 
 	/// <summary>
@@ -45,6 +47,7 @@ public interface IScope
 	/// </remarks>
 	/// <param name="ID">Identificador de la variable.</param>
 	/// <param name="value">Valor a establecer en la variable.</param>
+	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
 	void SetVar(string ID, dynamic value, bool recursive = true);
 
 	/// <summary>
@@ -57,6 +60,7 @@ public interface IScope
 	/// </remarks>
 	/// <param name="ID">Identificador de la variable.</param>
 	/// <param name="value">Valor a definir en la variable.</param>
+	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
 	void DefVar(string ID, dynamic value, bool recursive = true);
 
 	/// <summary>
@@ -69,6 +73,7 @@ public interface IScope
 	/// </remarks>
 	/// <param name="ID">Identificador de la variable.</param>
 	/// <param name="value">Valor a declarar en la variable.</param>
+	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
 	void DecVar(string ID, dynamic value, bool recursive = true);
 
 	/// <summary>
@@ -76,5 +81,6 @@ public interface IScope
 	/// </summary>
 	/// <param name="ID">Identificador de la variable.</param>
 	/// <returns>Valor almacenado en la variable</returns>
+	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
 	dynamic GetVar(string ID, bool recursive = true);
 }

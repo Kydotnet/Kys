@@ -11,13 +11,13 @@ namespace Kys;
 
 public class KysVisitorProvider : IVisitorProvider
 {
-	IDictionary<Type, IVisitor<object>> _visitors = new ConcurrentDictionary<Type, IVisitor<object>>();
+	readonly IDictionary<Type, IVisitor<object>> _visitors = new ConcurrentDictionary<Type, IVisitor<object>>();
 
-	IDictionary<Type, Type> _types = new ConcurrentDictionary<Type, Type>();
+	readonly IDictionary<Type, Type> _types = new ConcurrentDictionary<Type, Type>();
 
-	IVisitor<object> _visitor = new BaseVisitor<object>();
+	readonly IVisitor<object> _visitor = new BaseVisitor<object>();
 
-	IServiceProvider serviceProvider;
+	readonly IServiceProvider serviceProvider;
 
 	bool instanced = false;
 
@@ -37,11 +37,6 @@ public class KysVisitorProvider : IVisitorProvider
 		where VisitorContext : ParserRuleContext
 	{
 		_visitors[typeof(VisitorContext)] = implementation;
-	}
-
-	public void AddVisitor<VisitorContext>(Func<IServiceProvider, IVisitor<object>> implemtentation) where VisitorContext : ParserRuleContext
-	{
-
 	}
 
 	public IVisitor<object> GetVisitor<VisitorContext>() where VisitorContext : ParserRuleContext
@@ -65,11 +60,11 @@ public class KysVisitorProvider : IVisitorProvider
 
 		var group = _types.GroupBy(T => T.Value).Zip(instances);
 
-		foreach (var item in group)
+		foreach (var (First, Second) in group)
 		{
-			foreach (var type in item.First)
+			foreach (var type in First)
 			{
-				_visitors[type.Key] = item.Second;
+				_visitors[type.Key] = Second;
 			}
 		}
 

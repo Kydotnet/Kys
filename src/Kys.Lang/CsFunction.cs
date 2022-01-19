@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace Kys.Lang;
 
+/// <summary>
+/// Contenedor simple para llamar un metodo estatico de C# desde Kys.
+/// </summary>
 [DebuggerDisplay("{Method}")]
 public class CsFunction : IFunction
 {
@@ -11,10 +14,13 @@ public class CsFunction : IFunction
 	/// </summary>
 	public MethodInfo Method { get; init; }
 
+	/// <inheritdoc/>
 	public string Name { get; init; }
 
+	/// <inheritdoc/>
 	public int ArgCount { get; init; }
 
+	/// <inheritdoc/>
 	public bool InfArgs { get; init; }
 
 	/// <summary>
@@ -22,8 +28,10 @@ public class CsFunction : IFunction
 	/// </summary>
 	public bool PassInfo { get; init; }
 
+	/// <inheritdoc/>
 	public IContext ParentContext { get; init; }
 
+	/// <inheritdoc/>
 	public virtual dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
 	{
 		var realargs = GetRealArgs(args);
@@ -38,6 +46,11 @@ public class CsFunction : IFunction
 		return ret;
 	}
 
+	/// <summary>
+	/// Comprime los argumentos finales en uno solo en casod e tratarse de argumentos infinitos.
+	/// </summary>
+	/// <param name="args"></param>
+	/// <returns></returns>
 	protected virtual dynamic[] GetRealArgs(dynamic[] args)
 	{
 		if (!InfArgs || args.Length < ArgCount) return args;

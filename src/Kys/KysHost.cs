@@ -33,12 +33,12 @@ namespace Kys
 			interpreter = new KysInterpreter()
 			{
 				KysParserVisitor = Services.GetService<IVisitorProvider>().GetVisitor<ProgramContext>(),
-				ProgramContext = Services.GetService<IContextFactory>().Create(ContextFactoryType.ME),
+				ProgramContext = Services.GetService<IContextFactory>().Create(ContextType.ME),
 				Sesion = Services.GetService<IInterpreterSesion>()
 			};			
 			SWM.Step("Interpreter Creation");
 			SWM.Step("Interpreter Configuration");
-			interpreter.ConfigureContext();
+			interpreter.ConfigureDefaultContext();
 			SWM.Step("Interpreter Configuration");
 			try
 			{

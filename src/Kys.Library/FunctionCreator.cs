@@ -2,6 +2,9 @@
 
 namespace Kys.Library;
 
+/// <summary>
+/// Provee metodos para convertir metodos de C# en funciones invocables desde Kys.
+/// </summary>
 partial class FunctionRegister
 {
 	internal static CsFunction CreateCsFuntion(IContext context, MethodInfo method, FunctionAttribute att)

@@ -13,25 +13,25 @@ public class DefaultContextFactory : IContextFactory
 {
 	IServiceProvider serviceProvider;
 
-	private Dictionary<ContextFactoryType, Func<IContext>> Factory = new();
+	private Dictionary<ContextType, Func<IContext>> Factory = new();
 
-	private IEnumerable<ContextFactoryType> types =
-		Enum.GetValues<ContextFactoryType>().Reverse();
+	private IEnumerable<ContextType> types =
+		Enum.GetValues<ContextType>().Reverse();
 
 	public DefaultContextFactory(IServiceProvider serviceProvider)
 	{
 		this.serviceProvider = serviceProvider;
-		ChangeContext<RuntimeContext>(ContextFactoryType.ALL);
+		ChangeContext<RuntimeContext>(ContextType.ALL);
 	}
 
-	public void ChangeContext<T>(ContextFactoryType type) where T : IContext
+	public void ChangeContext<T>(ContextType type) where T : IContext
 	{
 		Factory[type] = () => {
 			return ActivatorUtilities.CreateInstance<T>(serviceProvider);
 		};
 	}
 
-	public IContext Create(ContextFactoryType type)
+	public IContext Create(ContextType type)
 	{
 		if (Factory.ContainsKey(type))
 			return Factory[type]();
@@ -40,6 +40,6 @@ public class DefaultContextFactory : IContextFactory
 			if ((type & item) == item && Factory.ContainsKey(item))
 				return Factory[item]();
 		}
-		return Factory[ContextFactoryType.ALL]();
+		return Factory[ContextType.ALL]();
 	}
 }

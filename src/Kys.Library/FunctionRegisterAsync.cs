@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kys.Library;
 
+/// <inheritdoc/>
 partial class FunctionRegister
 {
 	static MethodInfo wait = ((Action)Task.CompletedTask.Wait).Method;

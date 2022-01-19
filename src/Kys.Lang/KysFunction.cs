@@ -2,6 +2,9 @@ using System.Reflection;
 
 namespace Kys.Lang;
 
+/// <summary>
+/// Una función creada directamente por el interprete con sentecias Kys.
+/// </summary>
 public sealed class KysFunction : IFunction
 {
 
@@ -10,12 +13,16 @@ public sealed class KysFunction : IFunction
 	/// </summary>
 	public IEnumerable<SentenceContext> Sentences { get; init; }
 
+	/// <inheritdoc/>
 	public string Name { get; init; }
 
+	/// <inheritdoc/>
 	public int ArgCount { get; init; }
 
+	/// <inheritdoc/>
 	public bool InfArgs { get; init; }
 
+	/// <inheritdoc/>
 	public IContext ParentContext { get; init; }
 
 	/// <summary>
@@ -26,8 +33,9 @@ public sealed class KysFunction : IFunction
 	/// <summary>
 	/// Este es el Visitor que se usa para ejecutar las sentencias dentro de la función
 	/// </summary>
-	public IKysParserVisitor<object> senteceVisitor { get; init; }
+	public IKysParserVisitor<object> SenteceVisitor { get; init; }
 
+	/// <inheritdoc/>
 	public dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
 	{
 		ValidateParams(args.Length);
@@ -48,11 +56,11 @@ public sealed class KysFunction : IFunction
 		var Zip = temp.Zip(args, (First, Second) => (First, Second));
 #endif
 
-		foreach (var item in Zip)
-			FunctionScope.SetVar(item.First, item.Second, false);
+		foreach (var (First, Second) in Zip)
+			FunctionScope.SetVar(First, Second, false);
 
 		foreach (var sentence in Sentences)
-			senteceVisitor.VisitSentence(sentence);
+			SenteceVisitor.VisitSentence(sentence);
 
 		FunctionScope.DefVar("return", null, false);
 		var ret = FunctionScope.GetVar("return", false);

@@ -1,45 +1,56 @@
-﻿namespace Kys.Interpreter
+﻿namespace Kys.Interpreter;
+
+/// <summary>
+/// Implementación por defecto de <see cref="IInterpreterSesion"/>.
+/// </summary>
+public class KysInterpreterSesion : IInterpreterSesion
 {
-	public class KysInterpreterSesion : IInterpreterSesion
+	/// <inheritdoc/>
+	public IContext CurrentContext { get; set; }
+
+	/// <inheritdoc/>
+	public IScope CurrentScope { get; set; }
+
+	/// <inheritdoc/>
+	public IContext CallerContext { get; set; }
+
+	readonly IDictionary<string, object> SesionVariables = new Dictionary<string, object>();
+
+	/// <inheritdoc/>
+	public object this[string name]
 	{
-		public IContext CurrentContext { get; set; }
+		get => SesionVariables.TryGetValue(name, out object Variable) ? Variable : null;
+		set => SesionVariables[name] = value;
+	}
 
-		public IScope CurrentScope { get; set; }
+	readonly IScopeFactory ScopeFactory;
 
-		public IContext CallerContext { get; set; }
+	/// <summary>
+	/// Crea un nueva nueva sesión.
+	/// </summary>
+	/// <param name="scopeFactory">La factory que se usara para generar <see cref="IScope"/> en <see cref="IInterpreterSesion.StartScope(ScopeType)"/>.</param>
+	public KysInterpreterSesion(IScopeFactory scopeFactory)
+	{
+		ScopeFactory = scopeFactory;
+	}
 
-		IDictionary<string, object> SesionVariables = new Dictionary<string, object>();
+	/// <inheritdoc/>
+	public IScope EndScope()
+	{
+		var c = CurrentScope;
 
-		public object this[string name]
-		{
-			get => SesionVariables.TryGetValue(name, out object Variable) ? Variable : null;
-			set => SesionVariables[name] = value;
-		}
+		CurrentScope = CurrentScope.ParentScope;
 
-		IScopeFactory ScopeFactory;
+		return CurrentScope == null
+			? throw new InvalidOperationException("A ocurrido un problema inesperado en la ejecución de la sesión del interprete.")
+			: c;
+	}
 
-		public KysInterpreterSesion(IScopeFactory scopeFactory)
-		{
-			ScopeFactory = scopeFactory;
-		}
-
-		public IScope EndScope()
-		{
-			var c = CurrentScope;
-
-			CurrentScope = CurrentScope.ParentScope;
-
-			if (CurrentScope == null)
-				throw new InvalidOperationException("A ocurrido un problema inesperado en la ejecución de la sesión del interprete.");
-
-			return c;
-		}
-
-		public IScope StartScope(ScopeFactoryType type)
-		{
-			var newScope = ScopeFactory.Create(type, CurrentScope);
-			CurrentScope = newScope;
-			return newScope;
-		}
+	/// <inheritdoc/>
+	public IScope StartScope(ScopeType type)
+	{
+		var newScope = ScopeFactory.Create(type, CurrentScope);
+		CurrentScope = newScope;
+		return newScope;
 	}
 }

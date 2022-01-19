@@ -11,26 +11,26 @@ namespace Kys;
 [AutoLoad]
 public class DefaultScopeFactory : IScopeFactory
 {
-	private Dictionary<ScopeFactoryType, Func<IScope, IScope>> Factory = new();
+	private Dictionary<ScopeType, Func<IScope, IScope>> Factory = new();
 
-	private IEnumerable<ScopeFactoryType> types =
-		Enum.GetValues<ScopeFactoryType>().Reverse();
+	private IEnumerable<ScopeType> types =
+		Enum.GetValues<ScopeType>().Reverse();
 	private IServiceProvider serviceProvider;
 
 	public DefaultScopeFactory(IServiceProvider serviceProvider)
 	{
 		this.serviceProvider = serviceProvider;
-		ChangeScope<RuntimeScope>(ScopeFactoryType.ALL);
+		ChangeScope<RuntimeScope>(ScopeType.ALL);
 	}
 
-	public void ChangeScope<T>(ScopeFactoryType type) where T : IScope =>
+	public void ChangeScope<T>(ScopeType type) where T : IScope =>
 		Factory[type] = (p) => {
 			var scope = ActivatorUtilities.CreateInstance<T>(serviceProvider);
 			scope.ParentScope = p;
 			return scope;
 		};
 
-	public IScope Create(ScopeFactoryType type, IScope parent = null)
+	public IScope Create(ScopeType type, IScope parent = null)
 	{
 		if (Factory.ContainsKey(type))
 			return Factory[type](parent);
@@ -39,6 +39,6 @@ public class DefaultScopeFactory : IScopeFactory
 			if ((type & item) == item && Factory.ContainsKey(item))
 				return Factory[item](parent);
 		}
-		return Factory[ScopeFactoryType.ALL](parent);
+		return Factory[ScopeType.ALL](parent);
 	}
 }

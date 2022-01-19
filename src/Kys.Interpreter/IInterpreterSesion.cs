@@ -1,4 +1,8 @@
 ﻿namespace Kys.Interpreter;
+
+/// <summary>
+/// Una sesión contiene los <see cref="IScope"/> del programa asi como tambien guarda información sobre la ejecución del mismo.
+/// </summary>
 public interface IInterpreterSesion
 {
 	/// <summary>
@@ -23,7 +27,16 @@ public interface IInterpreterSesion
 	/// <returns></returns>
 	object this[string name] { get; set; }
 
-	IScope StartScope(ScopeFactoryType type);
+	/// <summary>
+	/// Inicia un nuevo scope para un tipo especifico.
+	/// </summary>
+	/// <param name="type">El tipo para el cual sera usado ese scope.</param>
+	/// <returns></returns>
+	IScope StartScope(ScopeType type);
 
+	/// <summary>
+	/// Finaliza el <see cref="IScope"/> que esta siendo usado y vuelve al anterior.
+	/// </summary>
+	/// <returns>Devuelve una referencia al scope que se a finalizado, aunque estara vacio ya que es limpiado al finalizarse.</returns>
 	IScope EndScope();
 }

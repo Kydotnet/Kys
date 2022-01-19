@@ -62,8 +62,8 @@ internal class Startup
 		services.AddSingleton<IVisitorProvider>(ConfigureVisitors);
 		services.AddSingleton<IInterpreterSesion, KysInterpreterSesion>();
 
-		services.AddTransient<IContext>(S => S.GetRequiredService<IContextFactory>().Create(ContextFactoryType.ALL));
-		services.AddTransient<IScope>(S => S.GetRequiredService<IScopeFactory>().Create(ScopeFactoryType.ALL));
+		services.AddTransient<IContext>(S => S.GetRequiredService<IContextFactory>().Create(ContextType.ALL));
+		services.AddTransient<IScope>(S => S.GetRequiredService<IScopeFactory>().Create(ScopeType.ALL));
 	}
 
 	private static KysVisitorProvider ConfigureVisitors(IServiceProvider arg)

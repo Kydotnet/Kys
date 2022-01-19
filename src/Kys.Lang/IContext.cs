@@ -1,5 +1,8 @@
 namespace Kys.Lang;
 
+/// <summary>
+/// Representación de un contexto de ejecución, alamacena funciones y un <see cref="IScope"/> con variables.
+/// </summary>
 public interface IContext
 {
 	/// <summary>
