@@ -30,8 +30,8 @@ public class ControlVisitor : BaseVisitor<object>
 	public override object VisitIfcontrol([NotNull] IfcontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.CONTROL);
-		dynamic exp = expressionVisitor.Visit(context.expression());
-		if (exp)
+
+		if (Expistrue(context.expression()))
 			VisitBlock(context.block());
 		else if (context.elsecontrol() != null)
 			VisitElsecontrol(context.elsecontrol());
@@ -60,8 +60,8 @@ public class ControlVisitor : BaseVisitor<object>
 	{
 		Sesion.StartScope(ScopeType.CONTROL);
 		var block = context.block();
-
-		while (expressionVisitor.Visit(context.expression()))
+		var exp = context.expression();
+		while (Expistrue(exp))
 			VisitBlock(block);
 		Sesion.EndScope();
 		return null;
@@ -81,46 +81,16 @@ public class ControlVisitor : BaseVisitor<object>
 		var info = context.twbucle();
 		var block = info.block();
 		var timed = info.timeoutcontrol();
-		int wait = ValueVisitor.GetNumber(info.NUMBER());
+		int wait = ValueVisitor.GetInt(info.NUMBER());
 		var exp = info.expression();
 
 		if (timed != null)
 		{
-			var twait = ValueVisitor.GetNumber(timed.NUMBER());
-			var tblock = timed.block();
-			using var token = new CancellationTokenSource();
-
-			var task = Task.Run(() =>
-			{
-				while (expressionVisitor.Visit(exp) && !token.IsCancellationRequested)
-				{
-					VisitBlock(block);
-					Task.Delay(wait).Wait();
-				}
-				token.Cancel();
-			});
-			try
-			{
-				Task.Delay(twait, token.Token).Wait();
-			}
-			catch (Exception)
-			{
-
-			}
-			finally
-			{
-				if (!token.IsCancellationRequested)
-				{
-					token.Cancel();
-					// en caso de que el while se este ejecutando esperamos a que finalize, esto puede ocurrir cuando el bloque del while se pudo ejecutar y es algo muy pesado y aun no finaliza su ejecución
-					task.Wait();
-					VisitBlock(tblock);
-				}
-			}
+			TimeoutWhile(block, timed, wait, exp);
 		}
 		else
 		{
-			while (expressionVisitor.Visit(exp))
+			while (Expistrue(exp))
 			{
 				VisitBlock(block);
 				Task.Delay(wait).Wait();
@@ -128,6 +98,48 @@ public class ControlVisitor : BaseVisitor<object>
 		}
 		Sesion.EndScope();
 		return null;
+	}
+
+	private void TimeoutWhile(BlockContext block, TimeoutcontrolContext timed, int wait, ExpressionContext exp)
+	{
+		var twait = ValueVisitor.GetInt(timed.NUMBER());
+		var tblock = timed.block();
+		var token = new CancellationTokenSource();
+
+		// tarea de ejecución del bloque while
+		var whiletask = InternalTWile(exp, token, wait, block);
+		// tarea de esperar el timeot
+		var waittask = Task.Delay(twait, token.Token);
+		// esperamos que se termine el while o a que se acabe el timeout
+		var t = Task.WhenAny(whiletask, waittask).Result;
+		// cancelamos el token para que se pare el timeout o para que ya el while no itere mas
+		token.Cancel();
+
+		if(t == waittask)
+		{
+			// si acaba primero el timeout entonces primero esperamos a que acabe la ejecución del bucle while actual(en caso de ser pesado puede tardar mas que el tiempo de timeout)
+			whiletask.Wait();
+			VisitBlock(tblock);
+
+		}// si el que acabo primero fue el whiletask entonces es porque acabo antes que el timeout por loque no se debe hacer nada mas.
+
+	}
+
+	private async Task InternalTWile(ExpressionContext exp, CancellationTokenSource token, int wait, BlockContext block)
+	{
+		while (Expistrue(exp) && !token.IsCancellationRequested)
+		{
+			VisitBlock(block);
+			if (wait > 0)
+				await Task.Delay(wait);
+		}
+	}
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresión condicional", Justification = "Convertir en retorno directo ocasiona que se use el callsite equivocado al compilar.")]
+	private bool Expistrue(ExpressionContext exp)
+	{
+		if (expressionVisitor.Visit(exp)) return true;
+		return false;
 	}
 
 	/// <summary>
@@ -167,7 +179,7 @@ public class ControlVisitor : BaseVisitor<object>
 		if (varop != null) varoperationVisitor.VisitVaroperation(varop);
 
 		// ejecutamos la expresion de condicion.
-		while (expressionVisitor.Visit(exp))
+		while (Expistrue(exp))
 		{
 			// si se cumple ejecutamos el bloque
 			VisitBlock(block);
@@ -175,7 +187,7 @@ public class ControlVisitor : BaseVisitor<object>
 			// si hay una expresion por ejecutar
 			if (iexp != null) expressionVisitor.Visit(iexp);
 			// si hay una operacion con variable
-			else if(ivarop != null) varoperationVisitor.VisitVaroperation(ivarop);
+			else if (ivarop != null) varoperationVisitor.VisitVaroperation(ivarop);
 		}
 
 		Sesion.EndScope();

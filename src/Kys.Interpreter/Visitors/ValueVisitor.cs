@@ -85,16 +85,26 @@ public class ValueVisitor : BaseVisitor<dynamic>
 
 		return sesion.CurrentScope.GetVar(raw);
 	}
-	
+
+
 	/// <summary>
 	/// Obtiene un <see cref="int"/> o un <see cref="double"/> que se obtiene al parsear un <see cref="KysLexer.NUMBER"/>.
 	/// </summary>
 	/// <param name="terminalNode">El nodo que queire ser convertido en numero.</param>
 	/// <returns>Devuelve el numero obtenido, ya se un entero o un numero de doble presición.</returns>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresión condicional", Justification = "Reducir el if produce que un int se retorne como double, lo que genera error en ejecución")]
 	public static dynamic GetNumber(ITerminalNode terminalNode)
 	{
 		var raw = terminalNode.GetText();
-		return int.TryParse(raw, out int retint) ? retint : double.Parse(raw, CultureInfo.InvariantCulture);
+		if (int.TryParse(raw, out int retint))
+			return retint;
+
+		return  double.Parse(raw, CultureInfo.InvariantCulture);
+	}
+
+	internal static int GetInt(ITerminalNode terminalNode)
+	{
+		return int.Parse(terminalNode.GetText(),NumberStyles.Integer, null);
 	}
 
 	/// <summary>
