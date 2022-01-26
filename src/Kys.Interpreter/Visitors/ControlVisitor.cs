@@ -86,28 +86,37 @@ public class ControlVisitor : BaseVisitor<object>
 
 		if (timed != null)
 		{
-			TimeoutWhile(block, timed, wait, exp);
+			TWBucle(block, timed, wait, exp, InternalTWile);
 		}
 		else
 		{
 			while (Expistrue(exp))
 			{
 				VisitBlock(block);
-				Task.Delay(wait).Wait();
+				if (wait > 0)
+					Task.Delay(wait).Wait();
 			}
 		}
 		Sesion.EndScope();
 		return null;
 	}
 
-	private void TimeoutWhile(BlockContext block, TimeoutcontrolContext timed, int wait, ExpressionContext exp)
+	/// <summary>
+	/// Permite ejecuta un bucle definido con un timeout dado.
+	/// </summary>
+	/// <param name="block">Bloque que se debe pasar al bucle,y este bloque es pasado directamente a <paramref name="whilefunc"/>.</param>
+	/// <param name="timed">Contexto de la estructura timeout.</param>
+	/// <param name="wait">Tiempo que debe esperar el bucle entre ejecución. Es pasado directamente a <paramref name="whilefunc"/></param>
+	/// <param name="exp">Expresión que debe evaluar el bucle. Es pasado directamente a <paramref name="whilefunc"/></param>
+	/// <param name="whilefunc">Metodo que deberia generar una tarea que representa la ejecución del bucle en segundo plano.</param>
+	private void TWBucle(BlockContext block, TimeoutcontrolContext timed, int wait, ExpressionContext exp, Func<ExpressionContext, CancellationTokenSource, int, BlockContext, Task> whilefunc)
 	{
 		var twait = ValueVisitor.GetInt(timed.NUMBER());
 		var tblock = timed.block();
 		var token = new CancellationTokenSource();
 
 		// tarea de ejecución del bloque while
-		var whiletask = InternalTWile(exp, token, wait, block);
+		var whiletask = whilefunc(exp, token, wait, block);
 		// tarea de esperar el timeot
 		var waittask = Task.Delay(twait, token.Token);
 		// esperamos que se termine el while o a que se acabe el timeout
@@ -115,7 +124,7 @@ public class ControlVisitor : BaseVisitor<object>
 		// cancelamos el token para que se pare el timeout o para que ya el while no itere mas
 		token.Cancel();
 
-		if(t == waittask)
+		if (t == waittask)
 		{
 			// si acaba primero el timeout entonces primero esperamos a que acabe la ejecución del bucle while actual(en caso de ser pesado puede tardar mas que el tiempo de timeout)
 			whiletask.Wait();
@@ -133,6 +142,55 @@ public class ControlVisitor : BaseVisitor<object>
 			if (wait > 0)
 				await Task.Delay(wait);
 		}
+	}
+
+	/// <summary>
+	/// La estructura wait es una estructura definida en Kys cuyo funcionamiento es el de esperar a que una expresión se cumpla.
+	/// </summary>
+	/// <remarks>
+	/// Lo que hace el wait exactamente ese evaluar la expresión dada cada cierto tiempo, de forma indefinida hasta que esta evalue verdadero, en cuyo caso ejecutara el contenido del bloque.
+	/// Para evitar que un bloque wait se quede esperando por siempre es posible usar un bloque timeout, que especifica un tiempo maximo para esperar a que  la condición se cumpla.
+	/// </remarks>
+	/// <inheritdoc/>
+	public override object VisitWaitcontrol([NotNull] WaitcontrolContext context)
+	{
+		Sesion.StartScope(ScopeType.CONTROL);
+		var info = context.twbucle();
+		var block = info.block();
+		var timed = info.timeoutcontrol();
+		int wait = ValueVisitor.GetInt(info.NUMBER());
+		var exp = info.expression();
+
+		if (timed != null)
+		{
+			TWBucle(block, timed, wait, exp, InternalWait);
+		}
+		else
+		{
+			while (!Expistrue(exp))
+			{
+				if (wait > 0)
+					Task.Delay(wait).Wait();
+			}
+			// solamente cuando la expresión evalua true se sale del bucle y se ejecuta el codigo
+			VisitBlock(block);
+		}
+
+		Sesion.EndScope();
+		return null;
+	}
+
+	private async Task InternalWait(ExpressionContext exp, CancellationTokenSource token, int wait, BlockContext block)
+	{
+		while (!Expistrue(exp) && !token.IsCancellationRequested)
+		{
+			if (wait > 0)
+				await Task.Delay(wait);
+		}
+		// solo ejecutamos el bloque wait si se llega aqui si averse cancelado la tarea, es decir, si llega antes que el timeout
+		if (!token.IsCancellationRequested)
+			// solamente cuando la expresión evalua true se sale del bucle y se ejecuta el codigo
+			VisitBlock(block);
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresión condicional", Justification = "Convertir en retorno directo ocasiona que se use el callsite equivocado al compilar.")]
