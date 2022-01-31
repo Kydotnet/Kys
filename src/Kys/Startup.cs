@@ -1,4 +1,7 @@
-﻿using Antlr4.Runtime;
+﻿using System;
+using System.IO;
+using System.Linq;
+using Antlr4.Runtime;
 using Kys.Interpreter;
 using Kys.Interpreter.Visitors;
 using Kys.Lang;
@@ -7,9 +10,6 @@ using Kys.Library;
 using Kys.Parser;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
-using System.Linq;
 using static Kys.Parser.KysParser;
 
 namespace Kys;
@@ -18,27 +18,37 @@ internal class Startup
 {
 	public static int Main(string[] args)
 	{
-		SWM.Enabled = args.Contains("-t");
-		SWM.Step("Program Run");
 		if (args.Length > 0 && File.Exists(args[0]))
 		{
-			Environment.SetEnvironmentVariable("KYS_PROGRAM_FILE", args[0]);
+			var showtime = args.Contains("-t");
+			var filename = args[0];
 
-			SWM.Step("Host Configuration");
-			var hostb = new KysHostBuilder()
-				.ConfigureServices(ConfigureServices);
-			SWM.Step("Host Configuration");
-			SWM.Step("Host Creation");
-			var host = hostb.Build();
-			SWM.Step("Host Creation");
-			SWM.Step("Host Run");
-			host.Start();
-			SWM.Step("Host Run");
-
-			SWM.Step("Program Run");
-			return Environment.ExitCode;
+			return Entry(filename, showtime);
 		}
 		return -1;
+	}
+
+	public static int Entry(string filename, bool showtimes)
+	{
+		SWM.Enabled = showtimes;
+		SWM.Step("Program Run");
+
+		Environment.SetEnvironmentVariable("KYS_PROGRAM_FILE", filename);
+
+		SWM.Step("Host Configuration");
+		var hostb = new KysHostBuilder()
+			.ConfigureServices(ConfigureServices);
+		SWM.Step("Host Configuration");
+		SWM.Step("Host Creation");
+		var host = hostb.Build();
+		SWM.Step("Host Creation");
+		SWM.Step("Host Run");
+		host.Start();
+		SWM.Step("Host Run");
+
+		SWM.Step("Program Run");
+		return Environment.ExitCode;
+
 	}
 
 	private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
@@ -49,13 +59,14 @@ internal class Startup
 		services.AddSingleton<ITokenSource, KysLexer>();
 		services.AddSingleton<ITokenStream, CommonTokenStream>();
 		services.AddSingleton<IAntlrErrorListener<IToken>, KysErrorListener>();
-		services.AddSingleton<KysParser>(S => {
+		services.AddSingleton<KysParser>(S =>
+		{
 			var ret = new KysParser(S.GetRequiredService<ITokenStream>());
 			ret.RemoveErrorListeners();
 			ret.AddErrorListener(S.GetRequiredService<IAntlrErrorListener<IToken>>());
 			return ret;
 		});
-		
+
 		services.AddSingleton<IScopeFactory, DefaultScopeFactory>();
 		services.AddSingleton<IContextFactory, DefaultContextFactory>();
 

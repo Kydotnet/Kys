@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Kys.Lang\Kys.Lang.csproj" />
     <ProjectReference Include="..\Kys.Library\Kys.Library.csproj" />
   </ItemGroup>
 

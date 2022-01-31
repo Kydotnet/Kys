@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kys.Parser\Kys.Parser.csproj" />
+	<ProjectReference Include="..\..\..\KYLib-CSharp\KYLib\KYLib.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

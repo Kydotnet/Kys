@@ -107,8 +107,8 @@ public sealed class OverloadFunction : IFunction
 		var Func = GetFunction(Filter, args);
 		if (Func != null)
 			return Func;
-		
-		Func = Functions.FirstOrDefault(f=>f.ArgCount >= args.Length);
+
+		Func = Functions.FirstOrDefault(f => f.ArgCount >= args.Length);
 		if (Func != null)
 			return Func;
 
