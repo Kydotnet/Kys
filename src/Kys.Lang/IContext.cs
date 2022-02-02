@@ -1,7 +1,7 @@
-namespace Kys.Lang;
+锘縩amespace Kys.Lang;
 
 /// <summary>
-/// Representaci髇 de un contexto de ejecuci髇, alamacena funciones y un <see cref="IScope"/> con variables.
+/// Representaci贸n de un contexto de ejecuci贸n, alamacena funciones y un <see cref="IScope"/> con variables.
 /// </summary>
 public interface IContext
 {
@@ -16,33 +16,33 @@ public interface IContext
 	IEnumerable<IFunction> DefinedFunctions { get; }
 
 	/// <summary>
-	/// Agrega una funci髇 al contexto.
+	/// Agrega una funci贸n al contexto.
 	/// </summary>
 	/// <remarks>
 	/// Este metodo no genera error simplemente devuelve un booleano con el resultado.
 	/// </remarks>
-	/// <param name="Function">Funci髇 a agregar.</param>
-	/// <returns><c>true</c> si ha sido posible agregar la funci髇, <c>false</c> si la funci髇 ya ha sido agregada o ya existe una con el mismo nombre.</returns>
+	/// <param name="Function">Funci贸n a agregar.</param>
+	/// <returns><c>true</c> si ha sido posible agregar la funci贸n, <c>false</c> si la funci贸n ya ha sido agregada o ya existe una con el mismo nombre.</returns>
 	bool AddFunction(IFunction Function);
 
 	/// <summary>
-	/// Remueve una funci髇 de este contexto.
+	/// Remueve una funci贸n de este contexto.
 	/// </summary>
 	/// <remarks>
 	/// Este metodo no genera error simplemente devuelve un booleano con el resultado.
 	/// </remarks>
-	/// <param name="Name">Nombre de la funci髇 que quiere ser removida.</param>
-	/// <returns><c>true</c> si la funci髇 pudo ser removida correctamente, <c>false</c> en caso contrario.</returns>
+	/// <param name="Name">Nombre de la funci贸n que quiere ser removida.</param>
+	/// <returns><c>true</c> si la funci贸n pudo ser removida correctamente, <c>false</c> en caso contrario.</returns>
 	bool RemoveFunction(string Name);
 
 	/// <summary>
-	/// Agrega o cambia una funci髇 existente. Si la funci髇 aun no existe la crea y si ya existe la cambia.
+	/// Agrega o cambia una funci贸n existente. Si la funci贸n aun no existe la crea y si ya existe la cambia.
 	/// </summary>
-	/// <param name="Function">La funci髇 que quiere agregarse o modificarse.</param>
+	/// <param name="Function">La funci贸n que quiere agregarse o modificarse.</param>
 	void OverrideFunction(IFunction Function);
 
 	/// <summary>
-	/// Obtiene una funci髇 en este contexto.
+	/// Obtiene una funci贸n en este contexto.
 	/// </summary>
 	/// <param name="Name"></param>
 	/// <returns></returns>

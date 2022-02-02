@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+    <mime-type type="text/x-kys">
+    <comment>KY Script</comment>
+    <comment xml:lang="es">Programa de KY Script</comment>
+    <icon name="text-x-kys"/>
+    <glob pattern="*.kys"/>
+    </mime-type>
+</mime-info>
