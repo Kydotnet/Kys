@@ -4,7 +4,7 @@ using Microsoft.CSharp.RuntimeBinder;
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
-/// Implementaci髇 por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ExpressionContext"/>.
+/// Implementaci贸n por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ExpressionContext"/>.
 /// </summary>
 public class ExpressionVisitor : BaseVisitor<dynamic>
 {
@@ -27,14 +27,14 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 		valueVisitor.VisitValue(context.value());
 
 	/// <summary>
-	/// Evalua la expresi髇 interna, es decir, la que se encuentra dentro de los parentesis.
+	/// Evalua la expresi贸n interna, es decir, la que se encuentra dentro de los parentesis.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitParenthesisExp([NotNull] ParenthesisExpContext context) =>
 		Visit(context.expression());
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con el operador de C# "<c>!</c>".
+	/// Evalua la exrpesi贸n <paramref name="context"/> con el operador de C# "<c>!</c>".
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitUniNotExp([NotNull] UniNotExpContext context)
@@ -53,7 +53,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con los operadores de C# "pre <c>++</c>" y "pre <c>--</c>" dependiendo de <see cref="UniAritExpContext.UNIARIT()"/>.
+	/// Evalua la exrpesi贸n <paramref name="context"/> con los operadores de C# "pre <c>++</c>" y "pre <c>--</c>" dependiendo de <see cref="UniAritExpContext.UNIARIT()"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitUniAritExp([NotNull] UniAritExpContext context)
@@ -83,7 +83,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con el metodo <see cref="Math.Pow(double, double)"/>
+	/// Evalua la exrpesi贸n <paramref name="context"/> con el metodo <see cref="Math.Pow(double, double)"/>
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitPotencialExp([NotNull] PotencialExpContext context)
@@ -102,7 +102,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con los operadores de C# "<c>*</c>" y "<c>/</c>" dependiendo de <see cref="MultiplicativeExpContext.MULTIPLICATIVE()"/>.
+	/// Evalua la exrpesi贸n <paramref name="context"/> con los operadores de C# "<c>*</c>" y "<c>/</c>" dependiendo de <see cref="MultiplicativeExpContext.MULTIPLICATIVE()"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitMultiplicativeExp([NotNull] MultiplicativeExpContext context)
@@ -121,7 +121,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con el operador de C# "<c>%</c>".
+	/// Evalua la exrpesi贸n <paramref name="context"/> con el operador de C# "<c>%</c>".
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitModuleExp([NotNull] ModuleExpContext context)
@@ -140,7 +140,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con los operadores de C# "<c>+</c>" y "<c>-</c>" dependiendo de <see cref="AditiveExpContext.ADITIVE()"/>.
+	/// Evalua la exrpesi贸n <paramref name="context"/> con los operadores de C# "<c>+</c>" y "<c>-</c>" dependiendo de <see cref="AditiveExpContext.ADITIVE()"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitAditiveExp([NotNull] AditiveExpContext context)
@@ -159,7 +159,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con el metodo <see cref="object.Equals(object)"/>.
+	/// Evalua la exrpesi贸n <paramref name="context"/> con el metodo <see cref="object.Equals(object)"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitEqualityExp([NotNull] EqualityExpContext context)
@@ -178,7 +178,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la expresi髇 <paramref name="context"/> con los operadores de C# "<c>&amp;&amp;</c>" y "<c>||</c>" dependiendo de <see cref="LogicalExpContext.ANDOR()"/>.
+	/// Evalua la expresi贸n <paramref name="context"/> con los operadores de C# "<c>&amp;&amp;</c>" y "<c>||</c>" dependiendo de <see cref="LogicalExpContext.ANDOR()"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitLogicalExp([NotNull] LogicalExpContext context)
@@ -197,7 +197,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la expresi髇 <paramref name="context"/> con los operadores de C# "<c>&lt;=</c>" y "<c>&gt;=</c>" dependiendo de <see cref="EqrelationalExpContext.EQRELATIONAL()"/>.
+	/// Evalua la expresi贸n <paramref name="context"/> con los operadores de C# "<c>&lt;=</c>" y "<c>&gt;=</c>" dependiendo de <see cref="EqrelationalExpContext.EQRELATIONAL()"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitEqrelationalExp([NotNull] EqrelationalExpContext context)
@@ -216,7 +216,7 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Evalua la exrpesi髇 <paramref name="context"/> con los operadores de C# "<c>&lt;</c>" y "<c>&gt;</c>" dependiendo de <see cref="RelationalExpContext.RELATIONAL()"/>.
+	/// Evalua la exrpesi贸n <paramref name="context"/> con los operadores de C# "<c>&lt;</c>" y "<c>&gt;</c>" dependiendo de <see cref="RelationalExpContext.RELATIONAL()"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitRelationalExp([NotNull] RelationalExpContext context)
@@ -240,6 +240,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitFuncExp([NotNull] FuncExpContext context)
 	{
+		Sesion["LastColumn"] = context.Start.Column;
+		Sesion["LastLine"] = context.Start.Line;
 		return funcresultVisitor.VisitFuncresult(context.funcresult());
 	}
 }

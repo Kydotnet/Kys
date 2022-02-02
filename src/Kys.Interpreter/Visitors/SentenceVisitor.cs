@@ -3,7 +3,7 @@ using Antlr4.Runtime.Misc;
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
-/// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="SentenceContext"/>.
+/// ImplementaciÃ³n por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="SentenceContext"/>.
 /// </summary>
 public class SentenceVisitor : BaseVisitor<object>
 {
@@ -24,6 +24,7 @@ public class SentenceVisitor : BaseVisitor<object>
 	public override object VisitSentence([NotNull] SentenceContext context)
 	{
 		Sesion["LastColumn"] = context.Start.Column;
+		Sesion["LastLine"] = context.Start.Line;
 		Sesion["LastSentence"] = context;
 		return base.VisitSentence(context);
 	}

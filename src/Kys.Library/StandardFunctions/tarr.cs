@@ -7,7 +7,9 @@ partial class StandardFunctions
 	public static Array tarr(Type type, params dynamic[] args)
 	{
 		var ret = Array.CreateInstance(type, args.Length);
-		args.CopyTo(ret, 0);
+		var len = args.Length;
+		for (int i = 0; i < len; i++)
+			ret.SetValue(args[i], i);
 		return ret;
 	}
 }

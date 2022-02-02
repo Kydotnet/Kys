@@ -3,7 +3,7 @@ using Antlr4.Runtime.Misc;
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
-/// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="InstructionContext"/>.
+/// ImplementaciÃ³n por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="InstructionContext"/>.
 /// </summary>
 public class InstructionVisitor : BaseVisitor<object>
 {
@@ -19,6 +19,7 @@ public class InstructionVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitInstruction([NotNull] InstructionContext context)
 	{
+		Sesion["LastColumn"] = context.Start.Column;
 		Sesion["LastLine"] = context.Start.Line;
 		Sesion["LastInstruction"] = context;
 		return base.VisitInstruction(context);
@@ -32,7 +33,7 @@ public class InstructionVisitor : BaseVisitor<object>
 		sentenceVisitor.VisitSentence(context);
 
 	/// <summary>
-	/// Genera una función Kys con <see cref="FunctionRegister.AddKysFunction(IContext, FuncdefinitionContext, IKysParserVisitor{object})"/>.
+	/// Genera una funciÃ³n Kys con <see cref="FunctionRegister.AddKysFunction(IContext, FuncdefinitionContext, IKysParserVisitor{object})"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override object VisitFuncdefinition([NotNull] FuncdefinitionContext context)

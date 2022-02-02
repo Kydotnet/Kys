@@ -1,29 +1,14 @@
-#!/bin/kys
+#!/bin/kys -t
 
 kyl load "std"
 kys cmdargs args
 
-var i = 0;
+var intType = type("System.Double");
+var int = tarr(intType, 0 ,1 , 2, 3, 4);
 
-
-for(; i < 1000; i++) trace(i);
-
-for(var j = 0; j < 5; j += 2)
+for(var i = 0; i < arrlen(int);i++)
 {
-	trace(j);
+	trace(getarr(int, i));
 }
 
-var j = 0;
-
-var uno = 5++;
-
-uno ^= 2;
-
-trace(uno);
-
-var dos = uno++;
-
-trace(dos);
-
-trace(uno);
-trace(dos);
+trace(int);

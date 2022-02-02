@@ -29,7 +29,8 @@ public class KysInterpreter : IInterpreter
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine("line {0}:{1} {2}", Sesion["LastLine"] ?? 0, Sesion["LastColumn"] ?? 0, ex.Message);
+			var error = ex.InnerException ?? ex;
+			Console.WriteLine("line {0}:{1} [{2}] {3}", Sesion["LastLine"] ?? 0, Sesion["LastColumn"] ?? 0, error.GetType().Name, error.Message);
 		}
 	}
 
