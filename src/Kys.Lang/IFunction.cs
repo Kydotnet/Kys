@@ -1,37 +1,34 @@
+using KYLib.Interfaces;
+
 namespace Kys.Lang;
 
 /// <summary>
-/// Una funci髇 que puede ser agregada a un contexto de ejecuci髇 (<see cref="IContext"/>) para ser llamada desde Kys.
+/// Una funci贸n que puede ser agregada a un contexto de ejecuci贸n (<see cref="IContext"/>) para ser llamada desde Kys.
 /// </summary>
-public interface IFunction
+public interface IFunction : INameable
 {
 	/// <summary>
-	/// Nombre que toma la funci髇 a la hora de llamarla.
-	/// </summary>
-	string Name { get; }
-
-	/// <summary>
-	/// Cantidad de parametros que recibe esta funci髇.
-	/// En caso de que <see cref="InfArgs"/> sea <c>true</c> entonces este valor es el numero minimo de parametros que recibe la funci髇.
+	/// Cantidad de parametros que recibe esta funci贸n.
+	/// En caso de que <see cref="InfArgs"/> sea <c>true</c> entonces este valor es el numero minimo de parametros que recibe la funci贸n.
 	/// </summary>
 	int ArgCount { get; }
 
 	/// <summary>
-	/// Indica si la funci髇 puede recibir una cantidad infinita de parametros.
+	/// Indica si la funci贸n puede recibir una cantidad infinita de parametros.
 	/// </summary>
 	bool InfArgs { get; }
 
 	/// <summary>
-	/// Contexto en el cual se encuentra registrada esta funci髇.
+	/// Contexto en el cual se encuentra registrada esta funci贸n.
 	/// </summary>
 	IContext ParentContext { get; init; }
 
 	/// <summary>
-	/// Ejecuta la funci髇 por causa de un llamado.
+	/// Ejecuta la funci贸n por causa de un llamado.
 	/// </summary>
-	/// <param name="CallerContext">Contexto desde el cual se invoco a la funci髇.</param>
-	/// <param name="FunctionScope">Scope que sera usado para almacenar variabes locales de la funci髇.</param>
-	/// <param name="args">Argumentos pasados a la funci髇.</param>
-	/// <returns>Valor devuelto por la funci髇.</returns>
+	/// <param name="CallerContext">Contexto desde el cual se invoco a la funci贸n.</param>
+	/// <param name="FunctionScope">Scope que sera usado para almacenar variabes locales de la funci贸n.</param>
+	/// <param name="args">Argumentos pasados a la funci贸n.</param>
+	/// <returns>Valor devuelto por la funci贸n.</returns>
 	dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args);
 }

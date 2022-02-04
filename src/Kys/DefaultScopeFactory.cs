@@ -1,21 +1,21 @@
-﻿using KYLib.Modding;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using KYLib.Modding;
 using Kys.Lang;
 using Kys.Library;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Kys;
 
 [AutoLoad]
 public class DefaultScopeFactory : IScopeFactory
 {
-	private Dictionary<ScopeType, Func<IScope, IScope>> Factory = new();
+	readonly Dictionary<ScopeType, Func<IScope, IScope>> Factory = new();
 
-	private IEnumerable<ScopeType> types =
+	readonly IEnumerable<ScopeType> types =
 		Enum.GetValues<ScopeType>().Reverse();
-	private IServiceProvider serviceProvider;
+	readonly IServiceProvider serviceProvider;
 
 	public DefaultScopeFactory(IServiceProvider serviceProvider)
 	{
@@ -24,7 +24,8 @@ public class DefaultScopeFactory : IScopeFactory
 	}
 
 	public void ChangeScope<T>(ScopeType type) where T : IScope =>
-		Factory[type] = (p) => {
+		Factory[type] = (p) =>
+		{
 			var scope = ActivatorUtilities.CreateInstance<T>(serviceProvider);
 			scope.ParentScope = p;
 			return scope;

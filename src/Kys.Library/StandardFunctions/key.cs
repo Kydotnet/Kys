@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1591
+﻿#pragma warning disable CS1591, IDE1006
 namespace Kys.Library;
 
 partial class StandardFunctions

@@ -2,50 +2,49 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Kys
+namespace Kys;
+
+internal class SWM
 {
-	internal class SWM
+	readonly static IDictionary<string, Stopwatch> sws = new Dictionary<string, Stopwatch>();
+
+	public static bool Enabled = false;
+
+	public static void Start(string id)
 	{
-		static IDictionary<string, Stopwatch> sws = new Dictionary<string, Stopwatch>();
-
-		public static bool Enabled = false;
-
-		public static void Start(string id)
+		if (!Enabled) return;
+		if (sws.ContainsKey(id))
 		{
-			if (!Enabled) return;
-			if (sws.ContainsKey(id))
-			{
-				sws[id].Restart();
-			}
-			else
-			{
-				sws[id] = Stopwatch.StartNew();
-			}
+			sws[id].Restart();
 		}
-
-		public static void Stop(string id)
+		else
 		{
-			if (!Enabled) return;
-			if (sws.ContainsKey(id))
-			{
-				var sw = sws[id];
-				Console.WriteLine("{0} in {1}ms", id, sw.ElapsedMilliseconds);
-				sws.Remove(id);
-				sw.Stop();
-			}
+			sws[id] = Stopwatch.StartNew();
 		}
+	}
 
-		public static void Step(string id)
+	public static void Stop(string id)
+	{
+		if (!Enabled) return;
+		if (sws.ContainsKey(id))
 		{
-			if (!Enabled) return;
-			if (sws.ContainsKey(id))
-			{
-				Stop(id);
-			}
-			else
-			{
-				Start(id);
-			}
+			var sw = sws[id];
+			Console.WriteLine("{0} in {1}ms", id, sw.ElapsedMilliseconds);
+			sws.Remove(id);
+			sw.Stop();
+		}
+	}
+
+	public static void Step(string id)
+	{
+		if (!Enabled) return;
+		if (sws.ContainsKey(id))
+		{
+			Stop(id);
+		}
+		else
+		{
+			Start(id);
 		}
 	}
 }

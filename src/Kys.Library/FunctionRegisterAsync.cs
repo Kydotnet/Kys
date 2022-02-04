@@ -1,15 +1,15 @@
-﻿using GrEmit;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using GrEmit;
 
 namespace Kys.Library;
 
 /// <inheritdoc/>
 partial class FunctionRegister
 {
-	static MethodInfo wait = ((Action)Task.CompletedTask.Wait).Method;
+	readonly static MethodInfo wait = ((Action)Task.CompletedTask.Wait).Method;
 
 	private static MethodInfo IsAsync(MethodInfo method)
 	{

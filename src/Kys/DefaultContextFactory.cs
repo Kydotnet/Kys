@@ -1,21 +1,21 @@
-﻿using KYLib.Modding;
-using Kys.Lang;
-using Kys.Library;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KYLib.Modding;
+using Kys.Lang;
+using Kys.Library;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kys;
 
 [AutoLoad]
 public class DefaultContextFactory : IContextFactory
 {
-	IServiceProvider serviceProvider;
+	readonly IServiceProvider serviceProvider;
 
-	private Dictionary<ContextType, Func<IContext>> Factory = new();
+	readonly Dictionary<ContextType, Func<IContext>> Factory = new();
 
-	private IEnumerable<ContextType> types =
+	readonly IEnumerable<ContextType> types =
 		Enum.GetValues<ContextType>().Reverse();
 
 	public DefaultContextFactory(IServiceProvider serviceProvider)
@@ -26,7 +26,8 @@ public class DefaultContextFactory : IContextFactory
 
 	public void ChangeContext<T>(ContextType type) where T : IContext
 	{
-		Factory[type] = () => {
+		Factory[type] = () =>
+		{
 			return ActivatorUtilities.CreateInstance<T>(serviceProvider);
 		};
 	}

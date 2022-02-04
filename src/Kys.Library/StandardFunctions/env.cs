@@ -1,4 +1,4 @@
-#pragma warning disable CS1591
+#pragma warning disable CS1591, IDE1006
 using System.Collections;
 
 namespace Kys.Library;

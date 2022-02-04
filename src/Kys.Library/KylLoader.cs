@@ -1,6 +1,6 @@
 ﻿namespace Kys.Library;
 
-public static class KylLoader
+internal static class KylLoader
 {
 	public static void Load(KylContext context, IContext targetContext)
 	{

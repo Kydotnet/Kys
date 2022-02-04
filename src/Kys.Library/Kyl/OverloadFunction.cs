@@ -2,16 +2,23 @@
 
 namespace Kys.Library;
 
+/// <summary>
+/// Una función que recibe una longitud variada de parametros
+/// </summary>
 public sealed class OverloadFunction : IFunction
 {
-	private CsFunction[] Functions;
+	readonly CsFunction[] Functions;
 
+	/// <inheritdoc/>
 	public string Name { get; init; }
 
+	/// <inheritdoc/>
 	public int ArgCount { get; private set; }
 
+	/// <inheritdoc/>
 	public bool InfArgs { get; private set; }
 
+	/// <inheritdoc/>
 	public IContext ParentContext { get; init; }
 
 	internal OverloadFunction(MethodInfo[] methods, IContext targetContext)
@@ -127,7 +134,7 @@ public sealed class OverloadFunction : IFunction
 				var t2 = pars[i].ParameterType;
 				if (t1.IsPrimitive && t2.IsPrimitive)
 				{
-					if (isAssignable(t1, t2))
+					if (IsAssignable(t1, t2))
 						continue;
 					else
 					{
@@ -146,7 +153,7 @@ public sealed class OverloadFunction : IFunction
 		return null;
 	}
 
-	private bool isAssignable(Type t1, Type t2)
+	private bool IsAssignable(Type t1, Type t2)
 	{
 		var t1v = PrimitiveValueAssignation(t1);
 		var t2v = PrimitiveValueAssignation(t2);
