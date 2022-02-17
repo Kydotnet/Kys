@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "Kys": {
-      "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\User\\Source\\repos\\Kys\\samples\\test.kys\" -t",
-      "nativeDebugging": true
-    }
-  }
-}
