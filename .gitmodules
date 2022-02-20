@@ -1,0 +1,3 @@
+[submodule "external/KYLib"]
+	path = external/KYLib
+	url = git@github.com:JuanCalle1606/KYLib-CSharp.git
