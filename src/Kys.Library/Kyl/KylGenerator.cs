@@ -3,10 +3,10 @@ using KYLib.Utils;
 
 namespace Kys.Library;
 
-public static class KylGenerator
+internal static class KylGenerator
 {
 	const BindingFlags stpublicmet = BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly;
-	const BindingFlags publicmet = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+	//const BindingFlags publicmet = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
 
 	internal static void Generate(string[] args, IContext targetContext)

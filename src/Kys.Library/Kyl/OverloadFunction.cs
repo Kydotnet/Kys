@@ -98,6 +98,7 @@ public sealed class OverloadFunction : IFunction
 		return 0;
 	}
 
+	/// <inheritdoc/>
 	public dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args) =>
 		GetRealMethod(args).Call(CallerContext, FunctionScope, args);
 
@@ -164,5 +165,6 @@ public sealed class OverloadFunction : IFunction
 		return false;
 	}
 
+	/// <inheritdoc/>
 	public override string ToString() => $"{Functions[0].Method.ReturnType.Name} {Name}(...)";
 }

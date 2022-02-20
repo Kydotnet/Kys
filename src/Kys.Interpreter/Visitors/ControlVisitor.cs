@@ -196,8 +196,15 @@ public class ControlVisitor : BaseVisitor<object>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresión condicional", Justification = "Convertir en retorno directo ocasiona que se use el callsite equivocado al compilar.")]
 	private bool Expistrue(ExpressionContext exp)
 	{
-		if (expressionVisitor.Visit(exp)) return true;
-		return false;
+		object val = expressionVisitor.Visit(exp);
+		// ReSharper disable once ConvertIfStatementToReturnStatement
+		if (val == null || 
+		    val.Equals(0) || 
+		    val.Equals(false) || 
+		    string.IsNullOrEmpty(val.ToString())) 
+			return false;
+			
+		return true;
 	}
 
 	/// <summary>
