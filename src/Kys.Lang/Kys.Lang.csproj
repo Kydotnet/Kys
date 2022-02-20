@@ -1,16 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\external\KYLib\src\KYLib\KYLib.csproj" />
     <ProjectReference Include="..\Kys.Parser\Kys.Parser.csproj" />
-	<ProjectReference Include="..\..\..\KYLib-CSharp\KYLib\KYLib.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
 	<Version>1.0.1</Version>
 	<DocumentationFile>Kys.Lang.xml</DocumentationFile>
-	<RepositoryBranch>Lang-dev</RepositoryBranch>
 	<TargetFramework>netstandard2.1</TargetFramework>
-	<TargetFrameworks />
   </PropertyGroup>
 
 </Project>

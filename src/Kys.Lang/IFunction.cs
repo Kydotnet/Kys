@@ -1,4 +1,4 @@
-using KYLib.Interfaces;
+using KYLib.Abstractions;
 
 namespace Kys.Lang;
 

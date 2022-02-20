@@ -1,29 +1,11 @@
 <Project>
-	<PropertyGroup Condition="$(SolutionDir) == ''">
-		<SolutionDir>../../</SolutionDir>
-	</PropertyGroup>
+    <Import Project="$(MSBuildThisFileDirectory)external/KYLib/external/JuanCalle1606/code/csharp/Directory.Build.props"/>
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
 		<LangVersion>10.0</LangVersion>
-        <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Authors>Juan Pablo Calle</Authors>
-		<Company>Juan Pablo Calle Grafe</Company>
-		<Copyright>Copyrigth © 2021 Juan Pablo Calle</Copyright>
 		<RepositoryUrl>https://github.com/JuanCalle1606/Kys</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryBranch>main</RepositoryBranch>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<NeutralLanguage>es</NeutralLanguage>
-		<RootNamespace>$(MSBuildProjectName)</RootNamespace>
-    	<NoWin32Manifest>true</NoWin32Manifest>
     	<Nullable>annotations</Nullable>
-    	<BaseIntermediateOutputPath>$(SolutionDir).build\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-   		<BaseOutputPath>$(SolutionDir).build\bin\$(MSBuildProjectName)</BaseOutputPath>
-	</PropertyGroup>
-	<PropertyGroup Condition="$(Configuration) == 'Release'">
-		<DebugType>none</DebugType>
 	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework) != 'net5.0'">
     	<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
