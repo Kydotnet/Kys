@@ -7,15 +7,17 @@ namespace Kys.Interpreter.Visitors
 	/// </summary>
 	public class ProgramVisitor : BaseVisitor<dynamic>
 	{
-		IKysParserVisitor<object> IntructionVisitor;
-		IKysParserVisitor<object> TopLevelVisitor;
+		#pragma warning disable CS8618
+		IKysParserVisitor<object> _intructionVisitor;
+		IKysParserVisitor<object> _topLevelVisitor;
+		#pragma warning restore CS8618
 
 		/// <inheritdoc/>
 		public override void Configure(IServiceProvider serviceProvider)
 		{
 			base.Configure(serviceProvider);
-			IntructionVisitor = VisitorProvider.GetVisitor<InstructionContext>();
-			TopLevelVisitor = VisitorProvider.GetVisitor<ToplevelContext>();
+			_intructionVisitor = VisitorProvider.GetVisitor<InstructionContext>();
+			_topLevelVisitor = VisitorProvider.GetVisitor<ToplevelContext>();
 		}
 
 		/// <summary>
@@ -26,19 +28,27 @@ namespace Kys.Interpreter.Visitors
 		{
 			var toplevel = context.toplevel();
 			var instructions = context.instruction();
-
+			
+			
 			foreach (var top in toplevel)
-			{
-				TopLevelVisitor.VisitToplevel(top);
-			}
+				_topLevelVisitor.VisitToplevel(top);
 
+			var skips = 0;
 			foreach (var item in instructions)
 			{
-				if (IntructionVisitor.VisitInstruction(item) != null)
+				if (skips > 0)
+				{
+					skips--;
+					continue;
+				}
+				var ret = _intructionVisitor.VisitInstruction(item);
+				if (ret is false)
 					break;
+				if (ret is int skip)
+					skips = skip;
 			}
 
-			return null;
+			return false;
 		}
 	}
 }

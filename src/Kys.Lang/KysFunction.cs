@@ -1,4 +1,5 @@
 using System.Reflection;
+#pragma warning disable CS8618
 
 namespace Kys.Lang;
 
@@ -36,36 +37,33 @@ public sealed class KysFunction : IFunction
 	public IKysParserVisitor<object> SenteceVisitor { get; init; }
 
 	/// <inheritdoc/>
-	public dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
+	public dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args)
 	{
 		ValidateParams(args.Length);
 		
-		//FunctionScope.Start();
 		var temp = ParamsNames;
 
 		if (InfArgs)
 		{
 			temp = ParamsNames.SkipLast(1).ToArray();
 			var param = args.Skip(ArgCount).ToArray();
-			FunctionScope.SetVar(ParamsNames[^1], param);
+			functionScope.SetVar(ParamsNames[^1], param);
 		}
 
 #if NET5_0_OR_GREATER
 			var Zip = temp.Zip(args);
 #elif NETSTANDARD2_1_OR_GREATER
-		var Zip = temp.Zip(args, (First, Second) => (First, Second));
+		var zip = temp.Zip(args, (first, second) => (First: first, Second: second));
 #endif
 
-		foreach (var (First, Second) in Zip)
-			FunctionScope.SetVar(First, Second, false);
+		foreach (var (first, second) in zip)
+			functionScope.SetVar(first, second, false);
 
 		foreach (var sentence in Sentences)
 			SenteceVisitor.VisitSentence(sentence);
 
-		FunctionScope.DefVar("return", null, false);
-		var ret = FunctionScope.GetVar("return", false);
-
-		//FunctionScope.Stop();
+		functionScope.DefVar("return", null, false);
+		var ret = functionScope.GetVar("return", false);
 
 		return ret;
 	}
@@ -73,7 +71,7 @@ public sealed class KysFunction : IFunction
 	/// <summary>
 	/// Validamos que la cantidad de parametros sea la esperada.
 	/// </summary>
-	private void ValidateParams(int length)
+	void ValidateParams(int length)
 	{
 		if (ArgCount == -1)
 			return;

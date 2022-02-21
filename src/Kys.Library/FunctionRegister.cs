@@ -18,17 +18,17 @@ public static partial class FunctionRegister
 	/// </summary>
 	/// <param name="targetContext">Contetxo de destino en donde se agregaran las funciones.</param>
 	/// <typeparam name="ContainerType">El tipo del cual se buscan y extraen los metodos.</typeparam>
-	public static void AddFunctions<ContainerType>(this IContext targetContext) =>
-		AddFunctions(targetContext, typeof(ContainerType));
+	public static void AddFunctions<TContainerType>(this IContext targetContext) =>
+		AddFunctions(targetContext, typeof(TContainerType));
 
 	/// <summary>
-	/// Busca en el tipo <paramref name="ContainerType"/> todos los metodos estaticos que tengan <see cref="FunctionAttribute"/> y los agrega a <paramref name="targetContext"/> como <see cref="IFunction"/>.
+	/// Busca en el tipo <paramref name="containerType"/> todos los metodos estaticos que tengan <see cref="FunctionAttribute"/> y los agrega a <paramref name="targetContext"/> como <see cref="IFunction"/>.
 	/// </summary>
 	/// <param name="targetContext">Contetxo de destino en donde se agregaran las funciones.</param>
-	/// <param name="ContainerType">El tipo del cual se buscan y extraen los metodos.</param>
-	public static void AddFunctions(this IContext targetContext, Type ContainerType)
+	/// <param name="containerType">El tipo del cual se buscan y extraen los metodos.</param>
+	public static void AddFunctions(this IContext targetContext, Type containerType)
 	{
-		var methods = ContainerType.GetMethods(
+		var methods = containerType.GetMethods(
 			BindingFlags.DeclaredOnly
 			| BindingFlags.NonPublic
 			| BindingFlags.Public
@@ -42,11 +42,11 @@ public static partial class FunctionRegister
 	}
 
 	/// <summary>
-	/// Agrega una función definida en Kys al contexto ded destino.
+	/// Agrega una funciï¿½n definida en Kys al contexto ded destino.
 	/// </summary>
-	/// <param name="targetContext">Contetxo en el que sera almacenada la función.</param>
-	/// <param name="funcdefinition">Definición de la función.</param>
-	/// <param name="sentenceVisitor">Visitor que se usara para ejecutar las sentencias internas de la función.</param>
+	/// <param name="targetContext">Contetxo en el que sera almacenada la funciï¿½n.</param>
+	/// <param name="funcdefinition">Definiciï¿½n de la funciï¿½n.</param>
+	/// <param name="sentenceVisitor">Visitor que se usara para ejecutar las sentencias internas de la funciï¿½n.</param>
 	public static void AddKysFunction(this IContext targetContext, FuncdefinitionContext funcdefinition, IKysParserVisitor<object> sentenceVisitor)
 	{
 		var parameters = funcdefinition.parameters();
@@ -54,7 +54,7 @@ public static partial class FunctionRegister
 		var @params = parameters.@params()?.ID().Select(id => id.GetText()).ToArray();
 		var haveparams = @params != null;
 		var argcount = haveparams ? @params.Length - (infargs ? 1 : 0) : 0;
-		var ID = funcdefinition.ID().GetText();
+		var id = funcdefinition.ID().GetText();
 		var sentences = funcdefinition.block().sentence();
 
 		if (!haveparams && infargs)
@@ -62,9 +62,9 @@ public static partial class FunctionRegister
 			@params = new string[] { "params" };
 		}
 
-		var function = new KysFunction()
+		var function = new KysFunction
 		{
-			Name = ID,
+			Name = id,
 			ArgCount = argcount,
 			InfArgs = infargs,
 			ParentContext = targetContext,
@@ -80,8 +80,8 @@ public static partial class FunctionRegister
 	/// <summary>
 	/// Convierte el metodo <paramref name="method"/> en una <see cref="IFunction"/> invocable en Kys y la agrega a <paramref name="targetContext"/>.
 	/// </summary>
-	/// <param name="targetContext"><see cref="IContext"/> de destino al cual se agregara la función generada.</param>
-	/// <param name="method">Metodo de C# que se convertira, este debe ser un metodo estatico de lo contrario se producira un error al intentar ejecutar la función ya que se estara tratando de invocar sin instancia.</param>
+	/// <param name="targetContext"><see cref="IContext"/> de destino al cual se agregara la funciï¿½n generada.</param>
+	/// <param name="method">Metodo de C# que se convertira, este debe ser un metodo estatico de lo contrario se producira un error al intentar ejecutar la funciï¿½n ya que se estara tratando de invocar sin instancia.</param>
 	public static void AddCsFunction(this IContext targetContext, MethodInfo method) =>
 		AddCsFunction(targetContext, method, method.GetCustomAttribute<FunctionAttribute>() ?? FunctionAttribute.None);
 
@@ -89,13 +89,13 @@ public static partial class FunctionRegister
 	/// Convierte el metodo <paramref name="method"/> en una <see cref="IFunction"/> invocable en Kys y la agrega a <paramref name="targetContext"/>.
 	/// </summary>
 	/// <typeparam name="T">Tipo de delegado que contiene el metodo que se usara.</typeparam>
-	/// <param name="targetContext"><see cref="IContext"/> de destino al cual se agregara la función generada.</param>
-	/// <param name="method">Metodo de C# que se convertira, este debe ser un metodo estatico de lo contrario se producira un error al intentar ejecutar la función ya que se estara tratando de invocar sin instancia.</param>
+	/// <param name="targetContext"><see cref="IContext"/> de destino al cual se agregara la funciï¿½n generada.</param>
+	/// <param name="method">Metodo de C# que se convertira, este debe ser un metodo estatico de lo contrario se producira un error al intentar ejecutar la funciï¿½n ya que se estara tratando de invocar sin instancia.</param>
 	public static void AddCsFunction<T>(this IContext targetContext, T method)
 		where T : Delegate =>
 		AddCsFunction(targetContext, method.Method, method.Method.GetCustomAttribute<FunctionAttribute>() ?? FunctionAttribute.None);
 
-	private static void AddCsFunction(IContext targetContext, MethodInfo method, FunctionAttribute att)
+	static void AddCsFunction(IContext targetContext, MethodInfo method, FunctionAttribute att)
 	{
 		var function = CreateCsFuntion(targetContext, method, att);
 

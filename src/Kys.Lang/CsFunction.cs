@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+#pragma warning disable CS8618
 
 namespace Kys.Lang;
 
@@ -7,7 +8,7 @@ namespace Kys.Lang;
 /// Contenedor simple para llamar un metodo estatico de C# desde Kys.
 /// </summary>
 [DebuggerDisplay("{Method}")]
-public class CsFunction : IFunction
+public sealed class CsFunction : IFunction
 {
 	/// <summary>
 	/// Representa un metodo de C#
@@ -32,17 +33,15 @@ public class CsFunction : IFunction
 	public IContext ParentContext { get; init; }
 
 	/// <inheritdoc/>
-	public virtual dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args)
+	public dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args)
 	{
 		var realargs = GetRealArgs(args);
 		if (!PassInfo) return Method.Invoke(null, realargs);
-		//FunctionScope.Start();
 		var temp = new dynamic[realargs.Length + 2];
-		temp[0] = CallerContext;
-		temp[1] = FunctionScope;
+		temp[0] = callerContext;
+		temp[1] = functionScope;
 		realargs.CopyTo(temp, 2);
 		var ret = Method.Invoke(null, temp);
-		//FunctionScope.Stop();
 		return ret;
 	}
 
@@ -51,14 +50,14 @@ public class CsFunction : IFunction
 	/// </summary>
 	/// <param name="args"></param>
 	/// <returns></returns>
-	protected virtual dynamic[] GetRealArgs(dynamic[] args)
+	dynamic?[] GetRealArgs(dynamic?[] args)
 	{
 		if (!InfArgs || args.Length < ArgCount) return args;
 		var ret = new object[ArgCount + 1];
-		args[0..ArgCount].CopyTo(ret, 0);
+		args[..ArgCount].CopyTo(ret, 0);
 		var par = args.Skip(ArgCount).ToArray();
 		ret[^1] = Array.CreateInstance(
-			Method.GetParameters()[^1].ParameterType.GetElementType(),
+			Method.GetParameters()[^1].ParameterType.GetElementType()!,
 			par.Length
 		);
 		Array.Copy(par, (Array)ret[^1], par.Length);

@@ -1,22 +1,26 @@
 using Antlr4.Runtime.Misc;
 using Microsoft.CSharp.RuntimeBinder;
+// TODO: rethrow exceptions with KyTypes
+// ReSharper disable PossibleIntendedRethrow
 
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
 /// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ExpressionContext"/>.
 /// </summary>
-public class ExpressionVisitor : BaseVisitor<dynamic>
+public class ExpressionVisitor : BaseVisitor<dynamic?>
 {
-	IKysParserVisitor<dynamic> valueVisitor;
-	IKysParserVisitor<dynamic> funcresultVisitor;
-
+#pragma warning disable CS8618
+	IKysParserVisitor<dynamic> _valueVisitor;
+	IKysParserVisitor<dynamic> _funcresultVisitor;
+#pragma warning restore CS8618
+	
 	/// <inheritdoc/>
 	public override void Configure(IServiceProvider serviceProvider)
 	{
 		base.Configure(serviceProvider);
-		valueVisitor = VisitorProvider.GetVisitor<ValueContext>();
-		funcresultVisitor = VisitorProvider.GetVisitor<FuncresultContext>();
+		_valueVisitor = VisitorProvider.GetVisitor<ValueContext>();
+		_funcresultVisitor = VisitorProvider.GetVisitor<FuncresultContext>();
 	}
 
 	/// <summary>
@@ -24,22 +28,22 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// </summary>
 	/// <inheritdoc/>
 	public override dynamic VisitValueExp([NotNull] ValueExpContext context) =>
-		valueVisitor.VisitValue(context.value());
+		_valueVisitor.VisitValue(context.value());
 
 	/// <summary>
 	/// Evalua la expresión interna, es decir, la que se encuentra dentro de los parentesis.
 	/// </summary>
 	/// <inheritdoc/>
-	public override dynamic VisitParenthesisExp([NotNull] ParenthesisExpContext context) =>
+	public override dynamic? VisitParenthesisExp([NotNull] ParenthesisExpContext context) =>
 		Visit(context.expression());
 
 	/// <summary>
 	/// Evalua la exrpesión <paramref name="context"/> con el operador de C# "<c>!</c>".
 	/// </summary>
 	/// <inheritdoc/>
-	public override dynamic VisitUniNotExp([NotNull] UniNotExpContext context)
+	public override dynamic? VisitUniNotExp([NotNull] UniNotExpContext context)
 	{
-		dynamic val = Visit(context.expression());
+		var val = Visit(context.expression());
 
 		try
 		{
@@ -61,11 +65,11 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 		if (context.expression() is ValueExpContext valueexp && valueexp.value().ID() != null)
 			return VisitUniAritValueExp(valueexp);
 
-		dynamic val = Visit(context.expression());
+		var val = Visit(context.expression());
 
 		try
 		{
-			return context.UNIARIT().GetText() == "++" ? ++val : --val;
+			return (context.UNIARIT().GetText() == "++" ? ++val : --val)!;
 		}
 		catch (RuntimeBinderException e)
 		{
@@ -74,12 +78,12 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 		}
 	}
 
-	private dynamic VisitUniAritValueExp(ValueExpContext valueExpContext)
+	dynamic VisitUniAritValueExp(ValueExpContext valueExpContext)
 	{
 		var name = valueExpContext.value().ID().GetText();
 		var val = Sesion.CurrentScope.GetVar(name);
 		Sesion.CurrentScope.AsigVar(name, ++val);
-		return val;
+		return val!;
 	}
 
 	/// <summary>
@@ -88,8 +92,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitPotencialExp([NotNull] PotencialExpContext context)
 	{
-		dynamic a = Visit(context.expression(0));
-		dynamic b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
 		try
 		{
 			return context.POTENCIAL().GetText() == "^" ? Math.Pow(a, b) : Math.Pow(b, 1d / a);
@@ -107,8 +111,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitMultiplicativeExp([NotNull] MultiplicativeExpContext context)
 	{
-		dynamic a = Visit(context.expression(0));
-		dynamic b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
 		try
 		{
 			return context.MULTIPLICATIVE().GetText() == "*" ? a * b : a / b;
@@ -126,8 +130,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitModuleExp([NotNull] ModuleExpContext context)
 	{
-		dynamic a = Visit(context.expression(0));
-		dynamic b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
 		try
 		{
 			return a % b;
@@ -145,8 +149,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitAditiveExp([NotNull] AditiveExpContext context)
 	{
-		dynamic a = Visit(context.expression(0));
-		dynamic b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
 		try
 		{
 			return context.ADITIVE().GetText() == "+" ? a + b : a - b;
@@ -164,11 +168,11 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitEqualityExp([NotNull] EqualityExpContext context)
 	{
-		object a = Visit(context.expression(0));
-		object b = Visit(context.expression(1));
+		object? a = Visit(context.expression(0));
+		object? b = Visit(context.expression(1));
 		try
 		{
-			return context.EQUALITY().GetText() == "==" ? a.Equals(b) : !a.Equals(b);
+			return context.EQUALITY().GetText() == "==" ? a!.Equals(b) : !a!.Equals(b);
 		}
 		catch (RuntimeBinderException e)
 		{
@@ -183,8 +187,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitLogicalExp([NotNull] LogicalExpContext context)
 	{
-		dynamic a = Visit(context.expression(0));
-		dynamic b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
 		try
 		{
 			return context.ANDOR().GetText() == "&&" ? a && b : a || b;
@@ -202,8 +206,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitEqrelationalExp([NotNull] EqrelationalExpContext context)
 	{
-		dynamic a = Visit(context.expression(0));
-		dynamic b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
 		try
 		{
 			return context.EQRELATIONAL().GetText() == "<=" ? a <= b : a >= b;
@@ -221,8 +225,8 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	/// <inheritdoc/>
 	public override dynamic VisitRelationalExp([NotNull] RelationalExpContext context)
 	{
-		dynamic a = Visit(context.expression(0));
-		dynamic b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
 		try
 		{
 			return context.RELATIONAL().GetText() == "<" ? a < b : a > b;
@@ -242,6 +246,6 @@ public class ExpressionVisitor : BaseVisitor<dynamic>
 	{
 		Sesion["LastColumn"] = context.Start.Column;
 		Sesion["LastLine"] = context.Start.Line;
-		return funcresultVisitor.VisitFuncresult(context.funcresult());
+		return _funcresultVisitor.VisitFuncresult(context.funcresult());
 	}
 }

@@ -6,7 +6,7 @@
 public interface IInterpreter
 {
 	/// <summary>
-	/// El contexto principal del programa, este valor no deberia de cambiar nunca una vez inicia el la ejecución.
+	/// El contexto principal del programa, este valor no deberia de cambiar nunca una vez inicia la ejecución.
 	/// </summary>
 	IContext ProgramContext { get; }
 

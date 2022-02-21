@@ -8,55 +8,56 @@ namespace Kys.Interpreter.Visitors;
 /// </summary>
 public class VaroperationVisitor : BaseVisitor<object>
 {
-	IKysParserVisitor<dynamic> expressionVisitor;
+	#pragma warning disable CS8618
+	IKysParserVisitor<dynamic> _expressionVisitor;
+	#pragma warning restore CS8618
 
 	/// <inheritdoc/>
 	public override void Configure(IServiceProvider serviceProvider)
 	{
 		base.Configure(serviceProvider);
 
-		expressionVisitor = VisitorProvider.GetVisitor<ExpressionContext>();
+		_expressionVisitor = VisitorProvider.GetVisitor<ExpressionContext>();
 	}
 
 	/// <summary>
-	/// Declara una variable usando <see cref="IScope.DefVar(string, dynamic, bool)"/> del scope actual de la sesion.
+	/// Declara una variable usando <see cref="IScope.DecVar"/> del scope actual de la sesion.
 	/// </summary>
 	/// <inheritdoc/>
 	public override object VisitDeclaration([NotNull] DeclarationContext context)
 	{
 		VisitVaroperation(context.asignation(), Sesion.CurrentScope.DecVar);
-
-		return null;
+		return true;
 	}
 
 	/// <summary>
-	/// Crea una variable usando <see cref="IScope.DefVar(string, dynamic, bool)"/> del scope actual de la sesion.
+	/// Crea una variable usando <see cref="IScope.SetVar"/> del scope actual de la sesion.
 	/// </summary>
 	/// <inheritdoc/>
 	public override object VisitCreation([NotNull] CreationContext context)
 	{
 		VisitVaroperation(context.asignation(), Sesion.CurrentScope.SetVar);
-		return null;
+		return true;
 	}
 
-	private void VisitVaroperation(AsignationContext context, Action<string, dynamic, bool> actionVar)
+	void VisitVaroperation(AsignationContext context, Action<string, dynamic, bool> actionVar)
 	{
 		var name = context.ID().GetText();
 		var valueExp = context.expression();
-		object val = expressionVisitor.Visit(valueExp);
+		object val = _expressionVisitor.Visit(valueExp);
 
 		actionVar(name, val, true);
 	}
 
 	/// <summary>
-	/// Define una variable usando <see cref="IScope.DefVar(string, dynamic, bool)"/> del scope actual de la sesion.
+	/// Define una variable usando <see cref="IScope.DefVar"/> del scope actual de la sesion.
 	/// </summary>
 	/// <inheritdoc/>
 	public override object VisitDefinition([NotNull] DefinitionContext context)
 	{
 		VisitVaroperation(context.asignation(), Sesion.CurrentScope.DefVar);
 
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -66,14 +67,14 @@ public class VaroperationVisitor : BaseVisitor<object>
 	public override object VisitSimpleAssign([NotNull] SimpleAssignContext context)
 	{
 		VisitAsignation(context.ID(), context.expression(), context.Sequal());
-		return null;
+		return true;
 	}
 
-	private void VisitAsignation(ITerminalNode name, ExpressionContext expressionContext, ITerminalNode simbol)
+	void VisitAsignation(IParseTree name, IParseTree expressionContext, IParseTree simbol)
 	{ 
 		var id = name.GetText();
 		var operation = simbol.GetText();
-		dynamic value = expressionVisitor.Visit(expressionContext);
+		var value = _expressionVisitor.Visit(expressionContext);
 		Sesion["LastToken"] = simbol;
 		switch (operation)
 		{
@@ -111,7 +112,7 @@ public class VaroperationVisitor : BaseVisitor<object>
 	public override object VisitPotencialAssign([NotNull] PotencialAssignContext context)
 	{
 		VisitAsignation(context.ID(), context.expression(), context.POTENCIALASSIGN());
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -121,7 +122,7 @@ public class VaroperationVisitor : BaseVisitor<object>
 	public override object VisitMultiplicativeAssign([NotNull] MultiplicativeAssignContext context)
 	{
 		VisitAsignation(context.ID(), context.expression(), context.MULTIPLICATIVEASSIGN());
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -131,7 +132,7 @@ public class VaroperationVisitor : BaseVisitor<object>
 	public override object VisitModuleAssign([NotNull] ModuleAssignContext context)
 	{
 		VisitAsignation(context.ID(), context.expression(), context.MODULEASSIGN());
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -141,6 +142,6 @@ public class VaroperationVisitor : BaseVisitor<object>
 	public override object VisitAditiveAssign([NotNull] AditiveAssignContext context)
 	{
 		VisitAsignation(context.ID(), context.expression(), context.ADITIVEASSIGN());
-		return null;
+		return true;
 	}
 }

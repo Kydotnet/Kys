@@ -5,7 +5,7 @@ namespace Kys.Library;
 
 internal static class KylGenerator
 {
-	const BindingFlags stpublicmet = BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly;
+	const BindingFlags _Stpublicmet = BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly;
 	//const BindingFlags publicmet = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
 
@@ -14,7 +14,7 @@ internal static class KylGenerator
 		var type = GetType(args);
 		Ensure.NotNull(type, "Type");
 
-		var smetv = from methods in type.GetMethods(stpublicmet)
+		var smetv = from methods in type.GetMethods(_Stpublicmet)
 					where !methods.IsSpecialName && !methods.IsGenericMethodDefinition && !methods.ContainsGenericParameters
 					group methods by methods.Name into methodGroup
 					select methodGroup.ToArray();
@@ -46,7 +46,7 @@ internal static class KylGenerator
 		targetContext.AddFunction(function);
 	}
 
-	private static Type GetType(string[] args)
+	static Type GetType(string[] args)
 	{
 		if (args.Length == 1)
 			return Type.GetType(args[0], false, true);

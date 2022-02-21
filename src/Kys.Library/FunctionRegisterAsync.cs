@@ -9,9 +9,9 @@ namespace Kys.Library;
 /// <inheritdoc/>
 partial class FunctionRegister
 {
-	readonly static MethodInfo wait = ((Action)Task.CompletedTask.Wait).Method;
+	readonly static MethodInfo _Wait = ((Action)Task.CompletedTask.Wait).Method;
 
-	private static MethodInfo IsAsync(MethodInfo method)
+	static MethodInfo IsAsync(MethodInfo method)
 	{
 
 		if (method.GetCustomAttribute<AsyncStateMachineAttribute>() != null || method.ReturnType.IsAssignableTo(typeof(Task)))
@@ -23,7 +23,7 @@ partial class FunctionRegister
 		return method;
 	}
 
-	private static MethodInfo GenerateMethod(MethodInfo met)
+	static MethodInfo GenerateMethod(MethodInfo met)
 	{
 		var parameters = met.GetParameters().Select(p => p.ParameterType).ToArray();
 		var returnType = met.ReturnType == typeof(Task) ? typeof(void) : met.ReturnType.GenericTypeArguments[0];
@@ -32,7 +32,7 @@ partial class FunctionRegister
 		return GenerateFor(mb, met, met.GetParameters(), met.ReturnType);
 	}
 
-	private static MethodInfo GenerateFor(DynamicMethod mb, MethodInfo met, ParameterInfo[] parameterInfos, Type returnType)
+	static MethodInfo GenerateFor(DynamicMethod mb, MethodInfo met, ParameterInfo[] parameterInfos, Type returnType)
 	{
 		using (var il = new GroboIL(mb))
 		{
@@ -42,7 +42,7 @@ partial class FunctionRegister
 			il.Call(met);
 			il.Stloc(loc0);
 			il.Ldloc(loc0);
-			il.Call(wait);
+			il.Call(_Wait);
 			if (met.ReturnType != typeof(Task))
 			{
 				il.Ldloc(loc0);

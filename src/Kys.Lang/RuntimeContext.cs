@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 namespace Kys.Lang;
 
 /// <summary>
-/// La implementación por defecto de <see cref="IContext"/>.
+/// La implementaciï¿½n por defecto de <see cref="IContext"/>.
 /// </summary>
 public sealed class RuntimeContext : IContext
 {
@@ -11,7 +11,7 @@ public sealed class RuntimeContext : IContext
 	/// Guarda la lista de funciones definidas en este contexto.
 	/// </summary>
 	/// 
-	readonly IDictionary<string, IFunction> Functions = new ConcurrentDictionary<string, IFunction>();
+	readonly IDictionary<string, IFunction> _functions = new ConcurrentDictionary<string, IFunction>();
 
 	/// <summary>
 	/// Crea un nuevo <see cref="RuntimeScope"/> usando como scope raiz <paramref name="rootScope"/>.
@@ -23,27 +23,24 @@ public sealed class RuntimeContext : IContext
 	}
 
 	/// <inheritdoc/>
-	public IScope RootScope { get; private set; }
+	public IScope RootScope { get; }
 
 	/// <inheritdoc/>
-	public IEnumerable<IFunction> DefinedFunctions => Functions.Values;
+	public IEnumerable<IFunction> DefinedFunctions => _functions.Values;
 
 	/// <inheritdoc/>
 	public bool CanExecute => true;
 
 	/// <inheritdoc/>
-	public bool AddFunction(IFunction Function) => Functions.TryAdd(Function?.Name, Function);
+	public bool AddFunction(IFunction function) => _functions.TryAdd(function.Name, function);
 
 	/// <inheritdoc/>
-	public IFunction GetFunction(string Name) =>
-		Functions.TryGetValue(Name, out IFunction function) ? function : null;
+	public IFunction? GetFunction(string name) =>
+		_functions.TryGetValue(name, out var function) ? function : null;
 
 	/// <inheritdoc/>
-	public void OverrideFunction(IFunction Function) => Functions[Function?.Name] = Function;
+	public void OverrideFunction(IFunction function) => _functions[function.Name] = function;
 
 	/// <inheritdoc/>
-	public bool RemoveFunction(string Name)
-	{
-		return Functions.ContainsKey(Name) && Functions.Remove(Name);
-	}
+	public bool RemoveFunction(string name) => _functions.ContainsKey(name) && _functions.Remove(name);
 }

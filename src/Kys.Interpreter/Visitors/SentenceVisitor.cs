@@ -7,17 +7,19 @@ namespace Kys.Interpreter.Visitors;
 /// </summary>
 public class SentenceVisitor : BaseVisitor<object>
 {
-	IKysParserVisitor<dynamic> controlVisitor;
-	IKysParserVisitor<dynamic> varOperationVisitor;
-	IKysParserVisitor<dynamic> funcresultVisitor;
-
+	#pragma warning disable CS8618
+	IKysParserVisitor<dynamic> _controlVisitor;
+	IKysParserVisitor<dynamic> _varOperationVisitor;
+	IKysParserVisitor<dynamic> _funcresultVisitor;
+	#pragma warning restore CS8618
+	
 	/// <inheritdoc/>
 	public override void Configure(IServiceProvider serviceProvider)
 	{
 		base.Configure(serviceProvider);
-		controlVisitor = VisitorProvider.GetVisitor<ControlContext>();
-		varOperationVisitor = VisitorProvider.GetVisitor<VaroperationContext>();
-		funcresultVisitor = VisitorProvider.GetVisitor<FuncresultContext>();
+		_controlVisitor = VisitorProvider.GetVisitor<ControlContext>();
+		_varOperationVisitor = VisitorProvider.GetVisitor<VaroperationContext>();
+		_funcresultVisitor = VisitorProvider.GetVisitor<FuncresultContext>();
 	}
 
 	/// <inheritdoc/>
@@ -34,14 +36,14 @@ public class SentenceVisitor : BaseVisitor<object>
 	/// </summary>
 	/// <inheritdoc/>
 	public override object VisitControl([NotNull] ControlContext context) =>
-		controlVisitor.VisitControl(context);
+		_controlVisitor.VisitControl(context);
 
 	/// <summary>
 	/// Se evalua <paramref name="context"/> usando el <see cref="IVisitor{T}"/> para el contexto <see cref="VaroperationContext"/>.
 	/// </summary>
 	/// <inheritdoc/>
 	public override object VisitVaroperation([NotNull] VaroperationContext context) =>
-		varOperationVisitor.VisitVaroperation(context);
+		_varOperationVisitor.VisitVaroperation(context);
 
 	/// <summary>
 	/// Se evalua <see cref="FunccallContext.funcresult()"/> de <paramref name="context"/> usando el <see cref="IVisitor{T}"/> para el contexto <see cref="FuncresultContext"/>.
@@ -49,9 +51,9 @@ public class SentenceVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitFunccall([NotNull] FunccallContext context)
 	{
-		funcresultVisitor.VisitFuncresult(context.funcresult());
+		_funcresultVisitor.VisitFuncresult(context.funcresult());
 
-		// si se devuelve algo que no sea nulo el InstructionVisitor terminara
-		return null;
+		// si se false el InstructionVisitor terminara
+		return true;
 	}
 }

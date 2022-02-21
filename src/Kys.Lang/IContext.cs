@@ -21,9 +21,9 @@ public interface IContext
 	/// <remarks>
 	/// Este metodo no genera error simplemente devuelve un booleano con el resultado.
 	/// </remarks>
-	/// <param name="Function">Función a agregar.</param>
+	/// <param name="function">Función a agregar.</param>
 	/// <returns><c>true</c> si ha sido posible agregar la función, <c>false</c> si la función ya ha sido agregada o ya existe una con el mismo nombre.</returns>
-	bool AddFunction(IFunction Function);
+	bool AddFunction(IFunction function);
 
 	/// <summary>
 	/// Remueve una función de este contexto.
@@ -31,22 +31,22 @@ public interface IContext
 	/// <remarks>
 	/// Este metodo no genera error simplemente devuelve un booleano con el resultado.
 	/// </remarks>
-	/// <param name="Name">Nombre de la función que quiere ser removida.</param>
+	/// <param name="name">Nombre de la función que quiere ser removida.</param>
 	/// <returns><c>true</c> si la función pudo ser removida correctamente, <c>false</c> en caso contrario.</returns>
-	bool RemoveFunction(string Name);
+	bool RemoveFunction(string name);
 
 	/// <summary>
 	/// Agrega o cambia una función existente. Si la función aun no existe la crea y si ya existe la cambia.
 	/// </summary>
-	/// <param name="Function">La función que quiere agregarse o modificarse.</param>
-	void OverrideFunction(IFunction Function);
+	/// <param name="function">La función que quiere agregarse o modificarse.</param>
+	void OverrideFunction(IFunction function);
 
 	/// <summary>
 	/// Obtiene una función en este contexto.
 	/// </summary>
-	/// <param name="Name"></param>
+	/// <param name="name"></param>
 	/// <returns></returns>
-	IFunction GetFunction(string Name);
+	IFunction? GetFunction(string name);
 
 	/// <summary>
 	/// Indica si este contexto puede ser ejecutado, si un contexto no puede ser ejecutado entonces solo puede ser usado para cargar funciones y almacenarlas pero no se podran ejecutar sentencias ni bloques asi como su <see cref="RootScope"/> no sera usado para almacenar variables.

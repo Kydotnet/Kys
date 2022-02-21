@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+### Cambiado
+- Se pueden hacer operaciones con variables en la tercera sentencia de un bucle for.
+
 ## v1.0.0
 
 ### Cambiado

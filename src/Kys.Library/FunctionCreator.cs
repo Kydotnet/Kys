@@ -34,17 +34,18 @@ partial class FunctionRegister
 			argcount -= 2;
 		}
 
-		return new CsFunction()
+		return new()
 		{
 			Method = realmethod,
 			Name = name,
 			ParentContext = context,
 			ArgCount = argcount,
-			InfArgs = infArg
+			InfArgs = infArg,
+			PassInfo = att.Passinfo
 		};
 	}
 
-	private static void CheckSupport(MethodInfo methodInfo)
+	static void CheckSupport(MethodInfo methodInfo)
 	{
 		if (methodInfo.IsSpecialName)
 			throw new NotSupportedException("Special name methods are not supported in kys");

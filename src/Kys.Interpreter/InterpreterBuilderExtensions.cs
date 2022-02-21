@@ -23,7 +23,7 @@ public static class InterpreterBuilderExtensions
 	/// Agrega las funciones estandar a un contexto.
 	/// </summary>
 	/// <param name="obj">Contexto de destino.</param>
-	private static void ConfigureContext(IContext obj)
+	static void ConfigureContext(IContext obj)
 	{
 		obj.AddStandardFunctions();
 	}

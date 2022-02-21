@@ -11,36 +11,36 @@ namespace Kys;
 [AutoLoad]
 public class DefaultContextFactory : IContextFactory
 {
-	readonly IServiceProvider serviceProvider;
+	readonly IServiceProvider _serviceProvider;
 
-	readonly Dictionary<ContextType, Func<IContext>> Factory = new();
+	readonly Dictionary<ContextType, Func<IContext>> _factory = new();
 
-	readonly IEnumerable<ContextType> types =
+	readonly IEnumerable<ContextType> _types =
 		Enum.GetValues<ContextType>().Reverse();
 
 	public DefaultContextFactory(IServiceProvider serviceProvider)
 	{
-		this.serviceProvider = serviceProvider;
-		ChangeContext<RuntimeContext>(ContextType.ALL);
+		this._serviceProvider = serviceProvider;
+		ChangeContext<RuntimeContext>(ContextType.All);
 	}
 
 	public void ChangeContext<T>(ContextType type) where T : IContext
 	{
-		Factory[type] = () =>
+		_factory[type] = () =>
 		{
-			return ActivatorUtilities.CreateInstance<T>(serviceProvider);
+			return ActivatorUtilities.CreateInstance<T>(_serviceProvider);
 		};
 	}
 
 	public IContext Create(ContextType type)
 	{
-		if (Factory.ContainsKey(type))
-			return Factory[type]();
-		foreach (var item in types)
+		if (_factory.ContainsKey(type))
+			return _factory[type]();
+		foreach (var item in _types)
 		{
-			if ((type & item) == item && Factory.ContainsKey(item))
-				return Factory[item]();
+			if ((type & item) == item && _factory.ContainsKey(item))
+				return _factory[item]();
 		}
-		return Factory[ContextType.ALL]();
+		return _factory[ContextType.All]();
 	}
 }

@@ -5,25 +5,27 @@ using System.Globalization;
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
-/// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ValueContext"/> y <see cref="FuncresultContext"/>.
+/// Implementaciï¿½n por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ValueContext"/> y <see cref="FuncresultContext"/>.
 /// </summary>
-public class ValueVisitor : BaseVisitor<dynamic>
+public class ValueVisitor : BaseVisitor<dynamic?>
 {
-	IKysParserVisitor<dynamic> expressionVisitor;
+	#pragma warning disable CS8618
+	IKysParserVisitor<dynamic> _expressionVisitor;
+	#pragma warning restore CS8618
 
 	/// <inheritdoc/>
 	public override void Configure(IServiceProvider serviceProvider)
 	{
 		base.Configure(serviceProvider);
-		expressionVisitor = VisitorProvider.GetVisitor<ExpressionContext>();
+		_expressionVisitor = VisitorProvider.GetVisitor<ExpressionContext>();
 	}
 
 	/// <summary>
-	/// Busca en el contexto actual una función con nombre <see cref="FuncresultContext.ID()"/> y la llama.
+	/// Busca en el contexto actual una funciÃ³n con nombre <see cref="FuncresultContext.ID()"/> y la llama.
 	/// </summary>
 	/// <inheritdoc/>
-	/// <returns>Devuelve lo mismo devuelto por la función.</returns>
-	public override dynamic VisitFuncresult([NotNull] FuncresultContext context)
+	/// <returns>Devuelve lo mismo devuelto por la funciÃ³n.</returns>
+	public override dynamic? VisitFuncresult([NotNull] FuncresultContext context)
 	{
 		var funcname = context.ID().GetText();
 		Sesion["LastToken"] = context.ID().Symbol;
@@ -33,11 +35,11 @@ public class ValueVisitor : BaseVisitor<dynamic>
 		var funcargs = context.arguments();
 		var hasargs = funcargs != null;
 
-		dynamic[] args = hasargs ? funcargs.expression().Select(v => expressionVisitor.Visit(v)).ToArray() : Array.Empty<dynamic>();
-		var scope = Sesion.StartScope(ScopeType.FUNCTION);
+		dynamic[] args = hasargs ? funcargs!.expression().Select(v => _expressionVisitor.Visit(v)).ToArray() : Array.Empty<dynamic>();
+		var scope = Sesion.StartScope(ScopeType.Function);
 
-		//TODO: producir error cuando no existe la función;
-		var dev = func.Call(Sesion.CurrentContext, scope, args);
+		//TODO: producir error cuando no existe la funciÃ³n;
+		var dev = func?.Call(Sesion.CurrentContext, scope, args);
 
 		Sesion.EndScope();
 		// si se devuelve algo que no sea nulo el InstructionVisitor terminara
@@ -48,7 +50,7 @@ public class ValueVisitor : BaseVisitor<dynamic>
 	/// Interpreta el valor del <see cref="ValueContext"/> y lo devuelve.
 	/// </summary>
 	/// <inheritdoc/>
-	public override dynamic VisitValue([NotNull] ValueContext context)
+	public override dynamic? VisitValue([NotNull] ValueContext context)
 	{
 		if (context.STRING() != null)
 			return GetString(context.STRING());
@@ -74,12 +76,12 @@ public class ValueVisitor : BaseVisitor<dynamic>
 	}
 
 	/// <summary>
-	/// Obtiene el valor de una varible de nombre <see cref="KysLexer.ID"/> desde una sesión <paramref name="sesion"/>.
+	/// Obtiene el valor de una varible de nombre <see cref="KysLexer.ID"/> desde una sesiï¿½n <paramref name="sesion"/>.
 	/// </summary>
-	/// <param name="sesion">La sesión desde la cual se obtendra la variable.</param>
+	/// <param name="sesion">La sesiï¿½n desde la cual se obtendra la variable.</param>
 	/// <param name="terminalNode">El nombre de la variable a obtener.</param>
-	/// <returns>Devuelve el valor obtenido desde la sesión o propaga el error en caso de no estar definida.</returns>
-	public static dynamic GetVar(IInterpreterSesion sesion, ITerminalNode terminalNode)
+	/// <returns>Devuelve el valor obtenido desde la sesiï¿½n o propaga el error en caso de no estar definida.</returns>
+	public static dynamic? GetVar(IInterpreterSesion sesion, ITerminalNode terminalNode)
 	{
 		var raw = terminalNode.GetText();
 
@@ -91,8 +93,8 @@ public class ValueVisitor : BaseVisitor<dynamic>
 	/// Obtiene un <see cref="int"/> o un <see cref="double"/> que se obtiene al parsear un <see cref="KysLexer.NUMBER"/>.
 	/// </summary>
 	/// <param name="terminalNode">El nodo que queire ser convertido en numero.</param>
-	/// <returns>Devuelve el numero obtenido, ya se un entero o un numero de doble presición.</returns>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresión condicional", Justification = "Reducir el if produce que un int se retorne como double, lo que genera error en ejecución")]
+	/// <returns>Devuelve el numero obtenido, ya se un entero o un numero de doble presiciï¿½n.</returns>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresiï¿½n condicional", Justification = "Reducir el if produce que un int se retorne como double, lo que genera error en ejecuciï¿½n")]
 	public static dynamic GetNumber(ITerminalNode terminalNode)
 	{
 		var raw = terminalNode.GetText();

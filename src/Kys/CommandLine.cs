@@ -37,33 +37,33 @@ internal class CommandLine
 			Arity = ArgumentArity.ZeroOrMore
 		};
 
-		var KysRoot = new RootCommand
+		var kysRoot = new RootCommand
 		{
 			kysFile,
 			kysArgs,
 			showTimes
 		};
 
-		KysRoot.TreatUnmatchedTokensAsErrors = false;
+		kysRoot.TreatUnmatchedTokensAsErrors = false;
 
-		KysRoot.Description = "Execute a kys file with the KyScript interpreter";
+		kysRoot.Description = "Execute a kys file with the KyScript interpreter";
 
-		KysRoot.SetHandler<InvocationContext, FileInfo, bool>(KysCommand, kysFile, showTimes);
+		kysRoot.SetHandler<InvocationContext, FileInfo, bool>(KysCommand, kysFile, showTimes);
 
-		KysRoot.AddValidator(validatecommand);
+		kysRoot.AddValidator(Validatecommand);
 
-		var a = KysRoot.Invoke(args);
+		var a = kysRoot.Invoke(args);
 		return a;
 	}
 
-	private static HelpBuilder getHelpBuilder(BindingContext arg)
+	static HelpBuilder GetHelpBuilder(BindingContext arg)
 	{
 		var dev = new HelpBuilder(LocalizationResources.Instance);
 
 		return dev;
 	}
 
-	private static string? validatecommand(System.CommandLine.Parsing.CommandResult symbolResult)
+	static string? Validatecommand(System.CommandLine.Parsing.CommandResult symbolResult)
 	{
 		return null;
 	}

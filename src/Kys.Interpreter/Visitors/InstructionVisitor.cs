@@ -7,13 +7,15 @@ namespace Kys.Interpreter.Visitors;
 /// </summary>
 public class InstructionVisitor : BaseVisitor<object>
 {
-	IVisitor<object> sentenceVisitor;
-
+	#pragma warning disable CS8618
+	IVisitor<object> _sentenceVisitor;
+	#pragma warning restore CS8618
+	
 	/// <inheritdoc/>
 	public override void Configure(IServiceProvider serviceProvider)
 	{
 		base.Configure(serviceProvider);
-		sentenceVisitor = VisitorProvider.GetVisitor<SentenceContext>();
+		_sentenceVisitor = VisitorProvider.GetVisitor<SentenceContext>();
 	}
 
 	/// <inheritdoc/>
@@ -30,7 +32,7 @@ public class InstructionVisitor : BaseVisitor<object>
 	/// </summary>
 	/// <inheritdoc/>
 	public override object VisitSentence([NotNull] SentenceContext context) =>
-		sentenceVisitor.VisitSentence(context);
+		_sentenceVisitor.VisitSentence(context);
 
 	/// <summary>
 	/// Genera una función Kys con <see cref="FunctionRegister.AddKysFunction(IContext, FuncdefinitionContext, IKysParserVisitor{object})"/>.
@@ -38,8 +40,8 @@ public class InstructionVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitFuncdefinition([NotNull] FuncdefinitionContext context)
 	{
-		Sesion.CurrentContext.AddKysFunction(context, sentenceVisitor);
-		return null;
+		Sesion.CurrentContext.AddKysFunction(context, _sentenceVisitor);
+		return false;
 	}
 
 	/// <summary>

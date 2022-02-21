@@ -17,58 +17,58 @@ public class KysVisitorProvider : IVisitorProvider
 
 	readonly IVisitor<object> _visitor = new BaseVisitor<object>();
 
-	readonly IServiceProvider serviceProvider;
+	readonly IServiceProvider _serviceProvider;
 
-	bool instanced = false;
+	bool _instanced = false;
 
 	public KysVisitorProvider(IServiceProvider serviceProvider)
 	{
-		this.serviceProvider = serviceProvider;
+		this._serviceProvider = serviceProvider;
 	}
 
-	public void AddVisitor<VisitorContext, Implementation>()
-		where VisitorContext : ParserRuleContext
-		where Implementation : IVisitor<object>
+	public void AddVisitor<TVisitorContext, TImplementation>()
+		where TVisitorContext : ParserRuleContext
+		where TImplementation : IVisitor<object>
 	{
-		_types[typeof(VisitorContext)] = typeof(Implementation);
+		_types[typeof(TVisitorContext)] = typeof(TImplementation);
 	}
 
-	public void AddVisitor<VisitorContext>(IVisitor<object> implementation)
-		where VisitorContext : ParserRuleContext
+	public void AddVisitor<TVisitorContext>(IVisitor<object> implementation)
+		where TVisitorContext : ParserRuleContext
 	{
-		_visitors[typeof(VisitorContext)] = implementation;
+		_visitors[typeof(TVisitorContext)] = implementation;
 	}
 
-	public IVisitor<object> GetVisitor<VisitorContext>() where VisitorContext : ParserRuleContext
+	public IVisitor<object> GetVisitor<TVisitorContext>() where TVisitorContext : ParserRuleContext
 	{
-		if (!instanced)
+		if (!_instanced)
 		{
 			InstanceAll();
 		}
-		if (_visitors.ContainsKey(typeof(VisitorContext)))
-			return _visitors[typeof(VisitorContext)];
+		if (_visitors.ContainsKey(typeof(TVisitorContext)))
+			return _visitors[typeof(TVisitorContext)];
 		return _visitor;
 	}
 
 	internal void InstanceAll()
 	{
-		instanced = true;
+		_instanced = true;
 		var registeredType = _types.Values.Distinct();
 		var instances = registeredType.Select(
-			t => (IVisitor<object>)ActivatorUtilities.CreateInstance(serviceProvider, t)
+			t => (IVisitor<object>)ActivatorUtilities.CreateInstance(_serviceProvider, t)
 		).ToArray();
 
 		var group = _types.GroupBy(T => T.Value).Zip(instances);
 
-		foreach (var (First, Second) in group)
+		foreach (var (first, second) in group)
 		{
-			foreach (var type in First)
+			foreach (var type in first)
 			{
-				_visitors[type.Key] = Second;
+				_visitors[type.Key] = second;
 			}
 		}
 
 		foreach (var visitor in instances)
-			visitor.Configure(serviceProvider);
+			visitor.Configure(_serviceProvider);
 	}
 }

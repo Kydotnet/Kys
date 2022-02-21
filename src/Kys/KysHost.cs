@@ -7,20 +7,28 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Kys.Lang;
 using static Kys.Parser.KysParser;
 
 namespace Kys
 {
 	internal class KysHost : IHost
 	{
-		IInterpreter interpreter;
+		readonly IInterpreter _interpreter;
 
 		public KysHost(IServiceProvider provider)
 		{
 			Services = provider;
+			Swm.Step("Interpreter Creation");
+
+			_interpreter = Services.GetService<IInterpreter>() ?? ActivatorUtilities.CreateInstance<KysInterpreter>(Services);
+			
+			Services.GetRequiredService<IInterpreterSesion>().Interpreter = _interpreter;
+
+			Swm.Step("Interpreter Creation");
 		}
 
-		public IServiceProvider Services { get; private set; }
+		public IServiceProvider Services { get; }
 
 		public void Dispose()
 		{
@@ -28,26 +36,20 @@ namespace Kys
 
 		public Task StartAsync(CancellationToken cancellationToken = default)
 		{
-			SWM.Step("Interpreter Creation");
-			var ProgramParser = Services.GetRequiredService<KysParser>();
-			interpreter = new KysInterpreter()
-			{
-				KysParserVisitor = Services.GetService<IVisitorProvider>().GetVisitor<ProgramContext>(),
-				ProgramContext = Services.GetService<IContextFactory>().Create(ContextType.ME),
-				Sesion = Services.GetService<IInterpreterSesion>()
-			};			
-			SWM.Step("Interpreter Creation");
-			SWM.Step("Interpreter Configuration");
-			interpreter.ConfigureDefaultContext();
-			SWM.Step("Interpreter Configuration");
+			Swm.Step("Parser Creation");
+			var programParser = Services.GetRequiredService<KysParser>();
+			Swm.Step("Parser Creation");
+			Swm.Step("Interpreter Configuration");
+			_interpreter.ConfigureDefaultContext();
+			Swm.Step("Interpreter Configuration");
 			try
 			{
-				SWM.Step("Parsed");
-				var parsed = ProgramParser.program();
-				SWM.Step("Parsed");
-				SWM.Step("Kys Run");
-				interpreter.Start(parsed);
-				SWM.Step("Kys Run");
+				Swm.Step("Parsed");
+				var parsed = programParser.program();
+				Swm.Step("Parsed");
+				Swm.Step("Kys Run");
+				_interpreter.Start(parsed);
+				Swm.Step("Kys Run");
 			}
 			catch (KysException e)
 			{

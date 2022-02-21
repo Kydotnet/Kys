@@ -19,76 +19,76 @@ public class RuntimeScope : IScope
 	public void Clear() => Variables.Clear();
 
 	/// <inheritdoc/>
-	public void AsigVar(string ID, dynamic value, bool recursive = true)
+	public void AsigVar(string id, dynamic value, bool recursive = true)
 	{
 		if (recursive)
 		{
-			var scope = this.CheckRecursive(ID);
+			var scope = this.CheckRecursive(id);
 			if (scope != null)
 			{
-				scope.AsigVar(ID, value, false);
+				scope.AsigVar(id, value, false);
 				return;
 			}
 		}
-		if (!Variables.ContainsKey(ID))
-			_ = Variables[ID];
-		Variables[ID] = value;
+		if (!Variables.ContainsKey(id))
+			_ = Variables[id];
+		Variables[id] = value;
 	}
 
 	/// <inheritdoc/>
-	public void SetVar(string ID, dynamic value, bool recursive = true)
+	public void SetVar(string id, dynamic value, bool recursive = true)
 	{
 		if (recursive)
 		{
-			var scope = this.CheckRecursive(ID);
+			var scope = this.CheckRecursive(id);
 			if (scope != null)
 			{
-				scope.SetVar(ID, value, false);
+				scope.SetVar(id, value, false);
 				return;
 			}
 		}
-		Variables[ID] = value;
+		Variables[id] = value;
 	}
 
 	/// <inheritdoc/>
-	public void DefVar(string ID, dynamic value, bool recursive = true)
+	public void DefVar(string id, dynamic value, bool recursive = true)
 	{
 		if (recursive)
 		{
-			var scope = this.CheckRecursive(ID);
+			var scope = this.CheckRecursive(id);
 			if (scope != null)
 				return;
 		}
-		else if (ConVar(ID)) return;
-		Variables[ID] = value;
+		else if (ConVar(id)) return;
+		Variables[id] = value;
 	}
 
 	/// <inheritdoc/>
-	public void DecVar(string ID, dynamic value, bool recursive = true)
+	public void DecVar(string id, dynamic value, bool recursive = true)
 	{
 		if (recursive)
 		{
-			var scope = this.CheckRecursive(ID);
+			var scope = this.CheckRecursive(id);
 			if (scope != null)
 			{
-				scope.DecVar(ID, value, false);
+				scope.DecVar(id, value, false);
 				return;
 			}
 		}
-		Variables.Add(ID, value);
+		Variables.Add(id, value);
 	}
 
 	/// <inheritdoc/>
-	public dynamic GetVar(string ID, bool recursive = true)
+	public dynamic GetVar(string id, bool recursive = true)
 	{
-		if (Variables.TryGetValue(ID, out dynamic ret))
+		if (Variables.TryGetValue(id, out dynamic ret))
 			return ret;
-		return recursive && ParentScope != null ? ParentScope.GetVar(ID) : Variables[ID];
+		return recursive && ParentScope != null ? ParentScope.GetVar(id) : Variables[id];
 	}
 
 	/// <inheritdoc/>
-	public bool ConVar(string ID, bool recursive = false)
+	public bool ConVar(string id, bool recursive = false)
 	{
-		return recursive ? this.CheckRecursive(ID) != null : Variables.ContainsKey(ID);
+		return recursive ? this.CheckRecursive(id) != null : Variables.ContainsKey(id);
 	}
 }

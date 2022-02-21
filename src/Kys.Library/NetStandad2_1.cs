@@ -1,7 +1,7 @@
 ﻿#if NETSTANDARD2_1_OR_GREATER
 namespace Kys.Library;
 
-internal static class NetStandard2_1
+internal static class NetStandard21
 {
 	internal static bool IsAssignableTo(this Type a, Type b)
 	{

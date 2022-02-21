@@ -26,9 +26,9 @@ public interface IFunction : INameable
 	/// <summary>
 	/// Ejecuta la función por causa de un llamado.
 	/// </summary>
-	/// <param name="CallerContext">Contexto desde el cual se invoco a la función.</param>
-	/// <param name="FunctionScope">Scope que sera usado para almacenar variabes locales de la función.</param>
+	/// <param name="callerContext">Contexto desde el cual se invoco a la función.</param>
+	/// <param name="functionScope">Scope que sera usado para almacenar variabes locales de la función.</param>
 	/// <param name="args">Argumentos pasados a la función.</param>
 	/// <returns>Valor devuelto por la función.</returns>
-	dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args);
+	dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args);
 }

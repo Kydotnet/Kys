@@ -10,17 +10,19 @@ namespace Kys.Interpreter.Visitors;
 /// </summary>
 public class ControlVisitor : BaseVisitor<object>
 {
-	IKysParserVisitor<dynamic> expressionVisitor;
-	IKysParserVisitor<object> sentenceVisitor;
-	IKysParserVisitor<object> varoperationVisitor;
+#pragma warning disable CS8618
+	IKysParserVisitor<dynamic> _expressionVisitor;
+	IKysParserVisitor<object> _sentenceVisitor;
+	IKysParserVisitor<object> _varoperationVisitor;
+#pragma warning restore CS8618
 
 	/// <inheritdoc/>
 	public override void Configure(IServiceProvider serviceProvider)
 	{
 		base.Configure(serviceProvider);
-		expressionVisitor = VisitorProvider.GetVisitor<ExpressionContext>();
-		sentenceVisitor = VisitorProvider.GetVisitor<SentenceContext>();
-		varoperationVisitor = VisitorProvider.GetVisitor<VaroperationContext>();
+		_expressionVisitor = VisitorProvider.GetVisitor<ExpressionContext>();
+		_sentenceVisitor = VisitorProvider.GetVisitor<SentenceContext>();
+		_varoperationVisitor = VisitorProvider.GetVisitor<VaroperationContext>();
 	}
 
 	/// <summary>
@@ -29,14 +31,14 @@ public class ControlVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitIfcontrol([NotNull] IfcontrolContext context)
 	{
-		Sesion.StartScope(ScopeType.CONTROL);
+		Sesion.StartScope(ScopeType.Control);
 
 		if (Expistrue(context.expression()))
 			VisitBlock(context.block());
 		else if (context.elsecontrol() != null)
 			VisitElsecontrol(context.elsecontrol());
 		Sesion.EndScope();
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -49,7 +51,7 @@ public class ControlVisitor : BaseVisitor<object>
 			VisitIfcontrol(context.ifcontrol());
 		else
 			VisitBlock(context.block());
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -58,13 +60,13 @@ public class ControlVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitWhilecontrol([NotNull] WhilecontrolContext context)
 	{
-		Sesion.StartScope(ScopeType.CONTROL);
+		Sesion.StartScope(ScopeType.Control);
 		var block = context.block();
 		var exp = context.expression();
 		while (Expistrue(exp))
 			VisitBlock(block);
 		Sesion.EndScope();
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -77,7 +79,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitTwhilecontrol([NotNull] TwhilecontrolContext context)
 	{
-		Sesion.StartScope(ScopeType.CONTROL);
+		Sesion.StartScope(ScopeType.Control);
 		var info = context.twbucle();
 		var block = info.block();
 		var timed = info.timeoutcontrol();
@@ -86,7 +88,7 @@ public class ControlVisitor : BaseVisitor<object>
 
 		if (timed != null)
 		{
-			TWBucle(block, timed, wait, exp, InternalTWile);
+			TwBucle(block, timed, wait, exp, InternalTWile);
 		}
 		else
 		{
@@ -98,7 +100,7 @@ public class ControlVisitor : BaseVisitor<object>
 			}
 		}
 		Sesion.EndScope();
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -109,7 +111,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// <param name="wait">Tiempo que debe esperar el bucle entre ejecución. Es pasado directamente a <paramref name="whilefunc"/></param>
 	/// <param name="exp">Expresión que debe evaluar el bucle. Es pasado directamente a <paramref name="whilefunc"/></param>
 	/// <param name="whilefunc">Metodo que deberia generar una tarea que representa la ejecución del bucle en segundo plano.</param>
-	private void TWBucle(BlockContext block, TimeoutcontrolContext timed, int wait, ExpressionContext exp, Func<ExpressionContext, CancellationTokenSource, int, BlockContext, Task> whilefunc)
+	void TwBucle(BlockContext block, TimeoutcontrolContext timed, int wait, ExpressionContext exp, Func<ExpressionContext, CancellationTokenSource, int, BlockContext, Task> whilefunc)
 	{
 		var twait = ValueVisitor.GetInt(timed.NUMBER());
 		var tblock = timed.block();
@@ -134,7 +136,7 @@ public class ControlVisitor : BaseVisitor<object>
 
 	}
 
-	private async Task InternalTWile(ExpressionContext exp, CancellationTokenSource token, int wait, BlockContext block)
+	async Task InternalTWile(ExpressionContext exp, CancellationTokenSource token, int wait, BlockContext block)
 	{
 		while (Expistrue(exp) && !token.IsCancellationRequested)
 		{
@@ -154,7 +156,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitWaitcontrol([NotNull] WaitcontrolContext context)
 	{
-		Sesion.StartScope(ScopeType.CONTROL);
+		Sesion.StartScope(ScopeType.Control);
 		var info = context.twbucle();
 		var block = info.block();
 		var timed = info.timeoutcontrol();
@@ -163,7 +165,7 @@ public class ControlVisitor : BaseVisitor<object>
 
 		if (timed != null)
 		{
-			TWBucle(block, timed, wait, exp, InternalWait);
+			TwBucle(block, timed, wait, exp, InternalWait);
 		}
 		else
 		{
@@ -177,10 +179,10 @@ public class ControlVisitor : BaseVisitor<object>
 		}
 
 		Sesion.EndScope();
-		return null;
+		return true;
 	}
 
-	private async Task InternalWait(ExpressionContext exp, CancellationTokenSource token, int wait, BlockContext block)
+	async Task InternalWait(ExpressionContext exp, CancellationTokenSource token, int wait, BlockContext block)
 	{
 		while (!Expistrue(exp) && !token.IsCancellationRequested)
 		{
@@ -194,9 +196,9 @@ public class ControlVisitor : BaseVisitor<object>
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresión condicional", Justification = "Convertir en retorno directo ocasiona que se use el callsite equivocado al compilar.")]
-	private bool Expistrue(ExpressionContext exp)
+	bool Expistrue(ExpressionContext exp)
 	{
-		object val = expressionVisitor.Visit(exp);
+		object val = _expressionVisitor.Visit(exp);
 		// ReSharper disable once ConvertIfStatementToReturnStatement
 		if (val == null || 
 		    val.Equals(0) || 
@@ -232,7 +234,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// <inheritdoc/>
 	public override object VisitForcontrol([NotNull] ForcontrolContext context)
 	{
-		Sesion.StartScope(ScopeType.CONTROL);
+		Sesion.StartScope(ScopeType.Control);
 		var varop = context.varoperation();
 		var exp = context.expression();
 		var forexp = context.forexpression();
@@ -241,7 +243,7 @@ public class ControlVisitor : BaseVisitor<object>
 		var block = context.block();
 
 		//la operacion se ejecuta al principio, si existe
-		if (varop != null) varoperationVisitor.VisitVaroperation(varop);
+		if (varop != null) _varoperationVisitor.VisitVaroperation(varop);
 
 		// ejecutamos la expresion de condicion.
 		while (Expistrue(exp))
@@ -250,13 +252,13 @@ public class ControlVisitor : BaseVisitor<object>
 			VisitBlock(block);
 
 			// si hay una expresion por ejecutar
-			if (iexp != null) expressionVisitor.Visit(iexp);
+			if (iexp != null) _expressionVisitor.Visit(iexp);
 			// si hay una operacion con variable
-			else if (ivarop != null) varoperationVisitor.VisitVaroperation(ivarop);
+			else if (ivarop != null) _varoperationVisitor.VisitVaroperation(ivarop);
 		}
 
 		Sesion.EndScope();
-		return null;
+		return true;
 	}
 
 	/// <summary>
@@ -266,7 +268,7 @@ public class ControlVisitor : BaseVisitor<object>
 	public override object VisitBlock([NotNull] BlockContext context)
 	{
 		foreach (var item in context.sentence())
-			sentenceVisitor.VisitSentence(item);
-		return null;
+			_sentenceVisitor.VisitSentence(item);
+		return true;
 	}
 }

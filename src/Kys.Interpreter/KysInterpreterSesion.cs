@@ -1,4 +1,5 @@
-﻿namespace Kys.Interpreter;
+﻿using System.Collections.Concurrent;
+namespace Kys.Interpreter;
 
 /// <summary>
 /// Implementación por defecto de <see cref="IInterpreterSesion"/>.
@@ -6,50 +7,60 @@
 public class KysInterpreterSesion : IInterpreterSesion
 {
 	/// <inheritdoc/>
-	public IContext CurrentContext { get; set; }
+	public IInterpreter Interpreter { get; set; } = null!;
 
 	/// <inheritdoc/>
-	public IScope CurrentScope { get; set; }
+	public IContext CurrentContext { get; set; } = null!;
 
 	/// <inheritdoc/>
-	public IContext CallerContext { get; set; }
-
-	readonly IDictionary<string, object> SesionVariables = new Dictionary<string, object>();
+	public IScope CurrentScope { get; set; } = null!;
 
 	/// <inheritdoc/>
-	public object this[string name]
+	public IContext? CallerContext { get; set; }
+	
+	readonly IDictionary<string, object> _sesionVariables = new ConcurrentDictionary<string, object>();
+
+	/// <inheritdoc/>
+	public object? this[string name]
 	{
-		get => SesionVariables.TryGetValue(name, out object Variable) ? Variable : null;
-		set => SesionVariables[name] = value;
+		get => _sesionVariables.TryGetValue(name, out var variable) ? variable : null;
+		set
+		{
+			if (value is null)
+			{
+				if (_sesionVariables.ContainsKey(name))
+					_sesionVariables.Remove(name);
+			}
+			else
+			{
+				_sesionVariables[name] = value;
+			}
+		}
 	}
 
-	readonly IScopeFactory ScopeFactory;
+	readonly IScopeFactory _scopeFactory;
 
 	/// <summary>
 	/// Crea un nueva nueva sesión.
 	/// </summary>
 	/// <param name="scopeFactory">La factory que se usara para generar <see cref="IScope"/> en <see cref="IInterpreterSesion.StartScope(ScopeType)"/>.</param>
+	// ReSharper disable once NotNullMemberIsNotInitialized
 	public KysInterpreterSesion(IScopeFactory scopeFactory)
 	{
-		ScopeFactory = scopeFactory;
+		_scopeFactory = scopeFactory;
 	}
 
 	/// <inheritdoc/>
-	public IScope EndScope()
+	public void EndScope()
 	{
-		var c = CurrentScope;
-
-		CurrentScope = CurrentScope.ParentScope;
-
-		return CurrentScope == null
-			? throw new InvalidOperationException("A ocurrido un problema inesperado en la ejecución de la sesión del interprete.")
-			: c;
+		CurrentScope = CurrentScope.ParentScope ?? 
+		throw new InvalidOperationException("A ocurrido un problema inesperado en la ejecución de la sesión del interprete.");
 	}
 
 	/// <inheritdoc/>
 	public IScope StartScope(ScopeType type)
 	{
-		var newScope = ScopeFactory.Create(type, CurrentScope);
+		var newScope = _scopeFactory.Create(type, CurrentScope);
 		CurrentScope = newScope;
 		return newScope;
 	}

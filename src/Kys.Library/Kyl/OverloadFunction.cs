@@ -7,7 +7,7 @@ namespace Kys.Library;
 /// </summary>
 public sealed class OverloadFunction : IFunction
 {
-	readonly CsFunction[] Functions;
+	readonly CsFunction[] _functions;
 
 	/// <inheritdoc/>
 	public string Name { get; init; }
@@ -32,12 +32,12 @@ public sealed class OverloadFunction : IFunction
 		).
 		ToList();
 		list.Sort(Sort);
-		Functions = list.ToArray();
+		_functions = list.ToArray();
 		InfArgs = list.Any(f => f.InfArgs);
 		ArgCount = list.Min(f => f.ArgCount);
 	}
 
-	private static int Sort(CsFunction f1, CsFunction f2)
+	static int Sort(CsFunction f1, CsFunction f2)
 	{
 		if (f1.InfArgs != f2.InfArgs)
 			return f1.InfArgs ? 1 : -1;
@@ -64,7 +64,7 @@ public sealed class OverloadFunction : IFunction
 		return f;
 	}
 
-	private static int PrimitiveValueComparer(Type t1)
+	static int PrimitiveValueComparer(Type t1)
 	{
 		if (t1 == typeof(char)) return 1;
 		if (t1 == typeof(bool)) return 1;
@@ -81,7 +81,7 @@ public sealed class OverloadFunction : IFunction
 		return 0;
 	}
 
-	private static int PrimitiveValueAssignation(Type t1)
+	static int PrimitiveValueAssignation(Type t1)
 	{
 		if (t1 == typeof(char)) return 0;
 		if (t1 == typeof(bool)) return 0;
@@ -99,31 +99,31 @@ public sealed class OverloadFunction : IFunction
 	}
 
 	/// <inheritdoc/>
-	public dynamic Call(IContext CallerContext, IScope FunctionScope, params dynamic[] args) =>
-		GetRealMethod(args).Call(CallerContext, FunctionScope, args);
+	public dynamic Call(IContext callerContext, IScope functionScope, params dynamic[] args) =>
+		GetRealMethod(args).Call(callerContext, functionScope, args);
 
-	private CsFunction GetRealMethod(dynamic[] args)
+	CsFunction GetRealMethod(dynamic[] args)
 	{
 		if (args.Length < ArgCount)
-			return Functions[0];
+			return _functions[0];
 
-		var Filter = Functions.Where(
+		var filter = _functions.Where(
 			f =>
 				(f.ArgCount == args.Length && !f.InfArgs) ||
 				(args.Length >= f.ArgCount && f.InfArgs)
 		);
-		var Func = GetFunction(Filter, args);
-		if (Func != null)
-			return Func;
+		var func = GetFunction(filter, args);
+		if (func != null)
+			return func;
 
-		Func = Functions.FirstOrDefault(f => f.ArgCount >= args.Length);
-		if (Func != null)
-			return Func;
+		func = _functions.FirstOrDefault(f => f.ArgCount >= args.Length);
+		if (func != null)
+			return func;
 
-		return Functions[^1];
+		return _functions[^1];
 	}
 
-	private CsFunction GetFunction(IEnumerable<CsFunction> fixedFilter, object[] args)
+	CsFunction GetFunction(IEnumerable<CsFunction> fixedFilter, object[] args)
 	{
 		foreach (var func in fixedFilter)
 		{
@@ -154,17 +154,17 @@ public sealed class OverloadFunction : IFunction
 		return null;
 	}
 
-	private bool IsAssignable(Type t1, Type t2)
+	bool IsAssignable(Type t1, Type t2)
 	{
-		var t1v = PrimitiveValueAssignation(t1);
-		var t2v = PrimitiveValueAssignation(t2);
-		if (t1v == 0 || t2v == 0) return false;
-		if (t1v > 0) return t2v > t1v;
-		if (t1v < 0) return t2v < t1v || t2v > Math.Abs(t1v);
+		var t1V = PrimitiveValueAssignation(t1);
+		var t2V = PrimitiveValueAssignation(t2);
+		if (t1V == 0 || t2V == 0) return false;
+		if (t1V > 0) return t2V > t1V;
+		if (t1V < 0) return t2V < t1V || t2V > Math.Abs(t1V);
 
 		return false;
 	}
 
 	/// <inheritdoc/>
-	public override string ToString() => $"{Functions[0].Method.ReturnType.Name} {Name}(...)";
+	public override string ToString() => $"{_functions[0].Method.ReturnType.Name} {Name}(...)";
 }

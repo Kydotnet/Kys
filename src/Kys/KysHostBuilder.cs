@@ -11,33 +11,28 @@ internal class KysHostBuilder : IHostBuilder
 {
 
 	public IDictionary<object, object> Properties { get; } = new Dictionary<object, object>();
-	readonly List<Action<HostBuilderContext, IServiceCollection>> ConfigureServicesActions = new();
+	readonly List<Action<HostBuilderContext, IServiceCollection>> _configureServicesActions = new();
 
-	IServiceCollection services;
-	IServiceProvider servicesProvider;
-
-	public KysHostBuilder()
-	{
-
-	}
+	IServiceCollection? _services;
+	IServiceProvider? _servicesProvider;
 
 	public IHost Build()
 	{
-		SWM.Step("Host Service Creation");
+		Swm.Step("Host Service Creation");
 		BuildServiceProvider();
-		SWM.Step("Host Service Creation");
-		var host = new KysHost(servicesProvider);
+		Swm.Step("Host Service Creation");
+		var host = new KysHost(_servicesProvider!);
 		return host;
 	}
 
-	private void BuildServiceProvider()
+	void BuildServiceProvider()
 	{
-		services = new ServiceCollection();
-		foreach (var item in ConfigureServicesActions)
+		_services = new ServiceCollection();
+		foreach (var item in _configureServicesActions)
 		{
-			item(null, services);
+			item(null, _services);
 		}
-		servicesProvider = services.BuildServiceProvider();
+		_servicesProvider = _services.BuildServiceProvider();
 	}
 
 	public IHostBuilder ConfigureAppConfiguration(Action<HostBuilderContext, IConfigurationBuilder> configureDelegate)
@@ -58,7 +53,7 @@ internal class KysHostBuilder : IHostBuilder
 	public IHostBuilder ConfigureServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
 	{
 		Ensure.NotNull(configureDelegate, nameof(configureDelegate));
-		ConfigureServicesActions.Add(configureDelegate);
+		_configureServicesActions.Add(configureDelegate);
 		return this;
 	}
 

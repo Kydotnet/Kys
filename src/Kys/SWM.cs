@@ -4,33 +4,33 @@ using System.Diagnostics;
 
 namespace Kys;
 
-internal class SWM
+internal class Swm
 {
-	readonly static IDictionary<string, Stopwatch> sws = new Dictionary<string, Stopwatch>();
+	readonly static IDictionary<string, Stopwatch> _Sws = new Dictionary<string, Stopwatch>();
 
 	public static bool Enabled = false;
 
 	public static void Start(string id)
 	{
 		if (!Enabled) return;
-		if (sws.ContainsKey(id))
+		if (_Sws.ContainsKey(id))
 		{
-			sws[id].Restart();
+			_Sws[id].Restart();
 		}
 		else
 		{
-			sws[id] = Stopwatch.StartNew();
+			_Sws[id] = Stopwatch.StartNew();
 		}
 	}
 
 	public static void Stop(string id)
 	{
 		if (!Enabled) return;
-		if (sws.ContainsKey(id))
+		if (_Sws.ContainsKey(id))
 		{
-			var sw = sws[id];
+			var sw = _Sws[id];
 			Console.WriteLine("{0} in {1}ms", id, sw.ElapsedMilliseconds);
-			sws.Remove(id);
+			_Sws.Remove(id);
 			sw.Stop();
 		}
 	}
@@ -38,7 +38,7 @@ internal class SWM
 	public static void Step(string id)
 	{
 		if (!Enabled) return;
-		if (sws.ContainsKey(id))
+		if (_Sws.ContainsKey(id))
 		{
 			Stop(id);
 		}
