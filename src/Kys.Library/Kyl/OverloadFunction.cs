@@ -129,9 +129,12 @@ public sealed class OverloadFunction : IFunction
 			var fail = false;
 			for (var i = 0; i < func.ArgCount; i++)
 			{
-				var hast1 = args[i] is not null;	
+				var hast1 = args[i] is not null;
+				// tipo del objeto pasado
 				var t1 = args[i]?.GetType() ?? typeof(object);
+				// tipo esperado por la función
 				var t2 = pars[i].ParameterType;
+				// ambos son primitivos, si no se peude asignar falla.
 				if (t1.IsPrimitive && t2.IsPrimitive)
 				{
 					if (IsAssignable(t1, t2))
@@ -139,9 +142,16 @@ public sealed class OverloadFunction : IFunction
 					fail = true;
 					break;
 				}
-				if (t1.IsAssignableTo(t2))
+				if (hast1) // se paso un valor no nulo como parametro
+				{
+					if (t1.IsAssignableTo(t2))
+						continue;
+				}
+				else if (!t2.IsValueType) // se esparaba un objeto de referencia por
+				{
+					// un valor referencia puede aceptar nulos por lo que podria ser aceptado.
 					continue;
-				
+				}
 				fail = true;
 				break;
 			}
