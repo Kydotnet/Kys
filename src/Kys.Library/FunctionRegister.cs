@@ -3,7 +3,6 @@ using System.Reflection;
 
 namespace Kys.Library;
 
-/// <inheritdoc/>
 public static partial class FunctionRegister
 {
 	/// <summary>
@@ -14,10 +13,10 @@ public static partial class FunctionRegister
 		AddFunctions(targetContext, typeof(StandardFunctions));
 
 	/// <summary>
-	/// Busca en el tipo <typeparamref name="ContainerType"/> todos los metodos estaticos que tengan <see cref="FunctionAttribute"/> y los agrega a <paramref name="targetContext"/> como <see cref="IFunction"/>.
+	/// Busca en el tipo <typeparamref name="TContainerType"/> todos los metodos estaticos que tengan <see cref="FunctionAttribute"/> y los agrega a <paramref name="targetContext"/> como <see cref="IFunction"/>.
 	/// </summary>
 	/// <param name="targetContext">Contetxo de destino en donde se agregaran las funciones.</param>
-	/// <typeparam name="ContainerType">El tipo del cual se buscan y extraen los metodos.</typeparam>
+	/// <typeparam name="TContainerType">El tipo del cual se buscan y extraen los metodos.</typeparam>
 	public static void AddFunctions<TContainerType>(this IContext targetContext) =>
 		AddFunctions(targetContext, typeof(TContainerType));
 
@@ -53,13 +52,13 @@ public static partial class FunctionRegister
 		var infargs = parameters.PARAMS() != null;
 		var @params = parameters.@params()?.ID().Select(id => id.GetText()).ToArray();
 		var haveparams = @params != null;
-		var argcount = haveparams ? @params.Length - (infargs ? 1 : 0) : 0;
+		var argcount = haveparams ? @params!.Length - (infargs ? 1 : 0) : 0;
 		var id = funcdefinition.ID().GetText();
 		var sentences = funcdefinition.block().sentence();
 
 		if (!haveparams && infargs)
 		{
-			@params = new string[] { "params" };
+			@params = new[] { "params" };
 		}
 
 		var function = new KysFunction

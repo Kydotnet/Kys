@@ -1,4 +1,5 @@
-﻿namespace Kys.Library;
+﻿using Kys.Library.Kyl;
+namespace Kys.Library;
 
 internal static class KylLoader
 {

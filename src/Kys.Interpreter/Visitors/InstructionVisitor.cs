@@ -41,7 +41,7 @@ public class InstructionVisitor : BaseVisitor<object>
 	public override object VisitFuncdefinition([NotNull] FuncdefinitionContext context)
 	{
 		Sesion.CurrentContext.AddKysFunction(context, _sentenceVisitor);
-		return false;
+		return true;
 	}
 
 	/// <summary>

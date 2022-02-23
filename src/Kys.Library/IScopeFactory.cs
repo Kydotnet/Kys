@@ -1,6 +1,5 @@
 ﻿namespace Kys.Library;
 
-
 /// <summary>
 /// Provee un generador de objetos <see cref="IScope"/>.
 /// </summary>
@@ -19,5 +18,5 @@ public interface IScopeFactory
 	/// <param name="type">El tipo de scope que se debe generar, es decir, el proposito.</param>
 	/// <param name="parent">Un scope opcional que sera el padre del scope generado. Ver <seealso cref="IScope.ParentScope"/></param>
 	/// <returns>Devuelve el scope generado.</returns>
-	IScope Create(ScopeType type, IScope parent = null);
+	IScope Create(ScopeType type, IScope? parent = null);
 }

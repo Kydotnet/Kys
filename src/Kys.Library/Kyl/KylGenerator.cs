@@ -1,20 +1,19 @@
 ﻿using System.Reflection;
 using KYLib.Utils;
-
-namespace Kys.Library;
+namespace Kys.Library.Kyl;
 
 internal static class KylGenerator
 {
-	const BindingFlags _Stpublicmet = BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly;
-	//const BindingFlags publicmet = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-
+	const BindingFlags Stpublicmet = BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly;
+	// ReSharper disable once UnusedMember.Local
+	const BindingFlags Publicmet = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
 	internal static void Generate(string[] args, IContext targetContext)
 	{
 		var type = GetType(args);
 		Ensure.NotNull(type, "Type");
 
-		var smetv = from methods in type.GetMethods(_Stpublicmet)
+		var smetv = from methods in type!.GetMethods(Stpublicmet)
 					where !methods.IsSpecialName && !methods.IsGenericMethodDefinition && !methods.ContainsGenericParameters
 					group methods by methods.Name into methodGroup
 					select methodGroup.ToArray();
@@ -46,7 +45,7 @@ internal static class KylGenerator
 		targetContext.AddFunction(function);
 	}
 
-	static Type GetType(string[] args)
+	static Type? GetType(string[] args)
 	{
 		if (args.Length == 1)
 			return Type.GetType(args[0], false, true);

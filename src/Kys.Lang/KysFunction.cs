@@ -29,7 +29,7 @@ public sealed class KysFunction : IFunction
 	/// <summary>
 	/// Nombres de los parametros de la función.
 	/// </summary>
-	public string[] ParamsNames { get; init; }
+	public string[]? ParamsNames { get; init; }
 
 	/// <summary>
 	/// Este es el Visitor que se usa para ejecutar las sentencias dentro de la función
@@ -40,24 +40,24 @@ public sealed class KysFunction : IFunction
 	public dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args)
 	{
 		ValidateParams(args.Length);
-		
-		var temp = ParamsNames;
 
-		if (InfArgs)
+		if (ParamsNames is not null)
 		{
-			temp = ParamsNames.SkipLast(1).ToArray();
-			var param = args.Skip(ArgCount).ToArray();
-			functionScope.SetVar(ParamsNames[^1], param);
+			var temp = ParamsNames;
+
+			if (InfArgs)
+			{
+				temp = ParamsNames.SkipLast(1).ToArray();
+				var param = args.Skip(ArgCount).ToArray();
+				functionScope.SetVar(ParamsNames[^1], param);
+			}
+			if (ArgCount > 0 && !InfArgs)
+			{
+				var zip = temp.Zip(args, (first, second) => (First: first, Second: second));
+				foreach (var (first, second) in zip)
+					functionScope.SetVar(first, second, false);
+			}
 		}
-
-#if NET5_0_OR_GREATER
-			var Zip = temp.Zip(args);
-#elif NETSTANDARD2_1_OR_GREATER
-		var zip = temp.Zip(args, (first, second) => (First: first, Second: second));
-#endif
-
-		foreach (var (first, second) in zip)
-			functionScope.SetVar(first, second, false);
 
 		foreach (var sentence in Sentences)
 			SenteceVisitor.VisitSentence(sentence);

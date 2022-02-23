@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-
-namespace Kys.Library;
+#pragma warning disable CS8618
+namespace Kys.Library.Kyl;
 
 /// <summary>
 /// Una función que recibe una longitud variada de parametros
@@ -13,15 +13,15 @@ public sealed class OverloadFunction : IFunction
 	public string Name { get; init; }
 
 	/// <inheritdoc/>
-	public int ArgCount { get; private set; }
+	public int ArgCount { get; }
 
 	/// <inheritdoc/>
-	public bool InfArgs { get; private set; }
+	public bool InfArgs { get; }
 
 	/// <inheritdoc/>
 	public IContext ParentContext { get; init; }
 
-	internal OverloadFunction(MethodInfo[] methods, IContext targetContext)
+	internal OverloadFunction(IEnumerable<MethodInfo> methods, IContext targetContext)
 	{
 		var list = methods.
 		Select(
@@ -47,7 +47,7 @@ public sealed class OverloadFunction : IFunction
 		var pars1 = f1.Method.GetParameters();
 		var pars2 = f2.Method.GetParameters();
 		var f = 0;
-		for (int i = 0; i < f1.ArgCount; i++)
+		for (var i = 0; i < f1.ArgCount; i++)
 		{
 			var t1 = pars1[i].ParameterType;
 			var t2 = pars2[i].ParameterType;
@@ -99,10 +99,10 @@ public sealed class OverloadFunction : IFunction
 	}
 
 	/// <inheritdoc/>
-	public dynamic Call(IContext callerContext, IScope functionScope, params dynamic[] args) =>
+	public dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args) =>
 		GetRealMethod(args).Call(callerContext, functionScope, args);
 
-	CsFunction GetRealMethod(dynamic[] args)
+	CsFunction GetRealMethod(dynamic?[] args)
 	{
 		if (args.Length < ArgCount)
 			return _functions[0];
@@ -117,52 +117,46 @@ public sealed class OverloadFunction : IFunction
 			return func;
 
 		func = _functions.FirstOrDefault(f => f.ArgCount >= args.Length);
-		if (func != null)
-			return func;
+		return func ?? _functions[^1];
 
-		return _functions[^1];
 	}
 
-	CsFunction GetFunction(IEnumerable<CsFunction> fixedFilter, object[] args)
+	static CsFunction? GetFunction(IEnumerable<CsFunction> fixedFilter, IReadOnlyList<object?> args)
 	{
 		foreach (var func in fixedFilter)
 		{
 			var pars = func.Method.GetParameters();
 			var fail = false;
-			for (int i = 0; i < func.ArgCount; i++)
+			for (var i = 0; i < func.ArgCount; i++)
 			{
-				var t1 = args[i].GetType();
+				var hast1 = args[i] is not null;	
+				var t1 = args[i]?.GetType() ?? typeof(object);
 				var t2 = pars[i].ParameterType;
 				if (t1.IsPrimitive && t2.IsPrimitive)
 				{
 					if (IsAssignable(t1, t2))
 						continue;
-					else
-					{
-						fail = true;
-						break;
-					}
-				}
-				if (!t1.IsAssignableTo(t2))
-				{
 					fail = true;
 					break;
 				}
+				if (t1.IsAssignableTo(t2))
+					continue;
+				
+				fail = true;
+				break;
 			}
 			if (!fail) return func;
 		}
 		return null;
 	}
 
-	bool IsAssignable(Type t1, Type t2)
+	static bool IsAssignable(Type t1, Type t2)
 	{
 		var t1V = PrimitiveValueAssignation(t1);
 		var t2V = PrimitiveValueAssignation(t2);
 		if (t1V == 0 || t2V == 0) return false;
 		if (t1V > 0) return t2V > t1V;
-		if (t1V < 0) return t2V < t1V || t2V > Math.Abs(t1V);
-
-		return false;
+		return t2V < t1V || t2V > Math.Abs(t1V);
 	}
 
 	/// <inheritdoc/>
