@@ -1,12 +1,11 @@
-﻿using Antlr4.Runtime;
-using Kys.Interpreter;
-using Kys.Interpreter.Visitors;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-
+using Antlr4.Runtime;
+using Kys.Interpreter;
+using Kys.Interpreter.Visitors;
+using Microsoft.Extensions.DependencyInjection;
 namespace Kys;
 
 public class KysVisitorProvider : IVisitorProvider
@@ -19,11 +18,11 @@ public class KysVisitorProvider : IVisitorProvider
 
 	readonly IServiceProvider _serviceProvider;
 
-	bool _instanced = false;
+	bool _instanced;
 
 	public KysVisitorProvider(IServiceProvider serviceProvider)
 	{
-		this._serviceProvider = serviceProvider;
+		_serviceProvider = serviceProvider;
 	}
 
 	public void AddVisitor<TVisitorContext, TImplementation>()

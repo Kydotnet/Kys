@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime;
-
 namespace Kys.Lang.Runtime;
 
 /// <summary>

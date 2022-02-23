@@ -1,6 +1,5 @@
 ﻿using Antlr4.Runtime;
 using Kys.Interpreter.Visitors;
-
 namespace Kys.Interpreter;
 
 /// <summary>

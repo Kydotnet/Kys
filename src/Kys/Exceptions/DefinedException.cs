@@ -1,8 +1,8 @@
+using System;
 using Antlr4.Runtime;
-
 namespace Kys.Exceptions
 {
-	[System.Serializable]
+	[Serializable]
 	public class DefinedException : TokenException
 	{
 		public DefinedException(IToken token, string varname) : base(

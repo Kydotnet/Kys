@@ -3,6 +3,7 @@
 /// <summary>
 /// Tipos de <see cref="IScope"/> que se pueden crear.
 /// </summary>
+[Flags]
 public enum ScopeType
 {
 	/// <summary>

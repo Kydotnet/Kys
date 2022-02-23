@@ -1,5 +1,4 @@
 using KYLib.Abstractions;
-
 namespace Kys.Lang;
 
 /// <summary>

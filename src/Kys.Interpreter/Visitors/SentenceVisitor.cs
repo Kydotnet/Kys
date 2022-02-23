@@ -1,5 +1,4 @@
 using Antlr4.Runtime.Misc;
-
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>

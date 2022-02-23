@@ -5,7 +5,6 @@ using KYLib.Modding;
 using Kys.Lang;
 using Kys.Library;
 using Microsoft.Extensions.DependencyInjection;
-
 namespace Kys;
 
 [AutoLoad]
@@ -20,16 +19,13 @@ public class DefaultContextFactory : IContextFactory
 
 	public DefaultContextFactory(IServiceProvider serviceProvider)
 	{
-		this._serviceProvider = serviceProvider;
+		_serviceProvider = serviceProvider;
 		ChangeContext<RuntimeContext>(ContextType.All);
 	}
 
 	public void ChangeContext<T>(ContextType type) where T : IContext
 	{
-		_factory[type] = () =>
-		{
-			return ActivatorUtilities.CreateInstance<T>(_serviceProvider);
-		};
+		_factory[type] = () => ActivatorUtilities.CreateInstance<T>(_serviceProvider);
 	}
 
 	public IContext Create(ContextType type)

@@ -1,10 +1,9 @@
 using System.CommandLine;
-using System.CommandLine.Binding;
 using System.CommandLine.Help;
 using System.CommandLine.Invocation;
+using System.CommandLine.Parsing;
 using System.IO;
 using KYLib.Modding;
-
 namespace Kys;
 
 internal class CommandLine
@@ -14,7 +13,7 @@ internal class CommandLine
 		Mod.EnableAutoLoads();
 
 		var showTimes = new Option<bool>(
-				new string[]
+				new[]
 				{
 					"--show-time",
 					"-t"
@@ -50,14 +49,15 @@ internal class CommandLine
 		return a;
 	}
 
-	static HelpBuilder GetHelpBuilder(BindingContext arg)
+	// ReSharper disable once UnusedMember.Local
+	static HelpBuilder GetHelpBuilder()
 	{
 		var dev = new HelpBuilder(LocalizationResources.Instance);
 
 		return dev;
 	}
 
-	static string? Validatecommand(System.CommandLine.Parsing.CommandResult symbolResult)
+	static string? Validatecommand(CommandResult symbolResult)
 	{
 		return null;
 	}

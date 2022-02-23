@@ -3,6 +3,7 @@
 /// <summary>
 /// Tipos de <see cref="IContext"/> que se pueden crear.
 /// </summary>
+[Flags]
 public enum ContextType
 {
 	/// <summary>

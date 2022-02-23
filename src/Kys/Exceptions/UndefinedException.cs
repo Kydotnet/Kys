@@ -1,8 +1,8 @@
+using System;
 using Antlr4.Runtime;
-
 namespace Kys.Exceptions
 {
-	[System.Serializable]
+	[Serializable]
 	public class UndefinedException : TokenException
 	{
 		public UndefinedException(IToken token, string varname) : this(
@@ -20,7 +20,7 @@ namespace Kys.Exceptions
 
 	}
 
-	[System.Serializable]
+	[Serializable]
 	public class UndefinedFunctionException : UndefinedException
 	{
 		public UndefinedFunctionException(IToken token, string varname) : base(token, varname, "función")

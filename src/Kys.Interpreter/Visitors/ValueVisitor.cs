@@ -1,7 +1,6 @@
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-
+using Antlr4.Runtime.Tree;
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
@@ -25,7 +24,7 @@ public class ValueVisitor : BaseVisitor<dynamic?>
 	/// </summary>
 	/// <inheritdoc/>
 	/// <returns>Devuelve lo mismo devuelto por la función.</returns>
-	public override dynamic? VisitFuncresult([NotNull] FuncresultContext context)
+	public override dynamic? VisitFuncresult([Antlr4.Runtime.Misc.NotNull] FuncresultContext context)
 	{
 		var funcname = context.ID().GetText();
 		Sesion["LastToken"] = context.ID().Symbol;
@@ -50,15 +49,15 @@ public class ValueVisitor : BaseVisitor<dynamic?>
 	/// Interpreta el valor del <see cref="ValueContext"/> y lo devuelve.
 	/// </summary>
 	/// <inheritdoc/>
-	public override dynamic? VisitValue([NotNull] ValueContext context)
+	public override dynamic? VisitValue([Antlr4.Runtime.Misc.NotNull] ValueContext context)
 	{
 		if (context.STRING() != null)
 			return GetString(context.STRING());
-		else if (context.NUMBER() != null)
+		if (context.NUMBER() != null)
 			return GetNumber(context.NUMBER());
-		else if (context.BOOL() != null)
+		if (context.BOOL() != null)
 			return GetBool(context.BOOL());
-		else if (context.ID() != null)
+		if (context.ID() != null)
 			return GetVar(Sesion, context.ID());
 
 		return null;
@@ -94,7 +93,7 @@ public class ValueVisitor : BaseVisitor<dynamic?>
 	/// </summary>
 	/// <param name="terminalNode">El nodo que queire ser convertido en numero.</param>
 	/// <returns>Devuelve el numero obtenido, ya se un entero o un numero de doble presici�n.</returns>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convertir a expresi�n condicional", Justification = "Reducir el if produce que un int se retorne como double, lo que genera error en ejecuci�n")]
+	[SuppressMessage("Style", "IDE0046:Convertir a expresi�n condicional", Justification = "Reducir el if produce que un int se retorne como double, lo que genera error en ejecuci�n")]
 	public static dynamic GetNumber(ITerminalNode terminalNode)
 	{
 		var raw = terminalNode.GetText();

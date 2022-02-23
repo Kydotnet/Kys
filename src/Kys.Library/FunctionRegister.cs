@@ -1,6 +1,5 @@
-using Kys.Parser;
 using System.Reflection;
-
+using Kys.Parser;
 namespace Kys.Library;
 
 public static partial class FunctionRegister

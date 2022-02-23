@@ -5,13 +5,12 @@ using KYLib.Modding;
 using Kys.Lang;
 using Kys.Library;
 using Microsoft.Extensions.DependencyInjection;
-
 namespace Kys;
 
 [AutoLoad]
 public class DefaultScopeFactory : IScopeFactory
 {
-	readonly Dictionary<ScopeType, Func<IScope, IScope>> _factory = new();
+	readonly Dictionary<ScopeType, Func<IScope?, IScope>> _factory = new();
 
 	readonly IEnumerable<ScopeType> _types =
 		Enum.GetValues<ScopeType>().Reverse();
@@ -19,19 +18,19 @@ public class DefaultScopeFactory : IScopeFactory
 
 	public DefaultScopeFactory(IServiceProvider serviceProvider)
 	{
-		this._serviceProvider = serviceProvider;
+		_serviceProvider = serviceProvider;
 		ChangeScope<RuntimeScope>(ScopeType.All);
 	}
 
 	public void ChangeScope<T>(ScopeType type) where T : IScope =>
-		_factory[type] = (p) =>
+		_factory[type] = p =>
 		{
 			var scope = ActivatorUtilities.CreateInstance<T>(_serviceProvider);
 			scope.ParentScope = p;
 			return scope;
 		};
 
-	public IScope Create(ScopeType type, IScope parent = null)
+	public IScope Create(ScopeType type, IScope? parent = null)
 	{
 		if (_factory.ContainsKey(type))
 			return _factory[type](parent);
