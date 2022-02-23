@@ -1,17 +1,18 @@
 #pragma warning disable CS1591, IDE1006
+// ReSharper disable once CheckNamespace
 namespace Kys.Library;
 
 partial class StandardFunctions
 {
-	[Function]
-	public static Array arr(params dynamic[] args) => args;
+	[Function(Name = "arr")]
+	public static Array Arr(params dynamic[] args) => args;
 
-	[Function]
-	public static void setarr(Array array, object value, params int[] index) => array.SetValue(value, index);
+	[Function(Name = "setarr")]
+	public static void Setarr(Array array, object value, params int[] index) => array.SetValue(value, index);
 
-	[Function]
-	public static object getarr(Array array, params int[] indices) => array.GetValue(indices);
+	[Function(Name = "getarr")]
+	public static object Getarr(Array array, params int[] indices) => array.GetValue(indices);
 
-	[Function]
-	public static int arrlen(Array array) => array.Length;
+	[Function(Name = "arrlen")]
+	public static int Arrlen(Array array) => array.Length;
 }

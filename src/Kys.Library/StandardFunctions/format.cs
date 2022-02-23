@@ -1,8 +1,9 @@
 #pragma warning disable CS1591, IDE1006
+// ReSharper disable once CheckNamespace
 namespace Kys.Library;
 
 partial class StandardFunctions
 {
-	[Function] public static string format(string txt, params dynamic[] args) => string.Format(txt, args);
+	[Function(Name = "format")]
+	public static string Format(string txt, params dynamic[] args) => string.Format(txt, args);
 }
-

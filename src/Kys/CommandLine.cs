@@ -1,14 +1,8 @@
-using System;
 using System.CommandLine;
 using System.CommandLine.Binding;
-using System.CommandLine.Builder;
 using System.CommandLine.Help;
 using System.CommandLine.Invocation;
-using System.Globalization;
 using System.IO;
-using System.Resources;
-using System.Threading.Tasks;
-using KYLib.Extensions;
 using KYLib.Modding;
 
 namespace Kys;
