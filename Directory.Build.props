@@ -1,12 +1,13 @@
 <Project>
     <Import Project="$(MSBuildThisFileDirectory)external/KYLib/external/JuanCalle1606/code/csharp/Directory.Build.props"/>
 	<PropertyGroup>
-		<OutputType>Library</OutputType>
-		<LangVersion>10.0</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>preview</LangVersion>
+		<TargetFramework>net7.0</TargetFramework>
+		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/JuanCalle1606/Kys</RepositoryUrl>
+		<DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
 	</PropertyGroup>
-	<ItemGroup Condition="$(TargetFramework) != 'net5.0'">
-    	<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-  	</ItemGroup>
 </Project>

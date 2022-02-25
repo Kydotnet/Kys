@@ -1,12 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Antlr4.Runtime.Tree;
+#pragma warning disable CS8764
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
 /// Implementaci�n por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ValueContext"/> y <see cref="FuncresultContext"/>.
 /// </summary>
-public class ValueVisitor : BaseVisitor<dynamic?>
+public class ValueVisitor : BaseVisitor<dynamic>
 {
 	#pragma warning disable CS8618
 	IKysParserVisitor<dynamic> _expressionVisitor;

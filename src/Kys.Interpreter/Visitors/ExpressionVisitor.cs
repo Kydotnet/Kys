@@ -2,13 +2,14 @@ using Antlr4.Runtime.Misc;
 using Microsoft.CSharp.RuntimeBinder;
 // TODO: rethrow exceptions with KyTypes
 // ReSharper disable PossibleIntendedRethrow
+#pragma warning disable CS8764
 
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
 /// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ExpressionContext"/>.
 /// </summary>
-public class ExpressionVisitor : BaseVisitor<dynamic?>
+public class ExpressionVisitor : BaseVisitor<dynamic>
 {
 #pragma warning disable CS8618
 	IKysParserVisitor<dynamic> _valueVisitor;
@@ -168,11 +169,12 @@ public class ExpressionVisitor : BaseVisitor<dynamic?>
 	/// <inheritdoc/>
 	public override dynamic VisitEqualityExp([NotNull] EqualityExpContext context)
 	{
-		object? a = Visit(context.expression(0));
-		object? b = Visit(context.expression(1));
+		var a = Visit(context.expression(0));
+		var b = Visit(context.expression(1));
+		
 		try
 		{
-			return context.EQUALITY().GetText() == "==" ? a!.Equals(b) : !a!.Equals(b);
+			return context.EQUALITY().GetText() == "==" ? a == b : a != b;
 		}
 		catch (RuntimeBinderException e)
 		{

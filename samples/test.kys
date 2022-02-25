@@ -1,14 +1,19 @@
 #!/bin/kys -t
 
-kyl load "std"
-kys cmdargs args
+set num = 10;
 
-var intType = type("System.Double");
-var int = tarr(intType, 0 ,1 , 2, 3, 4);
-
-for(var i = 0; i < arrlen(int);i++)
+func getSum(sum)
 {
-	trace(getarr(int, i));
+    trace(sum + num);
+    num += 10;
 }
 
-trace(int);
+def r = 0;
+
+while(r++ < 10000)
+{
+    getSum(10);
+}
+
+for(var i = 0;i < 100000;i++)
+{}

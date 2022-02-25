@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KYLib.Modding;
 using Kys.Lang;
 using Kys.Library;
 using Microsoft.Extensions.DependencyInjection;
 namespace Kys;
 
-[AutoLoad]
 public class DefaultScopeFactory : IScopeFactory
 {
 	readonly Dictionary<ScopeType, Func<IScope?, IScope>> _factory = new();

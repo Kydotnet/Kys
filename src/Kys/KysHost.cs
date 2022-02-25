@@ -12,6 +12,8 @@ namespace Kys
 	{
 		readonly IInterpreter _interpreter;
 
+		readonly IInterpreterSesion _sesion;
+
 		public KysHost(IServiceProvider provider)
 		{
 			Services = provider;
@@ -19,7 +21,8 @@ namespace Kys
 
 			_interpreter = Services.GetService<IInterpreter>() ?? ActivatorUtilities.CreateInstance<KysInterpreter>(Services);
 			
-			Services.GetRequiredService<IInterpreterSesion>().Interpreter = _interpreter;
+			_sesion = Services.GetRequiredService<IInterpreterSesion>();
+			_sesion.Interpreter = _interpreter;
 
 			Swm.Step("Interpreter Creation");
 		}
@@ -49,7 +52,15 @@ namespace Kys
 			}
 			catch (KysException e)
 			{
-				Console.WriteLine("{0} {1}", e.Line, e.Message);
+				Console.WriteLine("line {0} [{1}] {2}", e.Line, e.Name ?? e.GetType().Name, e.Message);
+			}
+			catch (Exception ex)
+			{
+				var error = ex.InnerException ?? ex;
+				Console.WriteLine("line {0}:{1} [{2}] {3}", _sesion["LastLine"] ?? 0, _sesion["LastColumn"] ?? 0, error.GetType().Name, error.Message);
+#if  DEBUG
+				Console.WriteLine(error.StackTrace);
+#endif
 			}
 			return Task.CompletedTask;
 		}

@@ -27,9 +27,11 @@ internal class KysHostBuilder : IHostBuilder
 	void BuildServiceProvider()
 	{
 		_services = new ServiceCollection();
+		var host = new HostBuilderContext(Properties);
+		
 		foreach (var item in _configureServicesActions)
 		{
-			item(null, _services);
+			item(host, _services);
 		}
 		_servicesProvider = _services.BuildServiceProvider();
 	}
@@ -56,12 +58,12 @@ internal class KysHostBuilder : IHostBuilder
 		return this;
 	}
 
-	public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory)
+	public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory) where TContainerBuilder : notnull
 	{
 		return this;
 	}
 
-	public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(Func<HostBuilderContext, IServiceProviderFactory<TContainerBuilder>> factory)
+	public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(Func<HostBuilderContext, IServiceProviderFactory<TContainerBuilder>> factory) where TContainerBuilder : notnull
 	{
 		return this;
 	}

@@ -63,7 +63,11 @@ public class ControlVisitor : BaseVisitor<object>
 		var block = context.block();
 		var exp = context.expression();
 		while (Expistrue(exp))
+		{
+			Sesion.StartScope(ScopeType.Control);
 			VisitBlock(block);
+			Sesion.EndScope();
+		}
 		Sesion.EndScope();
 		return true;
 	}
@@ -93,7 +97,9 @@ public class ControlVisitor : BaseVisitor<object>
 		{
 			while (Expistrue(exp))
 			{
+				Sesion.StartScope(ScopeType.Control);
 				VisitBlock(block);
+				Sesion.EndScope();
 				if (wait > 0)
 					Task.Delay(wait).Wait();
 			}
@@ -139,7 +145,9 @@ public class ControlVisitor : BaseVisitor<object>
 	{
 		while (Expistrue(exp) && !token.IsCancellationRequested)
 		{
+			Sesion.StartScope(ScopeType.Control);
 			VisitBlock(block);
+			Sesion.EndScope();
 			if (wait > 0)
 				await Task.Delay(wait);
 		}
@@ -247,8 +255,10 @@ public class ControlVisitor : BaseVisitor<object>
 		// ejecutamos la expresion de condicion.
 		while (Expistrue(exp))
 		{
+			Sesion.StartScope(ScopeType.Control);
 			// si se cumple ejecutamos el bloque
 			VisitBlock(block);
+			Sesion.EndScope();
 
 			// si hay una expresion por ejecutar
 			if (iexp != null) _expressionVisitor.Visit(iexp);

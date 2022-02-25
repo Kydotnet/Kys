@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "../KYLib-CSharp/KYLib"
+			"path": "../KYLib-CSharp/src/KYLib"
 		}
 	],
 	"settings": {}

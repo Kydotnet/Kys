@@ -8,8 +8,16 @@ namespace Kys.Lang.Runtime;
 public class KysException : Exception
 {
 
+	/// <summary>
+	/// Crea una excepción con un mensaje por defecto.
+	/// </summary>
 	protected KysException() : this(string.Empty, "Ha ocurrido un error en la ejecución del programa.") { }
 
+	/// <summary>
+	/// Crea una nueva excepción ocasionada por un token y con un emnsaje especifico.
+	/// </summary>
+	/// <param name="exceptionToken"></param>
+	/// <param name="msg"></param>
 	public KysException(IToken exceptionToken, string msg) : base(msg)
 	{
 		Line = $"line {exceptionToken.Line}:{exceptionToken.Column}:";
@@ -22,5 +30,14 @@ public class KysException : Exception
 		Line = interval;
 	}
 
-	public string Line { get; protected set; }
+	/// <summary>
+	/// 
+	/// </summary>
+	public string Line { get; }
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	// ReSharper disable once ReturnTypeCanBeNotNullable
+	public virtual string? Name => "Exception";
 }

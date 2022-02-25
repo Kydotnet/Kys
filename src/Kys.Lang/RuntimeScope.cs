@@ -12,7 +12,7 @@ public class RuntimeScope : IScope
 	/// <summary>
 	/// Contenedor interno de las variables
 	/// </summary>>
-	internal IDictionary<string, dynamic?> Variables { get; set; } = new ConcurrentDictionary<string, dynamic?>();
+	internal IDictionary<string, dynamic?> Variables { get; set; } = new Dictionary<string, dynamic?>();
 
 	/// <inheritdoc/>
 	public void Clear() => Variables.Clear();

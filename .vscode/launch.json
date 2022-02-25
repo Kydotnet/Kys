@@ -10,9 +10,10 @@
 			"request": "launch",
 			"preLaunchTask": "build",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/.build/bin/Kys/Debug/net5.0/Kys.dll",
+			"program": "${workspaceFolder}/.build/bin/Kys/Debug/net7.0/Kys.dll",
 			"args": [
-				"samples/test.kys"
+				"samples/test.kys",
+				"-t"
 			],
 			"cwd": "${workspaceFolder}",
 			// For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
@@ -27,7 +28,7 @@
 			"type": "coreclr",
 			"request": "launch",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/.build/bin/Kys/Debug/net5.0/Kys.dll",
+			"program": "${workspaceFolder}/.build/bin/Kys/Debug/net7.0/Kys.dll",
 			"args": [
 				"samples/test.kys"
 			],

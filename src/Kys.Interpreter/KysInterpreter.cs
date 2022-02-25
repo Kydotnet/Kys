@@ -35,18 +35,7 @@ public class KysInterpreter : IInterpreter
 	/// <inheritdoc/>
 	public void Start(ProgramContext programContext)
 	{
-		try
-		{
-			KysParserVisitor.VisitProgram(programContext);
-		}
-		catch (Exception ex)
-		{
-			var error = ex.InnerException ?? ex;
-			Console.WriteLine("line {0}:{1} [{2}] {3}", Sesion["LastLine"] ?? 0, Sesion["LastColumn"] ?? 0, error.GetType().Name, error.Message);
-#if  DEBUG
-			Console.WriteLine(error.StackTrace);
-#endif
-		}
+		KysParserVisitor.VisitProgram(programContext);
 	}
 
 	/// <inheritdoc/>
