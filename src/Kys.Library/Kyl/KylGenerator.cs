@@ -50,6 +50,6 @@ internal static class KylGenerator
 		if (args.Length == 1)
 			return Type.GetType(args[0], false, true);
 		var assembly = Assembly.Load(args[0]);
-		return assembly?.GetType(args[1], false, true);
+		return assembly.GetType(args[1], false, true);
 	}
 }

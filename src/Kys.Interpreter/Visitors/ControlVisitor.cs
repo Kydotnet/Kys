@@ -1,18 +1,18 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Threading.Tasks;
 using Antlr4.Runtime.Tree;
+using Kys.Runtime;
+
 namespace Kys.Interpreter.Visitors;
 
 /// <summary>
 /// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ControlContext"/>.
 /// </summary>
-public class ControlVisitor : BaseVisitor<object>
+public class ControlVisitor : BaseVisitor<IKyObject>
 {
 #pragma warning disable CS8618
-	IKysParserVisitor<dynamic> _expressionVisitor;
-	IKysParserVisitor<object> _sentenceVisitor;
-	IKysParserVisitor<object> _varoperationVisitor;
+	IKysParserVisitor<IKyObject> _expressionVisitor;
+	IKysParserVisitor<IKyObject> _sentenceVisitor;
+	IKysParserVisitor<IKyObject> _varoperationVisitor;
 #pragma warning restore CS8618
 
 	/// <inheritdoc/>
@@ -28,7 +28,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// Por defecto se evalua <see cref="IfcontrolContext.expression()"/> usando el <see cref="IVisitor{T}"/> para el contexto <see cref="ExpressionContext"/>, si es <c>true</c> se ejecuta <see cref="IfcontrolContext.block()"/> con <see cref="VisitBlock(BlockContext)"/>, de lo contrario en caso de que <see cref="IfcontrolContext.elsecontrol()"/> es distinto de <c>null</c> se eejcuta con <see cref="VisitElsecontrol(ElsecontrolContext)"/>.
 	/// </summary>
 	/// <inheritdoc/>
-	public override object VisitIfcontrol([Antlr4.Runtime.Misc.NotNull] IfcontrolContext context)
+	public override IKyObject VisitIfcontrol([Antlr4.Runtime.Misc.NotNull] IfcontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
 
@@ -37,27 +37,27 @@ public class ControlVisitor : BaseVisitor<object>
 		else if (context.elsecontrol() != null)
 			VisitElsecontrol(context.elsecontrol());
 		Sesion.EndScope();
-		return true;
+		return True;
 	}
 
 	/// <summary>
 	/// Por defecto si se trata de un "else if" encadenado lo ejecuta con <see cref="VisitIfcontrol(IfcontrolContext)"/>, de lo contrario ejecuta el contenido del bloque "else" con <see cref="VisitBlock(BlockContext)"/>.
 	/// </summary>
 	/// <inheritdoc/>
-	public override object VisitElsecontrol([Antlr4.Runtime.Misc.NotNull] ElsecontrolContext context)
+	public override IKyObject VisitElsecontrol([Antlr4.Runtime.Misc.NotNull] ElsecontrolContext context)
 	{
 		if (context.ifcontrol() != null)
 			VisitIfcontrol(context.ifcontrol());
 		else
 			VisitBlock(context.block());
-		return true;
+		return True;
 	}
 
 	/// <summary>
 	///  Por defecto se evalua <see cref="WhilecontrolContext.expression()"/> usando el <see cref="IVisitor{T}"/> para el contexto <see cref="ExpressionContext"/>, si es <c>true</c> se ejecuta <see cref="WhilecontrolContext.block()"/> con <see cref="VisitBlock(BlockContext)"/> y se vuelve a evaluar hasta que sea <c>false</c>.
 	/// </summary>
 	/// <inheritdoc/>
-	public override object VisitWhilecontrol([Antlr4.Runtime.Misc.NotNull] WhilecontrolContext context)
+	public override IKyObject VisitWhilecontrol([Antlr4.Runtime.Misc.NotNull] WhilecontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
 		var block = context.block();
@@ -69,7 +69,7 @@ public class ControlVisitor : BaseVisitor<object>
 			Sesion.EndScope();
 		}
 		Sesion.EndScope();
-		return true;
+		return True;
 	}
 
 	/// <summary>
@@ -80,7 +80,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// El tiempo maximo del timeout es superado unicamente si la tarea interna de metodo tarda mas que el tiempo dado en timeout, por ejemplo, se da un tiempo de <c>100</c> pero ejecutar ese bloque toma 700ms, esto no interrumpira la ejecución del bloque si no que esperara a que finalize y ya no volvera a evaluar la expresion si no que ejecutara el bloque interno del timeout.
 	/// </remarks>
 	/// <inheritdoc/>
-	public override object VisitTwhilecontrol([Antlr4.Runtime.Misc.NotNull] TwhilecontrolContext context)
+	public override IKyObject VisitTwhilecontrol([Antlr4.Runtime.Misc.NotNull] TwhilecontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
 		var info = context.twbucle();
@@ -105,7 +105,7 @@ public class ControlVisitor : BaseVisitor<object>
 			}
 		}
 		Sesion.EndScope();
-		return true;
+		return True;
 	}
 
 	/// <summary>
@@ -161,7 +161,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// Para evitar que un bloque wait se quede esperando por siempre es posible usar un bloque timeout, que especifica un tiempo maximo para esperar a que  la condición se cumpla.
 	/// </remarks>
 	/// <inheritdoc/>
-	public override object VisitWaitcontrol([Antlr4.Runtime.Misc.NotNull] WaitcontrolContext context)
+	public override IKyObject VisitWaitcontrol([Antlr4.Runtime.Misc.NotNull] WaitcontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
 		var info = context.twbucle();
@@ -186,7 +186,7 @@ public class ControlVisitor : BaseVisitor<object>
 		}
 
 		Sesion.EndScope();
-		return true;
+		return True;
 	}
 
 	async Task InternalWait(ExpressionContext exp, CancellationTokenSource token, int wait, BlockContext block)
@@ -202,18 +202,12 @@ public class ControlVisitor : BaseVisitor<object>
 			VisitBlock(block);
 	}
 
-	[SuppressMessage("Style", "IDE0046:Convertir a expresión condicional", Justification = "Convertir en retorno directo ocasiona que se use el callsite equivocado al compilar.")]
 	bool Expistrue(ExpressionContext exp)
 	{
-		object val = _expressionVisitor.Visit(exp);
-		// ReSharper disable once ConvertIfStatementToReturnStatement
-		if (val == null || 
-		    val.Equals(0) || 
-		    val.Equals(false) || 
-		    string.IsNullOrEmpty(val.ToString())) 
-			return false;
-			
-		return true;
+		var val = _expressionVisitor.Visit(exp);
+		if(val.CanOperate(OperatorType.Boolean))
+			return val.Boolean();
+		throw new NotImplementedException();
 	}
 
 	/// <summary>
@@ -239,7 +233,7 @@ public class ControlVisitor : BaseVisitor<object>
 	/// </list>
 	/// </remarks>
 	/// <inheritdoc/>
-	public override object VisitForcontrol([Antlr4.Runtime.Misc.NotNull] ForcontrolContext context)
+	public override IKyObject VisitForcontrol([Antlr4.Runtime.Misc.NotNull] ForcontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
 		var varop = context.varoperation();
@@ -267,17 +261,17 @@ public class ControlVisitor : BaseVisitor<object>
 		}
 
 		Sesion.EndScope();
-		return true;
+		return True;
 	}
 
 	/// <summary>
 	/// Por defecto itera todas las sentencias de <see cref="BlockContext.sentence()"/> y las ejecuta usando <see cref="IKysParserVisitor{Result}.VisitSentence(SentenceContext)"/> usando el <see cref="IVisitor{T}"/> dado por <see cref="IVisitorProvider.GetVisitor{VisitorContext}"/> para el contexto <see cref="SentenceContext"/>.
 	/// </summary>
 	/// <inheritdoc/>
-	public override object VisitBlock([Antlr4.Runtime.Misc.NotNull] BlockContext context)
+	public override IKyObject VisitBlock([Antlr4.Runtime.Misc.NotNull] BlockContext context)
 	{
 		foreach (var item in context.sentence())
 			_sentenceVisitor.VisitSentence(item);
-		return true;
+		return True;
 	}
 }

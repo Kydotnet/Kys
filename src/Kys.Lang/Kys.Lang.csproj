@@ -3,12 +3,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\external\KYLib\src\KYLib\KYLib.csproj" />
     <ProjectReference Include="..\Kys.Parser\Kys.Parser.csproj" />
+    <ProjectReference Include="..\Kys.Runtime\Kys.Runtime.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
 	<Version>1.0.1</Version>
-	<DocumentationFile>Kys.Lang.xml</DocumentationFile>
-	<TargetFramework>netstandard2.1</TargetFramework>
+	<Description>Provee los tipos que se usan para realizar caracteristicas del lenguaje, como scopes.</Description>
   </PropertyGroup>
 
 </Project>

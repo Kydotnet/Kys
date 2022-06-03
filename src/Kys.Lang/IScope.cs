@@ -1,3 +1,5 @@
+using Kys.Runtime;
+
 namespace Kys.Lang;
 
 /// <summary>
@@ -35,7 +37,7 @@ public interface IScope
 	/// <param name="id">Identificador de la variable.</param>
 	/// <param name="value">Valor a asignar a la variable.</param>
 	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
-	void AsigVar(string id, dynamic? value, bool recursive = true);
+	void AsigVar(string id, IKyObject value, bool recursive = true);
 
 	/// <summary>
 	/// Asigna a un valor a una variable o la crea si no existe, si la variable existe en este o en otro <see cref="IScope"/> padre entonces cambia su valor, si no existe crea una variable en este <see cref="IScope"/> y le asigna <paramref name="value"/>.
@@ -48,7 +50,7 @@ public interface IScope
 	/// <param name="id">Identificador de la variable.</param>
 	/// <param name="value">Valor a establecer en la variable.</param>
 	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
-	void SetVar(string id, dynamic? value, bool recursive = true);
+	void SetVar(string id, IKyObject value, bool recursive = true);
 
 	/// <summary>
 	/// Crea una variable y le asigna un valor o no hace nada si la variable ya existe,  si la variable existe en este o en otro <see cref="IScope"/> padre entonces no hace nada, si no existe crea una variable en este <see cref="IScope"/> y le asigna <paramref name="value"/>.
@@ -61,7 +63,7 @@ public interface IScope
 	/// <param name="id">Identificador de la variable.</param>
 	/// <param name="value">Valor a definir en la variable.</param>
 	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
-	void DefVar(string id, dynamic? value, bool recursive = true);
+	void DefVar(string id, IKyObject value, bool recursive = true);
 
 	/// <summary>
 	/// Crea una variable y le asigna un valore,  si la variable existe en este o en otro <see cref="IScope"/> padre entonces se genera un error, si no existe crea una variable en este <see cref="IScope"/> y le asigna <paramref name="value"/>.
@@ -74,7 +76,7 @@ public interface IScope
 	/// <param name="id">Identificador de la variable.</param>
 	/// <param name="value">Valor a declarar en la variable.</param>
 	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
-	void DecVar(string id, dynamic? value, bool recursive = true);
+	void DecVar(string id, IKyObject value, bool recursive = true);
 
 	/// <summary>
 	/// Obtiene el valor de una variable en este o en un <see cref="IScope"/> padre, si la variable no existe se genera un error.
@@ -82,5 +84,5 @@ public interface IScope
 	/// <param name="id">Identificador de la variable.</param>
 	/// <returns>Valor almacenado en la variable</returns>
 	/// <param name="recursive">Indica si se deben revisar los <see cref="IScope"/> padres de forma recursiva.</param>
-	dynamic? GetVar(string id, bool recursive = true);
+	IKyObject GetVar(string id, bool recursive = true);
 }

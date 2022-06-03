@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Kys.Interpreter;
+﻿using Kys.Interpreter;
 using Kys.Lang.Runtime;
 using Kys.Parser;
 using Microsoft.Extensions.DependencyInjection;

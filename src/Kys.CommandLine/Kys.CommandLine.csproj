@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Linea de comandos de Kys</Description>
+  </PropertyGroup>
+</Project>

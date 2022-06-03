@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>0.1</Version>
+		<Description>Objetos utilizados por Kys en tiempo de ejecución</Description>
+		<RootNamespace>Kys.Runtime</RootNamespace>
+	</PropertyGroup>
+
+</Project>

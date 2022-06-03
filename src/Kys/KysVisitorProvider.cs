@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using Antlr4.Runtime;
 using Kys.Interpreter;
 using Kys.Interpreter.Visitors;
+using Kys.Runtime;
 using Microsoft.Extensions.DependencyInjection;
 namespace Kys;
 
 public class KysVisitorProvider : IVisitorProvider
 {
-	readonly IDictionary<Type, IVisitor<object>> _visitors = new ConcurrentDictionary<Type, IVisitor<object>>();
+	readonly IDictionary<Type, IVisitor<IKyObject>> _visitors = new ConcurrentDictionary<Type, IVisitor<IKyObject>>();
 
 	readonly IDictionary<Type, Type> _types = new ConcurrentDictionary<Type, Type>();
 
-	readonly IVisitor<object> _visitor = new BaseVisitor<object>();
+	readonly IVisitor<IKyObject> _visitor = new BaseVisitor<IKyObject>();
 
 	readonly IServiceProvider _serviceProvider;
 
@@ -27,18 +25,18 @@ public class KysVisitorProvider : IVisitorProvider
 
 	public void AddVisitor<TVisitorContext, TImplementation>()
 		where TVisitorContext : ParserRuleContext
-		where TImplementation : IVisitor<object>
+		where TImplementation : IVisitor<IKyObject>
 	{
 		_types[typeof(TVisitorContext)] = typeof(TImplementation);
 	}
 
-	public void AddVisitor<TVisitorContext>(IVisitor<object> implementation)
+	public void AddVisitor<TVisitorContext>(IVisitor<IKyObject> implementation)
 		where TVisitorContext : ParserRuleContext
 	{
 		_visitors[typeof(TVisitorContext)] = implementation;
 	}
 
-	public IVisitor<object> GetVisitor<TVisitorContext>() where TVisitorContext : ParserRuleContext
+	public IVisitor<IKyObject> GetVisitor<TVisitorContext>() where TVisitorContext : ParserRuleContext
 	{
 		if (!_instanced)
 		{
@@ -54,7 +52,7 @@ public class KysVisitorProvider : IVisitorProvider
 		_instanced = true;
 		var registeredType = _types.Values.Distinct();
 		var instances = registeredType.Select(
-			t => (IVisitor<object>)ActivatorUtilities.CreateInstance(_serviceProvider, t)
+			t => (IVisitor<IKyObject>)ActivatorUtilities.CreateInstance(_serviceProvider, t)
 		).ToArray();
 
 		var group = _types.GroupBy(T => T.Value).Zip(instances);

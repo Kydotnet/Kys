@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Kys": {
+      "commandName": "Project",
+      "commandLineArgs": "-t samples/test.kys",
+      "workingDirectory": "C:\\Users\\User\\Source\\repos\\Kys"
+    }
+  }
+}

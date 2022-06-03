@@ -1,4 +1,3 @@
-using System;
 using Antlr4.Runtime;
 namespace Kys.Exceptions
 {

@@ -1,4 +1,6 @@
 using KYLib.Abstractions;
+using Kys.Runtime;
+
 namespace Kys.Lang;
 
 /// <summary>
@@ -29,5 +31,5 @@ public interface IFunction : INameable
 	/// <param name="functionScope">Scope que sera usado para almacenar variabes locales de la función.</param>
 	/// <param name="args">Argumentos pasados a la función.</param>
 	/// <returns>Valor devuelto por la función.</returns>
-	dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args);
+	IKyObject Call(IContext callerContext, IScope functionScope, params IKyObject[] args);
 }

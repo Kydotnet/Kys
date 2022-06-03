@@ -1,4 +1,6 @@
-﻿namespace Kys.Interpreter;
+﻿using Kys.Runtime;
+
+namespace Kys.Interpreter;
 
 /// <summary>
 /// Implementación por defecto de <see cref="IInterpreter"/> que se ejecuta con el visitor dado.
@@ -14,7 +16,7 @@ public class KysInterpreter : IInterpreter
 	/// <summary>
 	/// Visitor que sera usado para ejecutar el <see cref="KysParser.ProgramContext"/>.
 	/// </summary>
-	public IKysParserVisitor<dynamic> KysParserVisitor { get; }
+	public IKysParserVisitor<IKyObject> KysParserVisitor { get; }
 
 	/// <summary>
 	/// Crea una nueva instancia de interprete de Kys.

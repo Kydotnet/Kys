@@ -3,8 +3,7 @@
   <PropertyGroup>
     <Version>1.0</Version>
     <NoWarn>$(NoWarn);CS3021;CS1584;CS1658</NoWarn>
-    <DocumentationFile>Kys.Parser.xml</DocumentationFile>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <Description>Parser de Kys, este paquete incluye el Parser, el Lexer y el BaseVisitor</Description>
   </PropertyGroup>
 
   <ItemGroup>

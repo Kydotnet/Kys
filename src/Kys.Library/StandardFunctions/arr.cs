@@ -11,7 +11,7 @@ partial class StandardFunctions
 	public static void Setarr(Array array, object value, params int[] index) => array.SetValue(value, index);
 
 	[Function(Name = "getarr")]
-	public static object Getarr(Array array, params int[] indices) => array.GetValue(indices);
+	public static object? Getarr(Array array, params int[] indices) => array.GetValue(indices);
 
 	[Function(Name = "arrlen")]
 	public static int Arrlen(Array array) => array.Length;

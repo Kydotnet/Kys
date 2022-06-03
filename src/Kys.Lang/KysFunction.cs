@@ -1,3 +1,4 @@
+using Kys.Runtime;
 using System.Reflection;
 #pragma warning disable CS8618
 
@@ -34,10 +35,10 @@ public sealed class KysFunction : IFunction
 	/// <summary>
 	/// Este es el Visitor que se usa para ejecutar las sentencias dentro de la función
 	/// </summary>
-	public IKysParserVisitor<object> SenteceVisitor { get; init; }
+	public IKysParserVisitor<IKyObject> SenteceVisitor { get; init; }
 
 	/// <inheritdoc/>
-	public dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args)
+	public IKyObject Call(IContext callerContext, IScope functionScope, params IKyObject[] args)
 	{
 		ValidateParams(args.Length);
 
@@ -49,7 +50,7 @@ public sealed class KysFunction : IFunction
 			{
 				temp = ParamsNames.SkipLast(1).ToArray();
 				var param = args.Skip(ArgCount).ToArray();
-				functionScope.SetVar(ParamsNames[^1], param);
+				functionScope.SetVar(ParamsNames[^1], FromValue<Array>(param));
 			}
 			if (ArgCount > 0 && !InfArgs)
 			{
@@ -58,11 +59,10 @@ public sealed class KysFunction : IFunction
 					functionScope.SetVar(first, second, false);
 			}
 		}
-
+		functionScope.DefVar("return", Null, false);
 		foreach (var sentence in Sentences)
 			SenteceVisitor.VisitSentence(sentence);
 
-		functionScope.DefVar("return", null, false);
 		var ret = functionScope.GetVar("return", false);
 
 		return ret;

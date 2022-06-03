@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kys.Library\Kys.Library.csproj" />
+    <ProjectReference Include="..\Kys.Runtime\Kys.Runtime.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -10,10 +11,7 @@
 
   <PropertyGroup>
     <Version>0.1</Version>
-    <DocumentationFile>Kys.Interpreter.xml</DocumentationFile>
-    <RepositoryBranch>Interpreter-dev</RepositoryBranch>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <TargetFrameworks />
+    <Description>Provee el interprete y los Visitor que se usan para ejecutar Kys</Description>
   </PropertyGroup>
 
 </Project>

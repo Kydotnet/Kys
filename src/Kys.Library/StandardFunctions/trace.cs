@@ -9,6 +9,6 @@ partial class StandardFunctions
 	{
 		if (objs.Length == 0) Console.WriteLine(obj);
 		else if(obj is string format) Console.WriteLine(format, objs);
-		else Console.WriteLine();
+		else Console.WriteLine(obj);
 	}
 }

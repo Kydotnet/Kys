@@ -1,10 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <Content Include="Ky Logo.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta2.21617.1" />
@@ -15,14 +11,14 @@
     <ProjectReference Include="..\Kys.Library\Kys.Library.csproj" />
     <ProjectReference Include="..\Kys.Lang\Kys.Lang.csproj" />
     <ProjectReference Include="..\Kys.Interpreter\Kys.Interpreter.csproj" />
+    <ProjectReference Include="..\Kys.Runtime\Kys.Runtime.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-	  <TargetFramework>net7.0</TargetFramework>
+	  <OutputType>Exe</OutputType>
 	  <Version>0.1</Version>
 	  <StartupObject>Kys.CommandLine</StartupObject>
-	  <ApplicationIcon>Ky Logo.ico</ApplicationIcon>
+	  <Description>Punto de entrada de Kys</Description>
   </PropertyGroup>
 
 </Project>

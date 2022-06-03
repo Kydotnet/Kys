@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Kys.Runtime;
+using System.Reflection;
 #pragma warning disable CS8618
 namespace Kys.Library.Kyl;
 
@@ -99,7 +100,7 @@ public sealed class OverloadFunction : IFunction
 	}
 
 	/// <inheritdoc/>
-	public dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args) =>
+	public IKyObject Call(IContext callerContext, IScope functionScope, params IKyObject[] args) =>
 		GetRealMethod(args).Call(callerContext, functionScope, args);
 
 	CsFunction GetRealMethod(dynamic?[] args)

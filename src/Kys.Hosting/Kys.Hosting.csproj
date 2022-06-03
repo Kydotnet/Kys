@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Provee los tipos para permitir crear host de kys</Description>
+  </PropertyGroup>
+</Project>

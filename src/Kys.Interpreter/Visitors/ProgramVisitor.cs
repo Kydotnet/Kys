@@ -1,14 +1,16 @@
 ﻿using Antlr4.Runtime.Misc;
+using Kys.Runtime;
+
 namespace Kys.Interpreter.Visitors
 {
 	/// <summary>
 	/// Implementación por defecto de <see cref="IVisitor{T}"/> para ejecutar <see cref="ProgramContext"/>.
 	/// </summary>
-	public class ProgramVisitor : BaseVisitor<dynamic>
+	public class ProgramVisitor : BaseVisitor<IKyObject>
 	{
 		#pragma warning disable CS8618
-		IKysParserVisitor<object> _intructionVisitor;
-		IKysParserVisitor<object> _topLevelVisitor;
+		IKysParserVisitor<IKyObject> _intructionVisitor;
+		IKysParserVisitor<IKyObject> _topLevelVisitor;
 		#pragma warning restore CS8618
 
 		/// <inheritdoc/>
@@ -23,7 +25,7 @@ namespace Kys.Interpreter.Visitors
 		/// Primero ejecuta todas los toplevel de <see cref="ProgramContext.toplevel()"/> y luego ejecuta las instrucciones de <see cref="ProgramContext.instruction()"/>.
 		/// </summary>
 		/// <inheritdoc/>
-		public override dynamic VisitProgram([NotNull] ProgramContext context)
+		public override IKyObject VisitProgram([NotNull] ProgramContext context)
 		{
 			var toplevel = context.toplevel();
 			var instructions = context.instruction();
@@ -41,13 +43,13 @@ namespace Kys.Interpreter.Visitors
 					continue;
 				}
 				var ret = _intructionVisitor.VisitInstruction(item);
-				if (ret is false)
+				if (ret == False)
 					break;
-				if (ret is int skip)
+				if (ret is KyObject<int> skip)
 					skips = skip;
 			}
 
-			return false;
+			return False;
 		}
 	}
 }

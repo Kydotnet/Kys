@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Kys.Runtime;
+using System.Diagnostics;
 using System.Reflection;
 #pragma warning disable CS8618
 
@@ -33,25 +34,26 @@ public sealed class CsFunction : IFunction
 	public IContext ParentContext { get; init; }
 
 	/// <inheritdoc/>
-	public dynamic? Call(IContext callerContext, IScope functionScope, params dynamic?[] args)
+	public IKyObject Call(IContext callerContext, IScope functionScope, params IKyObject[] args)
 	{
 		var realargs = GetRealArgs(args);
-		if (!PassInfo) return Method.Invoke(null, realargs);
+		if (!PassInfo) return FromUnknowValue(Method.Invoke(null, realargs));
 		var temp = new dynamic[realargs.Length + 2];
 		temp[0] = callerContext;
 		temp[1] = functionScope;
 		realargs.CopyTo(temp, 2);
 		var ret = Method.Invoke(null, temp);
-		return ret;
+		return FromUnknowValue(ret);
 	}
 
 	/// <summary>
-	/// Comprime los argumentos finales en uno solo en casod e tratarse de argumentos infinitos.
+	/// Comprime los argumentos finales en uno solo en caso de tratarse de argumentos infinitos.
 	/// </summary>
-	/// <param name="args"></param>
+	/// <param name="entry"></param>
 	/// <returns></returns>
-	dynamic?[] GetRealArgs(dynamic?[] args)
+	object?[] GetRealArgs(IKyObject[] entry)
 	{
+		var args = entry.Select(E => E.ToCsharp()).ToArray();
 		if (!InfArgs || args.Length < ArgCount) return args;
 		var ret = new object[ArgCount + 1];
 		args[..ArgCount].CopyTo(ret, 0);

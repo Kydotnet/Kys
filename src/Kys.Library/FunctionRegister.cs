@@ -1,5 +1,7 @@
 using System.Reflection;
 using Kys.Parser;
+using Kys.Runtime;
+
 namespace Kys.Library;
 
 public static partial class FunctionRegister
@@ -45,7 +47,7 @@ public static partial class FunctionRegister
 	/// <param name="targetContext">Contetxo en el que sera almacenada la funci�n.</param>
 	/// <param name="funcdefinition">Definici�n de la funci�n.</param>
 	/// <param name="sentenceVisitor">Visitor que se usara para ejecutar las sentencias internas de la funci�n.</param>
-	public static void AddKysFunction(this IContext targetContext, FuncdefinitionContext funcdefinition, IKysParserVisitor<object> sentenceVisitor)
+	public static void AddKysFunction(this IContext targetContext, FuncdefinitionContext funcdefinition, IKysParserVisitor<IKyObject> sentenceVisitor)
 	{
 		var parameters = funcdefinition.parameters();
 		var infargs = parameters.PARAMS() != null;

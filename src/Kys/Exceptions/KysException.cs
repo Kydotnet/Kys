@@ -1,4 +1,3 @@
-using System;
 namespace Kys.Exceptions
 {
 	[Serializable]

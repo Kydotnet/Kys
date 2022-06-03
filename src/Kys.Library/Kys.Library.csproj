@@ -10,8 +10,7 @@
 
   <PropertyGroup>
     <Version>0.1</Version>
-    <DocumentationFile>Kys.Library.xml</DocumentationFile>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <Description>Provee metodos para generar funcinones de Kys apartir de C#</Description>
   </PropertyGroup>
 
 </Project>
