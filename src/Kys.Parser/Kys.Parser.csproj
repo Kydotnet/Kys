@@ -10,8 +10,4 @@
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="java -jar &quot;$(SolutionDir)build-tools/antlr4.jar&quot; -Dlanguage=CSharp KysParser.g4 KysLexer.g4 -no-listener -visitor -package Kys.Parser" />
-  </Target>
-
 </Project>

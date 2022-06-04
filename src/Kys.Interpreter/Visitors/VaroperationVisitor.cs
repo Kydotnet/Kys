@@ -28,7 +28,7 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitDeclaration([NotNull] DeclarationContext context)
 	{
-		VisitVaroperation(context.asignation(), Sesion.CurrentScope.DecVar);
+		VisitVaroperation(context.Asignation, Sesion.CurrentScope.DecVar);
 		return True;
 	}
 
@@ -38,14 +38,14 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitCreation([NotNull] CreationContext context)
 	{
-		VisitVaroperation(context.asignation(), Sesion.CurrentScope.SetVar);
+		VisitVaroperation(context.Asignation, Sesion.CurrentScope.SetVar);
 		return True;
 	}
 
 	void VisitVaroperation(AsignationContext context, Action<string, IKyObject, bool> actionVar)
 	{
-		var name = context.ID().GetCacheText();
-		var valueExp = context.expression();
+		var name = context.IDText;
+		var valueExp = context.Expression;
 		var val = _expressionVisitor.Visit(valueExp);
 
 		actionVar(name, val, true);
@@ -57,7 +57,7 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitDefinition([NotNull] DefinitionContext context)
 	{
-		VisitVaroperation(context.asignation(), Sesion.CurrentScope.DefVar);
+		VisitVaroperation(context.Asignation, Sesion.CurrentScope.DefVar);
 
 		return True;
 	}
@@ -68,14 +68,12 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitSimpleAssign([NotNull] SimpleAssignContext context)
 	{
-		VisitAsignation(context.ID(), context.expression(), context.Sequal());
+		VisitAsignation(context.IDText, context.Expression, context.SequalText, context.Sequal);
 		return True;
 	}
 
-	void VisitAsignation(ITerminalNode name, IParseTree expressionContext, ITerminalNode simbol)
+	void VisitAsignation(string id, IParseTree expressionContext, string operation, ITerminalNode simbol)
 	{ 
-		var id = name.GetCacheText();
-		var operation = simbol.GetCacheText();
 		var value = _expressionVisitor.Visit(expressionContext);
 		Sesion["LastToken"] = simbol;
 		switch (operation)
@@ -113,7 +111,7 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitPotencialAssign([NotNull] PotencialAssignContext context)
 	{
-		VisitAsignation(context.ID(), context.expression(), context.POTENCIALASSIGN());
+		VisitAsignation(context.IDText, context.Expression, context.POTENCIALASSIGNText, context.POTENCIALASSIGN);
 		return True;
 	}
 
@@ -123,7 +121,7 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitMultiplicativeAssign([NotNull] MultiplicativeAssignContext context)
 	{
-		VisitAsignation(context.ID(), context.expression(), context.MULTIPLICATIVEASSIGN());
+		VisitAsignation(context.IDText, context.Expression, context.MULTIPLICATIVEASSIGNText, context.MULTIPLICATIVEASSIGN);
 		return True;
 	}
 
@@ -133,7 +131,7 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitModuleAssign([NotNull] ModuleAssignContext context)
 	{
-		VisitAsignation(context.ID(), context.expression(), context.MODULEASSIGN());
+		VisitAsignation(context.IDText, context.Expression, context.MODULEASSIGNText, context.MODULEASSIGN);
 		return True;
 	}
 
@@ -143,7 +141,7 @@ public class VaroperationVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitAditiveAssign([NotNull] AditiveAssignContext context)
 	{
-		VisitAsignation(context.ID(), context.expression(), context.ADITIVEASSIGN());
+		VisitAsignation(context.IDText, context.Expression, context.ADITIVEASSIGNText, context.ADITIVEASSIGN);
 		return True;
 	}
 }

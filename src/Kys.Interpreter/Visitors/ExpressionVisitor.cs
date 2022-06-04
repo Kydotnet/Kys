@@ -1,4 +1,5 @@
 using Antlr4.Runtime.Misc;
+using Kys.Parser.Extensions;
 using Kys.Runtime;
 using Microsoft.CSharp.RuntimeBinder;
 // TODO: rethrow exceptions with KyTypes
@@ -30,14 +31,14 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	/// </summary>
 	/// <inheritdoc/>
 	public override IKyObject VisitValueExp([NotNull] ValueExpContext context) =>
-		_valueVisitor.VisitValue(context.value());
+		_valueVisitor.VisitValue(context.Value);
 
 	/// <summary>
 	/// Evalua la expresión interna, es decir, la que se encuentra dentro de los parentesis.
 	/// </summary>
 	/// <inheritdoc/>
 	public override IKyObject VisitParenthesisExp([NotNull] ParenthesisExpContext context) =>
-		Visit(context.expression());
+		Visit(context.Expression);
 
 	/// <summary>
 	/// Evalua la exrpesión <paramref name="context"/> con el operador de C# "<c>!</c>".
@@ -45,7 +46,7 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitUniNotExp([NotNull] UniNotExpContext context)
 	{
-		var val = Visit(context.expression());
+		var val = Visit(context.Expression);
 		if (val.CanOperate(OperatorType.UnitaryNegation))
 			return val.UnaryNegation();
 		throw new NotImplementedException();
@@ -58,20 +59,20 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	public override IKyObject VisitUniAritExp([NotNull] UniAritExpContext context)
 	{
 
-		if (context.expression() is ValueExpContext valueexp && valueexp.value().ID() != null)
-			return VisitUniAritValueExp(valueexp, context.UNIARIT().GetText() == "++");
+		if (context.Expression is ValueExpContext valueexp && valueexp.Value.ID != null)
+			return VisitUniAritValueExp(valueexp, context.UNIARITText == "++");
 
-		var val = Visit(context.expression());
+		var val = Visit(context.Expression);
 
 		if(val.CanOperate(OperatorType.UnitaryOperation))
-			return val.UnitaryOperation(context.UNIARIT().GetText() == "++");
+			return val.UnitaryOperation(context.UNIARITText == "++");
 
 		throw new NotImplementedException();
 	}
 
 	IKyObject VisitUniAritValueExp(ValueExpContext valueExpContext, bool v)
 	{
-		var name = valueExpContext.value().ID().GetText();
+		var name = valueExpContext.Value.IDText;
 		var val = Sesion.CurrentScope.GetVar(name);
 		if (val.CanOperate(OperatorType.UnitaryOperation))
 			Sesion.CurrentScope.AsigVar(name, val.UnitaryOperation(v));
@@ -87,7 +88,7 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	{
 		var a = Visit(context.expression(0));
 		var b = Visit(context.expression(1));
-		var pot = context.POTENCIAL().GetText() == "^";
+		var pot = context.POTENCIALText == "^";
 
 		if (a.CanOperate(OperatorType.Potencial))
 			return a.Potencial(pot, b);
@@ -105,7 +106,7 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	{
 		var a = Visit(context.expression(0));
 		var b = Visit(context.expression(1));
-		var pot = context.MULTIPLICATIVE().GetText() == "*";
+		var pot = context.MULTIPLICATIVEText == "*";
 
 		if (a.CanOperate(OperatorType.Multiplicative))
 			return a.Multiplicative(pot, b);
@@ -159,7 +160,7 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 		var a = Visit(context.expression(0));
 		var b = Visit(context.expression(1));
 
-		var pot = context.EQUALITY().GetText() == "==";
+		var pot = context.EQUALITYText == "==";
 
 		if (a.CanOperate(OperatorType.Equality))
 			return a.Equality(pot, b);
@@ -177,7 +178,7 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	{
 		var a = Visit(context.expression(0));
 		var b = Visit(context.expression(1));
-		var pot = context.ANDOR().GetText() == "&&";
+		var pot = context.ANDORText == "&&";
 
 		return a.CanOperate(OperatorType.Boolean) && b.CanOperate(OperatorType.Boolean)
 			? pot ? a.Boolean() && b.Boolean() ? True : False : a.Boolean() || b.Boolean() ? True : False
@@ -193,7 +194,7 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 		var a = Visit(context.expression(0));
 		var b = Visit(context.expression(1));
 
-		var pot = context.EQRELATIONAL().GetText() == "<=";
+		var pot = context.EQRELATIONALText == "<=";
 
 		if (a.CanOperate(OperatorType.EqualityRelacional))
 			return a.EqualityRelacional(pot, b);
@@ -209,9 +210,9 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitRelationalExp([NotNull] RelationalExpContext context)
 	{
-		var a = Visit(context.expression(0));
-		var b = Visit(context.expression(1));
-		var pot = context.RELATIONAL().GetText() == "<";
+		var a = Visit(context.Expression[0]);
+		var b = Visit(context.Expression[1]);
+		var pot = context.Pot;
 
 		if (a.CanOperate(OperatorType.Relacional))
 			return a.Relacional(pot, b);
@@ -229,6 +230,6 @@ public class ExpressionVisitor : BaseVisitor<IKyObject>
 	{
 		Sesion["LastColumn"] = context.Start.Column;
 		Sesion["LastLine"] = context.Start.Line;
-		return _funcresultVisitor.VisitFuncresult(context.funcresult());
+		return _funcresultVisitor.VisitFuncresult(context.Funcresult);
 	}
 }

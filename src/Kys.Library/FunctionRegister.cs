@@ -49,13 +49,13 @@ public static partial class FunctionRegister
 	/// <param name="sentenceVisitor">Visitor que se usara para ejecutar las sentencias internas de la funci�n.</param>
 	public static void AddKysFunction(this IContext targetContext, FuncdefinitionContext funcdefinition, IKysParserVisitor<IKyObject> sentenceVisitor)
 	{
-		var parameters = funcdefinition.parameters();
-		var infargs = parameters.PARAMS() != null;
+		var parameters = funcdefinition.Parameters;
+		var infargs = parameters.PARAMS != null;
 		var @params = parameters.@params()?.ID().Select(id => id.GetText()).ToArray();
 		var haveparams = @params != null;
 		var argcount = haveparams ? @params!.Length - (infargs ? 1 : 0) : 0;
-		var id = funcdefinition.ID().GetText();
-		var sentences = funcdefinition.block().sentence();
+		var id = funcdefinition.IDText;
+		var sentences = funcdefinition.Block.Sentence;
 
 		if (!haveparams && infargs)
 		{

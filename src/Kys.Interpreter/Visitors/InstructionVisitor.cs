@@ -26,11 +26,11 @@ public class InstructionVisitor : BaseVisitor<IKyObject>
 		Sesion["LastLine"] = context.Start.Line;
 		Sesion["LastInstruction"] = context;
 
-		if (context.sentence() is SentenceContext sentence)
+		if (context.Sentence is SentenceContext sentence)
 			return VisitSentence(sentence);
-		if (context.funcdefinition() is FuncdefinitionContext funcdefinition)
+		if (context.Funcdefinition is FuncdefinitionContext funcdefinition)
 			return VisitFuncdefinition(funcdefinition);
-		if (context.exitprogram() is ExitprogramContext exitprogram)
+		if (context.Exitprogram is ExitprogramContext exitprogram)
 			return VisitExitprogram(exitprogram);
 		return Null;
 	}
@@ -58,7 +58,7 @@ public class InstructionVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitExitprogram([NotNull] ExitprogramContext context)
 	{
-		var code = ValueVisitor.GetNumber(context.NUMBER());
+		var code = ValueVisitor.GetNumber(context.NUMBER);
 		if(code is KyObject<int> Int)
 			Environment.ExitCode = Int;
 		return False;

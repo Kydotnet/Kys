@@ -1,19 +1,8 @@
 #!/bin/kys -t
 
-set num = 10;
-
-func getSum(sum)
+set total = 0.0;
+for(var i = 0.0;i < 1000000.0;i++)
 {
-    trace(sum + num);
-    num += 10;
+    total += i;
 }
-
-def r = 0;
-
-while(r++ < 10000)
-{
-    getSum(10);
-}
-
-for(var i = 0;i < 100000;i++)
-{}
+trace(total);

@@ -32,10 +32,10 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	{
 		Sesion.StartScope(ScopeType.Control);
 
-		if (Expistrue(context.expression()))
-			VisitBlock(context.block());
-		else if (context.elsecontrol() != null)
-			VisitElsecontrol(context.elsecontrol());
+		if (Expistrue(context.Expression))
+			VisitBlock(context.Block);
+		else if (context.Elsecontrol != null)
+			VisitElsecontrol(context.Elsecontrol);
 		Sesion.EndScope();
 		return True;
 	}
@@ -46,10 +46,10 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitElsecontrol([Antlr4.Runtime.Misc.NotNull] ElsecontrolContext context)
 	{
-		if (context.ifcontrol() != null)
-			VisitIfcontrol(context.ifcontrol());
+		if (context.Ifcontrol != null)
+			VisitIfcontrol(context.Ifcontrol);
 		else
-			VisitBlock(context.block());
+			VisitBlock(context.Block);
 		return True;
 	}
 
@@ -60,8 +60,8 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	public override IKyObject VisitWhilecontrol([Antlr4.Runtime.Misc.NotNull] WhilecontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
-		var block = context.block();
-		var exp = context.expression();
+		var block = context.Block;
+		var exp = context.Expression;
 		while (Expistrue(exp))
 		{
 			Sesion.StartScope(ScopeType.Control);
@@ -83,11 +83,11 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	public override IKyObject VisitTwhilecontrol([Antlr4.Runtime.Misc.NotNull] TwhilecontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
-		var info = context.twbucle();
-		var block = info.block();
-		var timed = info.timeoutcontrol();
-		int wait = ValueVisitor.GetInt(info.NUMBER());
-		var exp = info.expression();
+		var info = context.Twbucle;
+		var block = info.Block;
+		var timed = info.Timeoutcontrol;
+		int wait = ValueVisitor.GetInt(info.NUMBER);
+		var exp = info.Expression;
 
 		if (timed != null)
 		{
@@ -118,8 +118,8 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	/// <param name="whilefunc">Metodo que deberia generar una tarea que representa la ejecución del bucle en segundo plano.</param>
 	void TwBucle(BlockContext block, TimeoutcontrolContext timed, int wait, ExpressionContext exp, Func<ExpressionContext, CancellationTokenSource, int, BlockContext, Task> whilefunc)
 	{
-		var twait = ValueVisitor.GetInt(timed.NUMBER());
-		var tblock = timed.block();
+		var twait = ValueVisitor.GetInt(timed.NUMBER);
+		var tblock = timed.Block;
 		var token = new CancellationTokenSource();
 
 		// tarea de ejecución del bloque while
@@ -164,11 +164,11 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	public override IKyObject VisitWaitcontrol([Antlr4.Runtime.Misc.NotNull] WaitcontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
-		var info = context.twbucle();
-		var block = info.block();
-		var timed = info.timeoutcontrol();
-		int wait = ValueVisitor.GetInt(info.NUMBER());
-		var exp = info.expression();
+		var info = context.Twbucle;
+		var block = info.Block;
+		var timed = info.Timeoutcontrol;
+		int wait = ValueVisitor.GetInt(info.NUMBER);
+		var exp = info.Expression;
 
 		if (timed != null)
 		{
@@ -236,12 +236,12 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	public override IKyObject VisitForcontrol([Antlr4.Runtime.Misc.NotNull] ForcontrolContext context)
 	{
 		Sesion.StartScope(ScopeType.Control);
-		var varop = context.varoperation();
-		var exp = context.expression();
-		var forexp = context.forexpression();
-		var iexp = forexp?.expression();
-		var ivarop = forexp?.varoperation();
-		var block = context.block();
+		var varop = context.Varoperation;
+		var exp = context.Expression;
+		var forexp = context.Forexpression;
+		var iexp = forexp?.Expression;
+		var ivarop = forexp?.Varoperation;
+		var block = context.Block;
 
 		//la operacion se ejecuta al principio, si existe
 		if (varop != null) _varoperationVisitor.VisitVaroperation(varop);
@@ -270,7 +270,7 @@ public class ControlVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitBlock([Antlr4.Runtime.Misc.NotNull] BlockContext context)
 	{
-		foreach (var item in context.sentence())
+		foreach (var item in context.Sentence)
 			_sentenceVisitor.VisitSentence(item);
 		return True;
 	}

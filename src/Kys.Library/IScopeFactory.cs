@@ -10,7 +10,7 @@ public interface IScopeFactory
 	/// </summary>
 	/// <typeparam name="T">Tipo que sera instanciado cada vez que se requiera un scope de <paramref name="type"/>.</typeparam>
 	/// <param name="type">Tipo de scope que sera reemplazado.</param>
-	void ChangeScope<T>(ScopeType type) where T : IScope;
+	void ChangeScope<T>(ScopeType type) where T : IScope, new();
 
 	/// <summary>
 	/// Genera un <see cref="IScope"/> con un proposito dado.

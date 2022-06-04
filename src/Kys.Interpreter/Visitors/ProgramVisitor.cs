@@ -27,8 +27,8 @@ namespace Kys.Interpreter.Visitors
 		/// <inheritdoc/>
 		public override IKyObject VisitProgram([NotNull] ProgramContext context)
 		{
-			var toplevel = context.toplevel();
-			var instructions = context.instruction();
+			var toplevel = context.Toplevel;
+			var instructions = context.Instruction;
 			
 			
 			foreach (var top in toplevel)

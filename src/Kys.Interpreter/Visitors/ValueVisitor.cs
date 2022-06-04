@@ -29,15 +29,15 @@ public class ValueVisitor : BaseVisitor<IKyObject>
 	/// <returns>Devuelve lo mismo devuelto por la función.</returns>
 	public override IKyObject VisitFuncresult([Antlr4.Runtime.Misc.NotNull] FuncresultContext context)
 	{
-		var funcname = context.ID().GetCacheText();
-		Sesion["LastToken"] = context.ID().Symbol;
+		var funcname = context.IDText;
+		Sesion["LastToken"] = context.ID.Symbol;
 
 		var func = Sesion.CurrentContext.GetFunction(funcname);
 
-		var funcargs = context.arguments();
+		var funcargs = context.Arguments;
 		var hasargs = funcargs != null;
 
-		IKyObject[] args = hasargs ? funcargs!.expression().Select(_expressionVisitor.Visit).ToArray() : Array.Empty<IKyObject>();
+		IKyObject[] args = hasargs ? funcargs!.Expression.Select(_expressionVisitor.Visit).ToArray() : Array.Empty<IKyObject>();
 		var scope = Sesion.StartScope(ScopeType.Function);
 
 		//TODO: producir error cuando no existe la función;
@@ -54,14 +54,14 @@ public class ValueVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitValue([Antlr4.Runtime.Misc.NotNull] ValueContext context)
 	{
-		if (context.String is ITerminalNode String)
-			return GetString(String);
-		if (context.Number is ITerminalNode Number)
-			return GetNumber(Number);
-		if (context.Bool is ITerminalNode Bool)
-			return GetBool(Bool);
-		if (context.Id is ITerminalNode Id)
-			return GetVar(Sesion, Id);
+		if (context.HasString)
+			return FromValue(context.String);
+		if (context.HasNumber)
+			return context.IsInt ? FromValue(context.IsInt) : FromValue(context.Double);
+		if (context.HasBool)
+			return context.Bool ? True : False;
+		if (context.HasId)
+			return GetVar(Sesion, context.Id);
 
 		return Null;
 	}
@@ -83,13 +83,10 @@ public class ValueVisitor : BaseVisitor<IKyObject>
 	/// <param name="sesion">La sesi�n desde la cual se obtendra la variable.</param>
 	/// <param name="terminalNode">El nombre de la variable a obtener.</param>
 	/// <returns>Devuelve el valor obtenido desde la sesi�n o propaga el error en caso de no estar definida.</returns>
-	public static IKyObject GetVar(IInterpreterSesion sesion, ITerminalNode terminalNode)
+	public static IKyObject GetVar(IInterpreterSesion sesion, string terminalNode)
 	{
-		var raw = terminalNode.GetCacheText();
-
-		return sesion.CurrentScope.GetVar(raw);
+		return sesion.CurrentScope.GetVar(terminalNode);
 	}
-
 
 	/// <summary>
 	/// Obtiene un <see cref="int"/> o un <see cref="double"/> que se obtiene al parsear un <see cref="KysLexer.NUMBER"/>.
@@ -109,16 +106,5 @@ public class ValueVisitor : BaseVisitor<IKyObject>
 	internal static int GetInt(ITerminalNode terminalNode)
 	{
 		return int.Parse(terminalNode.GetCacheText(), NumberStyles.Integer, null);
-	}
-
-	/// <summary>
-	/// Obtiene una cadena de texto desde un <see cref="ITerminalNode"/> de representa un item <see cref="KysLexer.STRING"/>.
-	/// </summary>
-	/// <param name="terminalNode">El nodo que quiere se convertido en string.</param>
-	/// <returns>Devuelve el texto contenido en el <see cref="KysLexer.STRING"/>.</returns>
-	public static IKyObject GetString(ITerminalNode terminalNode)
-	{
-		var raw = terminalNode.GetCacheText();
-		return FromValue(raw.Trim('"'));
 	}
 }

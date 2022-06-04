@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ParserEditor": {
+      "commandName": "Project",
+      "commandLineArgs": "KysParser.cs",
+      "workingDirectory": "C:\\Users\\User\\Source\\repos\\Kys\\src\\Kys.Parser"
+    }
+  }
+}

@@ -11,7 +11,7 @@
 namespace Kys.Parser;
 partial class KysParser
 {
-	partial class AditiveExpContext
+	partial class RelationalExpContext
 	{
 		bool? _pot;
 
@@ -20,7 +20,7 @@ partial class KysParser
 			get
 			{
 				if (_pot.HasValue) return _pot.Value;
-				_pot = ADITIVEText.Equals("+");
+				_pot = RELATIONALText.Equals("<");
 				return _pot.Value;
 			}
 		}

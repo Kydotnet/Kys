@@ -30,11 +30,11 @@ public class SentenceVisitor : BaseVisitor<IKyObject>
 		Sesion["LastLine"] = context.Start.Line;
 		Sesion["LastSentence"] = context;
 
-		if (context.control() is ControlContext sentence)
+		if (context.Control is ControlContext sentence)
 			return VisitControl(sentence);
-		if (context.varoperation() is VaroperationContext funcdefinition)
+		if (context.Varoperation is VaroperationContext funcdefinition)
 			return VisitVaroperation(funcdefinition);
-		if (context.funccall() is FunccallContext exitprogram)
+		if (context.Funccall is FunccallContext exitprogram)
 			return VisitFunccall(exitprogram);
 		return Null;
 	}
@@ -59,7 +59,7 @@ public class SentenceVisitor : BaseVisitor<IKyObject>
 	/// <inheritdoc/>
 	public override IKyObject VisitFunccall([NotNull] FunccallContext context)
 	{
-		_funcresultVisitor.VisitFuncresult(context.funcresult());
+		_funcresultVisitor.VisitFuncresult(context.Funcresult);
 
 		// si se devuelve false el InstructionVisitor terminara
 		return True;
